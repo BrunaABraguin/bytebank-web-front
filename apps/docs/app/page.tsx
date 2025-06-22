@@ -2,11 +2,12 @@ import Image from "next/image";
 import { Card } from "@repo/ui/card";
 import { Gradient } from "@repo/ui/gradient";
 import { TurborepoLogo } from "@repo/ui/turborepo-logo";
+import Link from "next/link";
 
 const LINKS = [
   {
-    title: "Docs",
-    href: "https://turborepo.com/docs",
+    title: "Web",
+    href: "/web",
     description: "Find in-depth information about Turborepo features and API.",
   },
   {
@@ -40,7 +41,6 @@ export default function Page() {
             className="flex gap-2 p-8 pointer-events-none place-items-center lg:pointer-events-auto lg:p-0"
             href="https://vercel.com?utm_source=create-turbo&utm_medium=basic&utm_campaign=create-turbo"
             rel="noopener noreferrer"
-            target="_blank"
           >
             By{" "}
             <Image
