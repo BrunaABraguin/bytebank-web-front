@@ -1,20 +1,20 @@
 import type { NextConfig } from "next";
-const { WEB_URL } = process.env;
+const { DASHBOARD_URL } = process.env;
 
 const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: "/web",
-        destination: `${WEB_URL}`,
+        source: "/dashboard",
+        destination: `${DASHBOARD_URL}`,
       },
       {
-        source: "/web/:path*",
-        destination: `${WEB_URL}/web/:path*`,
+        source: "/dashboard/:path*",
+        destination: `${DASHBOARD_URL}/dashboard/:path*`,
       },
       {
-        source: "/web-static/_next/:path+",
-        destination: `${WEB_URL}/web-static/_next/:path+`,
+        source: "/dashboard-static/_next/:path+",
+        destination: `${DASHBOARD_URL}/dashboard-static/_next/:path+`,
       },
     ];
   },
