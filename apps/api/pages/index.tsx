@@ -1,4 +1,4 @@
-import { User } from "@/interfaces";
+import { User } from "@repo/types";
 import Link from "next/link";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -17,9 +17,9 @@ export default function Index() {
   return (
     <ul>
       {data.map((user) => (
-        <li key={user.id}>
-          <Link href="/user/[id]" as={`/user/${user.id}`}>
-            {user.name ?? `User ${user.id}`}
+        <li key={user._id}>
+          <Link href="/user/[id]" as={`/user/${user._id}`}>
+            {user.name ?? `User ${user._id}`}
           </Link>
         </li>
       ))}

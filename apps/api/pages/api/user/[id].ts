@@ -1,5 +1,5 @@
+import { User } from "@repo/types";
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { User } from "../../../interfaces";
 
 export default function userHandler(
   req: NextApiRequest,
@@ -11,12 +11,22 @@ export default function userHandler(
 
   switch (method) {
     case "GET":
-      // Get data from your database
-      res.status(200).json({ id, name: `User ${id}` });
+      res
+        .status(200)
+        .json({
+          _id: id.toString(),
+          name: `User ${id}`,
+          email: `user${id}@example.com`,
+        });
       break;
     case "PUT":
-      // Update or create data in your database
-      res.status(200).json({ id, name: name || `User ${id}` });
+      res
+        .status(200)
+        .json({
+          _id: id.toString(),
+          name: name || `User ${id}`,
+          email: `user${id}@example.com`,
+        });
       break;
     default:
       res.setHeader("Allow", ["GET", "PUT"]);

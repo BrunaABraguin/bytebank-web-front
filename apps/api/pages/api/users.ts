@@ -1,13 +1,15 @@
+import { User } from "@repo/types";
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { User } from "../../interfaces";
 
-// Fake users data
-const users: User[] = [{ id: 1 }, { id: 2 }, { id: 3 }];
+const users: User[] = [
+  { _id: "1", name: "John Doe", email: "john@example.com" },
+  { _id: "2", name: "Jane Smith", email: "jane@example.com" },
+  { _id: "3", name: "Alice Johnson", email: "alice@example.com" },
+];
 
 export default function handler(
   _req: NextApiRequest,
   res: NextApiResponse<User[]>
 ) {
-  // Get data from your database
   res.status(200).json(users);
 }
