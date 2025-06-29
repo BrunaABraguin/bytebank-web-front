@@ -9,7 +9,7 @@ export default function Index() {
   const [data, setData] = useState<User[] | null>(null);
 
   useEffect(() => {
-    fetcher("/api/users").then(setData);
+    fetcher("/api/user/").then(setData);
   }, []);
 
   if (!data) return null;
