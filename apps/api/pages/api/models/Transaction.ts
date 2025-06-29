@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { TransactionEnum } from "@repo/types";
+import { TransactionEnum } from "@repo/types/transaction";
 
 export interface ITransaction extends Document {
   type: TransactionEnum;

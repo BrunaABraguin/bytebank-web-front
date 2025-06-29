@@ -1,4 +1,4 @@
-import { User } from "@repo/types";
+import { User } from "@repo/types/user";
 import Link from "next/link";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());

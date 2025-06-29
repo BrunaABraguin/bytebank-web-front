@@ -1,4 +1,4 @@
-import { TransactionEnum } from "../transaction";
+import { TransactionEnum } from "./transaction.js";
 
 export type FormValues = {
   type: TransactionEnum;
