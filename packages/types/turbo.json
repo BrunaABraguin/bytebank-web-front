@@ -2,9 +2,7 @@
   "extends": ["//"],
   "tasks": {
    "build": {
-      "outputs": ["dist/**"],
-      "dependsOn": ["^build"],
-      "cache": true
+      "outputs": ["dist/**"]
     },
     "dev": {
       "cache": false
