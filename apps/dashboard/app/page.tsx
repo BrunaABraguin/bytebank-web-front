@@ -1,5 +1,5 @@
 "use client";
-import { NAV_LINKS_DASHBOARD } from "@/contants";
+import { NAV_LINKS_DASHBOARD } from "@repo/utils/paths";
 import Sidebar from "@repo/ui/Sidebar";
 import { useMemo } from "react";
 import { usePathname } from "next/navigation";
