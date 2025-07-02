@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  assetPrefix: "/web-static",
+  assetPrefix: "/dashboard-static",
   typescript: {
     ignoreBuildErrors: true,
   },
