@@ -5,7 +5,7 @@ const PATH = {
   TRANSACTIONS: "/transactions",
 };
 
-export const NAV_LINKS_DASHBOARD = [
+export const NAV_LINKS = [
   { href: PATH.DASHBOARD, label: "Dashboard" },
   { href: PATH.TRANSACTIONS, label: "Transações" },
 ];

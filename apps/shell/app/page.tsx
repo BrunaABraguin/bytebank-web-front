@@ -1,23 +1,11 @@
-"use client";
-import { NAV_LINKS_DASHBOARD } from "@repo/utils/paths";
 import Sidebar from "@repo/ui/Sidebar";
-import { useMemo } from "react";
-import { usePathname } from "next/navigation";
+import { NAV_LINKS } from "@repo/utils/paths";
 
-export default function Home() {
-  const pathname = usePathname();
-
-  const navLinks = useMemo(() => {
-    return NAV_LINKS_DASHBOARD.map((link) => ({
-      ...link,
-      isActive: pathname === link.href,
-    }));
-  }, [pathname]);
-
+export default function Shell() {
   return (
     <div className="bg-green-light">
       <div className="grid grid-cols-1 lg:grid-cols-4 min-h-screen xl:px-28">
-        <Sidebar navLinks={navLinks} />
+        <Sidebar navLinks={NAV_LINKS} />
       </div>
     </div>
   );

@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={inter.variable}>
-      <body className="antialiased" suppressHydrationWarning={true}>
+      <body className="antialiased bg-green-light p-6" suppressHydrationWarning={true}>
         {children}
       </body>
     </html>
