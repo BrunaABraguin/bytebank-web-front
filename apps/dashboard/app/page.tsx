@@ -15,6 +15,7 @@ import {
 
 const receita = 11290;
 const despesas = 8322.45;
+const poupança = receita * 0.1;
 const saldo = receita - despesas;
 const despesasPlanejadas = [
   { nome: "Cuidados Pess.", valor: 80, gasto: 80 },
@@ -56,17 +57,78 @@ const dadosMensais = [
 export default function Dashboard() {
   return (
     <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <Card className="col-span-1 lg:col-span-2">
+        <CardContent className="p-4">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2 gap-2">
+            <div className="flex justify-between text-lg gap-8">
+              <div className="grid font-semibold">
+                <span className="text-sm text-gray-500">Saldo</span>
+                <span>R$ {saldo.toLocaleString()}</span>
+              </div>
+              <div className="grid font-semibold">
+                <span className="text-sm text-gray-500">Receita</span>
+                <span>R$ {receita.toLocaleString()}</span>
+              </div>
+              <div className="grid font-semibold">
+                <span className="text-sm text-gray-500">Despesas</span>
+                <span>R$ {despesas.toLocaleString()}</span>
+              </div>
+              <div className="grid font-semibold">
+                <span className="text-sm text-gray-500">Poupança</span>
+                <span>R$ {poupança.toLocaleString()}</span>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <select
+                className="border rounded px-2 py-1 text-sm"
+                defaultValue="Mar"
+              >
+                <option value="Jan">Janeiro</option>
+                <option value="Fev">Fevereiro</option>
+                <option value="Mar">Março</option>
+              </select>
+              <select
+                className="border rounded px-2 py-1 text-sm"
+                defaultValue="2024"
+              >
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+              </select>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
       <Card>
         <CardContent className="p-4">
-          <h2 className="text-xl font-bold mb-4">Receitas e Despesas</h2>
-          <div className="flex justify-between text-lg mb-2">
-            <div className="text-green-600">R$ {receita.toLocaleString()}</div>
-            <div className="text-red-600">R$ {despesas.toLocaleString()}</div>
-            <div className="text-emerald-700">R$ {saldo.toLocaleString()}</div>
-          </div>
+          <h2 className="text-xl font-bold mb-4 text-gray-400">
+            Receitas e Despesas
+          </h2>
+
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={dadosMensais}>
+                <defs>
+                  <linearGradient
+                    id="receitaGradient"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop offset="5%" stopColor="#47A138" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#B6E2B2" stopOpacity={0.2} />
+                  </linearGradient>
+                  <linearGradient
+                    id="despesasGradient"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop offset="5%" stopColor="#FF5031" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#FFD2C9" stopOpacity={0.2} />
+                  </linearGradient>
+                </defs>
                 <XAxis dataKey="mes" />
                 <YAxis />
                 <Tooltip />
@@ -74,14 +136,14 @@ export default function Dashboard() {
                   type="monotone"
                   dataKey="receita"
                   stroke="#47A138"
-                  fill="#47A138"
+                  fill="url(#receitaGradient)"
                   strokeWidth={3}
                 />
                 <Area
                   type="monotone"
                   dataKey="despesas"
                   stroke="#FF5031"
-                  fill="#FF5031"
+                  fill="url(#despesasGradient)"
                   strokeWidth={3}
                 />
               </AreaChart>
@@ -91,7 +153,9 @@ export default function Dashboard() {
       </Card>
       <Card>
         <CardContent className="p-4">
-          <h2 className="text-lg font-semibold mb-4">Cartões de Crédito</h2>
+          <h2 className="text-xl font-bold mb-4 text-gray-400">
+            Cartões de Crédito
+          </h2>
           {cartoes.map((item) => (
             <div key={item.nome} className="mb-2">
               <div className="flex justify-between text-sm">
@@ -105,7 +169,9 @@ export default function Dashboard() {
       </Card>
       <Card>
         <CardContent className="p-4">
-          <h2 className="text-lg font-semibold mb-4">Despesas x Planejado</h2>
+          <h2 className="text-xl font-bold mb-4 text-gray-400">
+            Despesas x Planejado
+          </h2>
           {despesasPlanejadas.map((item) => (
             <div key={item.nome} className="mb-2">
               <div className="flex justify-between text-sm">
@@ -115,40 +181,14 @@ export default function Dashboard() {
               <Progress value={item.gasto} className="h-2" />
             </div>
           ))}
-          <div className="flex justify-center mt-4">
-            <div className="relative w-20 h-20">
-              <svg className="w-full h-full" viewBox="0 0 36 36">
-                <path
-                  className="text-orange-200"
-                  strokeWidth="4"
-                  fill="none"
-                  stroke="currentColor"
-                  d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                />
-                <path
-                  className="text-orange-500"
-                  strokeWidth="4"
-                  fill="none"
-                  strokeDasharray="74, 100"
-                  stroke="currentColor"
-                  d="M18 2.0845
-                    a 15.9155 15.9155 0 0 1 0 31.831
-                    a 15.9155 15.9155 0 0 1 0 -31.831"
-                />
-              </svg>
-              <span className="absolute inset-0 flex items-center justify-center text-xl font-bold">
-                74%
-              </span>
-            </div>
-          </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardContent className="p-4">
-          <h2 className="text-lg font-semibold mb-4">% por Categoria</h2>
+          <h2 className="text-xl font-bold mb-4 text-gray-400">
+            % por Categoria
+          </h2>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart

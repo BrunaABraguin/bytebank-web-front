@@ -6,7 +6,7 @@ export const Card = ({
 }: Readonly<React.HTMLAttributes<HTMLDivElement>>) => {
   return (
     <div
-      className={`rounded-2xl border bg-white shadow-sm ${className}`}
+      className={`rounded-2xl border-0 bg-white shadow-sm border-gray-300 ${className}`}
       {...props}
     />
   );
