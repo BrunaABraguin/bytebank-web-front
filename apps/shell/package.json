@@ -11,18 +11,18 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/ui": "*",
-    "@repo/utils": "*",
-    "@repo/types": "*",
+    "@workspace/ui": "*",
+    "@workspace/utils": "*",
+    "@workspace/types": "*",
     "next": "^15.3.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^15.3.0",
-    "@repo/eslint-config": "*",
-    "@repo/tailwind-config": "*",
-    "@repo/typescript-config": "*",
+    "@workspace/eslint-config": "*",
+    "@workspace/tailwind-config": "*",
+    "@workspace/typescript-config": "*",
     "@tailwindcss/postcss": "^4.1.5",
     "@types/node": "^22.15.30",
     "@types/react": "^19.1.0",

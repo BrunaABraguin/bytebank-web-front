@@ -1,5 +1,5 @@
 {
-  "name": "bytebank-monorepo",
+  "name": "bytebank-workspace",
   "private": true,
   "scripts": {
     "build": "turbo run build",

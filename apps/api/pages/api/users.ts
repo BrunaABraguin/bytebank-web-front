@@ -1,4 +1,4 @@
-import { User } from "@repo/types/user";
+import { User } from "@workspace/types/user";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 const users: User[] = [

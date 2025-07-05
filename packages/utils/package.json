@@ -1,5 +1,5 @@
 {
-  "name": "@repo/utils",
+  "name": "@workspace/utils",
   "license": "MIT",
   "version": "1.0.0",
   "type": "module",
@@ -12,7 +12,7 @@
     "./*": "./dist/*.js"
   },
   "devDependencies": {
-    "@repo/typescript-config": "*",
+    "@workspace/typescript-config": "*",
     "typescript": "5.8.2"
   }
 }

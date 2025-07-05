@@ -1,7 +1,9 @@
 "use client";
-import { Card } from "@repo/ui/Card";
-import { CardContent } from "@repo/ui/CardContent";
-import { Progress } from "@repo/ui/Progress";
+import { Card, CardContent } from "@workspace/ui/Card";
+import { ChartConfig, ChartContainer } from "@workspace/ui/Chart";
+import { MonthYearPicker } from "@workspace/ui/MonthYearPicker";
+import { Progress } from "@workspace/ui/Progress";
+import { CirclePercent } from "@workspace/ui/CirclePercent";
 import {
   ResponsiveContainer,
   XAxis,
@@ -54,12 +56,29 @@ const dadosMensais = [
   { mes: "Mar", receita: 11290, despesas: 8322.45 },
 ];
 
+const limiteMensal = 15000;
+const limiteCartoes = cartoes.reduce(
+  (total, cartao) => total + cartao.valor,
+  0
+);
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "#2563eb",
+  },
+  mobile: {
+    label: "Mobile",
+    color: "#60a5fa",
+  },
+} satisfies ChartConfig;
+
 export default function Dashboard() {
   return (
     <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
       <Card className="col-span-1 lg:col-span-2">
-        <CardContent className="p-4">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2 gap-2">
+        <CardContent>
+          <div className="flex md:flex-row md:items-center md:justify-between mb-2 gap-2">
             <div className="flex justify-between text-lg gap-8">
               <div className="grid font-semibold">
                 <span className="text-sm text-gray-500">Saldo</span>
@@ -79,33 +98,19 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="flex gap-2">
-              <select
-                className="border rounded px-2 py-1 text-sm"
-                defaultValue="Mar"
-              >
-                <option value="Jan">Janeiro</option>
-                <option value="Fev">Fevereiro</option>
-                <option value="Mar">Março</option>
-              </select>
-              <select
-                className="border rounded px-2 py-1 text-sm"
-                defaultValue="2024"
-              >
-                <option value="2024">2024</option>
-                <option value="2023">2023</option>
-              </select>
+              <MonthYearPicker />
             </div>
           </div>
         </CardContent>
       </Card>
       <Card>
-        <CardContent className="p-4">
+        <CardContent>
           <h2 className="text-xl font-bold mb-4 text-gray-400">
             Receitas e Despesas
           </h2>
 
-          <div className="h-56">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-auto">
+            <ChartContainer config={chartConfig}>
               <AreaChart data={dadosMensais}>
                 <defs>
                   <linearGradient
@@ -147,15 +152,16 @@ export default function Dashboard() {
                   strokeWidth={3}
                 />
               </AreaChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </div>
         </CardContent>
       </Card>
       <Card>
-        <CardContent className="p-4">
+        <CardContent>
           <h2 className="text-xl font-bold mb-4 text-gray-400">
             Cartões de Crédito
           </h2>
+          <CirclePercent percent={(limiteCartoes / limiteMensal) * 100} />
           {cartoes.map((item) => (
             <div key={item.nome} className="mb-2">
               <div className="flex justify-between text-sm">
@@ -168,7 +174,7 @@ export default function Dashboard() {
         </CardContent>
       </Card>
       <Card>
-        <CardContent className="p-4">
+        <CardContent>
           <h2 className="text-xl font-bold mb-4 text-gray-400">
             Despesas x Planejado
           </h2>
@@ -185,7 +191,7 @@ export default function Dashboard() {
       </Card>
 
       <Card>
-        <CardContent className="p-4">
+        <CardContent>
           <h2 className="text-xl font-bold mb-4 text-gray-400">
             % por Categoria
           </h2>

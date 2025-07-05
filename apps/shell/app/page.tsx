@@ -1,5 +1,5 @@
-import Sidebar from "@repo/ui/Sidebar";
-import { NAV_LINKS } from "@repo/utils/paths";
+import Sidebar from "@workspace/ui/Sidebar";
+import { NAV_LINKS } from "@workspace/utils/paths";
 
 export default function Shell() {
   return (

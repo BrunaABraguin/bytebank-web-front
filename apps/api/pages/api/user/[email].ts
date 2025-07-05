@@ -1,4 +1,4 @@
-import { User as UserType } from "@repo/types/user";
+import { User as UserType } from "@workspace/types/user";
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectToMongoDB from "../libs/mongoDB";
 import User from "../models/User";
@@ -28,7 +28,7 @@ export default async function userHandler(
       });
       break;
     case "POST":
-      
+
     default:
       res.setHeader("Allow", ["GET", "POST"]);
       res.status(405).end(`Method ${method} Not Allowed`);

@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { TransactionEnum } from "@repo/types/transaction";
+import { TransactionEnum } from "@workspace/types/transaction";
 
 export interface ITransaction extends Document {
   type: TransactionEnum;
@@ -13,7 +13,7 @@ const TransactionSchema: Schema = new Schema(
     accountId: {
       type: Schema.Types.ObjectId,
       ref: "Account",
-      required: true
+      required: true,
     },
     type: {
       type: String,
