@@ -23,8 +23,8 @@ const Sidebar: React.FC<SidebarProps> = ({ navLinks }) => {
 
   return (
     <div>
-      <aside className="h-full lg:col-span-1 px-4 lg:py-6 rounded-lg">
-        <nav className="text-green-dark font-medium flex lg:flex-col px-6 max-lg:mb-6 max-lg:justify-between max-md:hidden">
+      <aside className="h-full lg:col-span-1 px-4 rounded-lg">
+        <nav className="text-green-dark font-medium flex lg:flex-col max-lg:mb-6 max-lg:justify-between max-md:hidden">
           {links.map(({ href, label, isActive }) => (
             <a
               key={href}

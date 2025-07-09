@@ -1,16 +1,18 @@
 "use client";
+import { Plus, SlidersHorizontal } from "lucide-react";
 import { Card, CardContent } from "@workspace/ui/Card";
-import { ChartConfig, ChartContainer } from "@workspace/ui/Chart";
 import { MonthYearPicker } from "@workspace/ui/MonthYearPicker";
 import { Progress } from "@workspace/ui/Progress";
-import { CirclePercent } from "@workspace/ui/CirclePercent";
+import { AreaChartMonths } from "@workspace/ui/AreaChartMonths";
+import { ChartRadialText } from "@workspace/ui/ChartRadialText";
+import { Button } from "@workspace/ui/Button";
+import Sidebar from "@workspace/ui/Sidebar";
+import { NAV_LINKS } from "@workspace/utils/paths";
 import {
   ResponsiveContainer,
   XAxis,
   YAxis,
   Tooltip,
-  AreaChart,
-  Area,
   BarChart,
   Bar,
 } from "recharts";
@@ -50,172 +52,117 @@ const cartoes = [
   { nome: "Visa 7890", percentual: 8.09, valor: 80 },
 ];
 
-const dadosMensais = [
-  { mes: "Jan", receita: 9500, despesas: 7100 },
-  { mes: "Fev", receita: 10200, despesas: 8000 },
-  { mes: "Mar", receita: 11290, despesas: 8322.45 },
-];
-
-const limiteMensal = 15000;
-const limiteCartoes = cartoes.reduce(
-  (total, cartao) => total + cartao.valor,
-  0
-);
-
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "#2563eb",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "#60a5fa",
-  },
-} satisfies ChartConfig;
-
 export default function Dashboard() {
   return (
-    <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <Card className="col-span-1 lg:col-span-2">
-        <CardContent>
-          <div className="flex md:flex-row md:items-center md:justify-between mb-2 gap-2">
-            <div className="flex justify-between text-lg gap-8">
-              <div className="grid font-semibold">
-                <span className="text-sm text-gray-500">Saldo</span>
-                <span>R$ {saldo.toLocaleString()}</span>
+    <div className="p-6 grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <Sidebar navLinks={NAV_LINKS} />
+      <div className="grid col-span-1 lg:col-span-4 gap-5">
+        <Card className="col-span-4">
+          <CardContent>
+            <div className="flex md:flex-row md:items-center md:justify-between mb-2 gap-2">
+              <div className="flex justify-between text-lg gap-8">
+                <div className="grid font-semibold">
+                  <span className="text-sm text-gray-500">Saldo</span>
+                  <span>R$ {saldo.toLocaleString()}</span>
+                </div>
+                <div className="grid font-semibold">
+                  <span className="text-sm text-gray-500">Receita</span>
+                  <span>R$ {receita.toLocaleString()}</span>
+                </div>
+                <div className="grid font-semibold">
+                  <span className="text-sm text-gray-500">Despesas</span>
+                  <span>R$ {despesas.toLocaleString()}</span>
+                </div>
+                <div className="grid font-semibold">
+                  <span className="text-sm text-gray-500">Poupança</span>
+                  <span>R$ {poupança.toLocaleString()}</span>
+                </div>
               </div>
-              <div className="grid font-semibold">
-                <span className="text-sm text-gray-500">Receita</span>
-                <span>R$ {receita.toLocaleString()}</span>
-              </div>
-              <div className="grid font-semibold">
-                <span className="text-sm text-gray-500">Despesas</span>
-                <span>R$ {despesas.toLocaleString()}</span>
-              </div>
-              <div className="grid font-semibold">
-                <span className="text-sm text-gray-500">Poupança</span>
-                <span>R$ {poupança.toLocaleString()}</span>
+              <div className="flex gap-2">
+                <Button variant="outline" size="icon" className="size-8">
+                  <Plus />
+                </Button>
+                <Button variant="outline" size="icon" className="size-8">
+                  <SlidersHorizontal />
+                </Button>
+                <MonthYearPicker />
               </div>
             </div>
-            <div className="flex gap-2">
-              <MonthYearPicker />
+          </CardContent>
+        </Card>
+        <Card className="col-span-1 lg:col-span-2">
+          <CardContent>
+            <h2 className="text-xl font-bold mb-4 text-gray-400">
+              Receitas e Despesas
+            </h2>
+            <AreaChartMonths />
+          </CardContent>
+        </Card>
+        <Card className="col-span-1 lg:col-span-2">
+          <CardContent>
+            <h2 className="text-xl font-bold mb-4 text-gray-400">
+              Cartões de Crédito
+            </h2>
+            <div className="flex gap-4">
+              <ChartRadialText />
+              <div className="flex flex-col w-1/2">
+                {cartoes.map((item) => (
+                  <div key={item.nome} className="mb-2 h-10">
+                    <div className="flex justify-between text-sm">
+                      <span>{item.nome}</span>
+                      <span>R$ {item.valor.toLocaleString()}</span>
+                    </div>
+                    <Progress value={item.percentual} className="h-2" />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardContent>
-          <h2 className="text-xl font-bold mb-4 text-gray-400">
-            Receitas e Despesas
-          </h2>
+          </CardContent>
+        </Card>
+        <Card className="col-span-1 lg:col-span-2">
+          <CardContent>
+            <h2 className="text-xl font-bold mb-4 text-gray-400">
+              Despesas x Planejado
+            </h2>
+            {despesasPlanejadas.map((item) => (
+              <div key={item.nome} className="mb-2">
+                <div className="flex justify-between text-sm">
+                  <span>{item.nome}</span>
+                  <span>{item.gasto}%</span>
+                </div>
+                <Progress value={item.gasto} className="h-2" />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
 
-          <div className="h-auto">
-            <ChartContainer config={chartConfig}>
-              <AreaChart data={dadosMensais}>
-                <defs>
-                  <linearGradient
-                    id="receitaGradient"
-                    x1="0"
-                    y1="0"
-                    x2="0"
-                    y2="1"
-                  >
-                    <stop offset="5%" stopColor="#47A138" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="#B6E2B2" stopOpacity={0.2} />
-                  </linearGradient>
-                  <linearGradient
-                    id="despesasGradient"
-                    x1="0"
-                    y1="0"
-                    x2="0"
-                    y2="1"
-                  >
-                    <stop offset="5%" stopColor="#FF5031" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="#FFD2C9" stopOpacity={0.2} />
-                  </linearGradient>
-                </defs>
-                <XAxis dataKey="mes" />
-                <YAxis />
-                <Tooltip />
-                <Area
-                  type="monotone"
-                  dataKey="receita"
-                  stroke="#47A138"
-                  fill="url(#receitaGradient)"
-                  strokeWidth={3}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="despesas"
-                  stroke="#FF5031"
-                  fill="url(#despesasGradient)"
-                  strokeWidth={3}
-                />
-              </AreaChart>
-            </ChartContainer>
-          </div>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardContent>
-          <h2 className="text-xl font-bold mb-4 text-gray-400">
-            Cartões de Crédito
-          </h2>
-          <CirclePercent percent={(limiteCartoes / limiteMensal) * 100} />
-          {cartoes.map((item) => (
-            <div key={item.nome} className="mb-2">
-              <div className="flex justify-between text-sm">
-                <span>{item.nome}</span>
-                <span>R$ {item.valor.toLocaleString()}</span>
-              </div>
-              <Progress value={item.percentual} className="h-2" />
+        <Card className="col-span-1 lg:col-span-2">
+          <CardContent>
+            <h2 className="text-xl font-bold mb-4 text-gray-400">
+              % por Categoria
+            </h2>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={categorias}
+                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                >
+                  <XAxis dataKey="nome" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar
+                    type="monotone"
+                    dataKey="percentual"
+                    stroke="#FF5031"
+                    fill="#FF5031"
+                    strokeWidth={3}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
-          ))}
-        </CardContent>
-      </Card>
-      <Card>
-        <CardContent>
-          <h2 className="text-xl font-bold mb-4 text-gray-400">
-            Despesas x Planejado
-          </h2>
-          {despesasPlanejadas.map((item) => (
-            <div key={item.nome} className="mb-2">
-              <div className="flex justify-between text-sm">
-                <span>{item.nome}</span>
-                <span>{item.gasto}%</span>
-              </div>
-              <Progress value={item.gasto} className="h-2" />
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardContent>
-          <h2 className="text-xl font-bold mb-4 text-gray-400">
-            % por Categoria
-          </h2>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={categorias}
-                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-              >
-                <XAxis dataKey="nome" />
-                <YAxis />
-                <Tooltip />
-                <Bar
-                  type="monotone"
-                  dataKey="percentual"
-                  stroke="#FF5031"
-                  fill="#FF5031"
-                  strokeWidth={3}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
