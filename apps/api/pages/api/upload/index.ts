@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import formidable, { Fields, Files } from "formidable";
 import connectToMongoDB from "../libs/mongoDB";
 import BillingFile from "../models/BillingFile";
+import runMiddleware, { cors } from "../libs/cors";
 
 export const config = {
   api: {
@@ -14,6 +15,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  await runMiddleware(req, res, cors);
   const form = formidable({ keepExtensions: true, multiples: false });
 
   form.parse(req, async (err: Error | null, fields: Fields, files: Files) => {
