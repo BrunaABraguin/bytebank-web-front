@@ -2,6 +2,7 @@ import type React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Providers } from "./Providers";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -23,8 +24,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={inter.variable}>
-      <body className="antialiased bg-green-light p-6" suppressHydrationWarning={true}>
-        {children}
+      <body
+        className="antialiased bg-green-light p-6"
+        suppressHydrationWarning={true}
+      >
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

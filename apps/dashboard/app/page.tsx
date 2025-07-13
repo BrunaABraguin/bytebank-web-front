@@ -16,6 +16,9 @@ import {
   BarChart,
   Bar,
 } from "recharts";
+import { FileUpload } from "@workspace/ui/FileUpload";
+import { useUploadFile } from "./hooks/useUploadFile";
+import { useEffect } from "react";
 
 const receita = 11290;
 const despesas = 8322.45;
@@ -53,6 +56,19 @@ const cartoes = [
 ];
 
 export default function Dashboard() {
+  const { data, mutate } = useUploadFile();
+
+  useEffect(() => {
+    console.log("Upload response:", data);
+  }, [data]);
+
+  const handleFileChange = (file: File | null) => {
+    mutate({
+      email: "user@example.com",
+      file,
+    });
+  };
+
   return (
     <div className="p-6 grid grid-cols-1 lg:grid-cols-5 gap-6">
       <Sidebar navLinks={NAV_LINKS} />
@@ -79,6 +95,7 @@ export default function Dashboard() {
                 </div>
               </div>
               <div className="flex gap-2">
+                <FileUpload fileChange={handleFileChange} />
                 <Button variant="outline" size="icon" className="size-8">
                   <Plus />
                 </Button>
