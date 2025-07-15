@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={inter.variable}>
       <body
-        className="antialiased bg-green-light p-6"
+        className="antialiased bg-green-light"
         suppressHydrationWarning={true}
       >
         <Providers>{children}</Providers>
