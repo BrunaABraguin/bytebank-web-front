@@ -41,13 +41,13 @@ export const TransactionForm = () => {
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Selecione o tipo de transação</DialogTitle>
+            <DialogTitle>Registre uma transação</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4">
             <div className="grid gap-3">
-              <Label htmlFor="transactionType">Tipo de Transação</Label>
+              <Label htmlFor="transactionType">Tipo</Label>
               <Select>
-                <SelectTrigger className="w-[180px] ml-4">
+                <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Selecione" />
                 </SelectTrigger>
                 <SelectContent>
@@ -64,13 +64,14 @@ export const TransactionForm = () => {
               </Select>
             </div>
             <div className="grid gap-3">
-              <Label htmlFor="transactionValue">Valor da Transação</Label>
+              <Label htmlFor="transactionValue">Valor</Label>
               <Input
                 id="transactionValue"
                 name="transactionValue"
                 placeholder="00.00"
                 type="number"
                 value={transactionValue}
+                className="w-[180px]"
                 onChange={(e) => setTransactionValue(e.target.value)}
               />
             </div>

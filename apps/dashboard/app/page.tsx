@@ -1,5 +1,5 @@
 "use client";
-import { Plus, SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
 import { Card, CardContent } from "@workspace/ui/Card";
 import { MonthYearPicker } from "@workspace/ui/MonthYearPicker";
 import { Progress } from "@workspace/ui/Progress";
@@ -16,6 +16,7 @@ import {
   BarChart,
   Bar,
 } from "recharts";
+import { TransactionForm } from "./components/TransactionForm";
 const receita = 11290;
 const despesas = 8322.45;
 const poupança = receita * 0.1;
@@ -78,9 +79,7 @@ export default function Dashboard() {
                 </div>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" size="icon" className="size-8">
-                  <Plus />
-                </Button>
+                <TransactionForm />
                 <Button variant="outline" size="icon" className="size-8">
                   <SlidersHorizontal />
                 </Button>
