@@ -6,8 +6,8 @@ export enum TransactionEnum {
 
 export type Transaction = {
   _id: string;
-  date: Date;
+  date: string;
   type: TransactionEnum;
-  amount: number;
+  value: number;
   accountId: string;
 };

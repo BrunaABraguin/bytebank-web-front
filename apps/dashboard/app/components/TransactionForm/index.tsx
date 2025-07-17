@@ -10,6 +10,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
+  DialogClose,
+  DialogDescription,
 } from "@workspace/ui/Dialog";
 import {
   Select,
@@ -21,27 +24,48 @@ import {
 import { Input } from "@workspace/ui/Input";
 import { Label } from "@workspace/ui/Label";
 import { Button } from "@workspace/ui/Button";
+import { TransactionEnum } from "@workspace/types/transaction";
 
 export const TransactionForm = () => {
-  const [transactionType, setTransactionType] = useState("");
-  const [transactionValue, setTransactionValue] = useState("");
+  const [transactionType, setTransactionType] = useState<TransactionEnum>(
+    TransactionEnum.INCOME
+  );
+  const [transactionValue, setTransactionValue] = useState<string>("");
   const transactionTypes = useAppSelector(
     (state) => state.transactionTypes.types
   );
+
+  function createTransaction(evt: React.FormEvent<HTMLFormElement>) {
+    evt.preventDefault();
+    if (transactionType && transactionValue) {
+      dispatch({
+        type: "transactions/addTransaction",
+        payload: {
+          type: transactionType,
+          value: parseFloat(transactionValue),
+        },
+      });
+      setTransactionType(TransactionEnum.INCOME);
+      setTransactionValue("");
+    }
+  }
 
   const dispatch = useAppDispatch();
 
   return (
     <Dialog>
-      <form>
-        <DialogTrigger asChild>
-          <Button variant="outline" size="icon" className="size-8">
-            <Plus />
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
+      <DialogTrigger asChild>
+        <Button variant="outline" size="icon" className="size-8">
+          <Plus />
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <form onSubmit={createTransaction}>
           <DialogHeader>
             <DialogTitle>Registre uma transação</DialogTitle>
+            <DialogDescription>
+              Preencha os campos abaixo para registrar uma nova transação.
+            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4">
             <div className="grid gap-3">
@@ -55,7 +79,7 @@ export const TransactionForm = () => {
                     <SelectItem
                       key={type}
                       value={type}
-                      onClick={() => setTransactionType(type)}
+                      onClick={() => setTransactionType(type as TransactionEnum)}
                     >
                       {type.charAt(0).toUpperCase() + type.slice(1)}
                     </SelectItem>
@@ -76,8 +100,16 @@ export const TransactionForm = () => {
               />
             </div>
           </div>
-        </DialogContent>
-      </form>
+          <DialogFooter>
+            <Button type="submit">Registrar</Button>
+            <DialogClose asChild>
+              <Button variant="secondary" type="button">
+                Cancelar
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 };

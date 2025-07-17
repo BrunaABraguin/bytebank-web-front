@@ -24,7 +24,7 @@ const months = [
 
 interface MonthYearPickerProps {
   value?: { month: number; year: number };
-  onChange?: (value: { month: number; year: number }) => void;
+  onChange: (value: { month: number; year: number }) => void;
   className?: string;
 }
 

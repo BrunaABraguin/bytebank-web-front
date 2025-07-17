@@ -2,6 +2,6 @@ import { TransactionEnum } from "./transaction.js";
 
 export type FormValues = {
   type: TransactionEnum;
-  amount: string;
+  value: string;
   accountId: string;
 };

@@ -3,7 +3,7 @@ import { TransactionEnum } from "@workspace/types/transaction";
 
 export interface ITransaction extends Document {
   type: TransactionEnum;
-  amount: number;
+  value: number;
   date: Date;
   accountId: string;
 }
@@ -20,7 +20,7 @@ const TransactionSchema: Schema = new Schema(
       enum: Object.values(TransactionEnum),
       required: true,
     },
-    amount: {
+    value: {
       type: Number,
       required: true,
     },
