@@ -3,9 +3,9 @@ import { ChartConfig, ChartContainer } from "./Chart";
 
 export const AreaChartMonths = () => {
   const dadosMensais = [
-    { mes: "Jan", receita: 9500, despesas: 7100 },
-    { mes: "Fev", receita: 10200, despesas: 8000 },
-    { mes: "Mar", receita: 11290, despesas: 8322.45 },
+    { month: "Janeiro", income: 0, expense: 0 },
+    { month: "Fevereiro", income: 0, expense: 0 },
+    { month: "Março", income: 11290, expense: 8322.45 },
   ];
 
   const chartConfig = {
@@ -24,30 +24,32 @@ export const AreaChartMonths = () => {
       <ChartContainer config={chartConfig}>
         <AreaChart data={dadosMensais}>
           <defs>
-            <linearGradient id="receitaGradient" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#47A138" stopOpacity={0.8} />
               <stop offset="95%" stopColor="#B6E2B2" stopOpacity={0.2} />
             </linearGradient>
-            <linearGradient id="despesasGradient" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="expenseGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#FF5031" stopOpacity={0.8} />
               <stop offset="95%" stopColor="#FFD2C9" stopOpacity={0.2} />
             </linearGradient>
           </defs>
-          <XAxis dataKey="mes" />
+          <XAxis dataKey="month" />
           <YAxis />
           <Tooltip />
           <Area
             type="monotone"
-            dataKey="receita"
+            dataKey="income"
+            name="Receita"
             stroke="#47A138"
-            fill="url(#receitaGradient)"
+            fill="url(#incomeGradient)"
             strokeWidth={3}
           />
           <Area
             type="monotone"
-            dataKey="despesas"
+            dataKey="expense"
+            name="Despesa"
             stroke="#FF5031"
-            fill="url(#despesasGradient)"
+            fill="url(#expenseGradient)"
             strokeWidth={3}
           />
         </AreaChart>

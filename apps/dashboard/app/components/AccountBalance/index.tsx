@@ -1,29 +1,16 @@
 import { Card, CardContent } from "@workspace/ui/Card";
 import { MonthYearPicker } from "@workspace/ui/MonthYearPicker";
 import { TransactionForm } from "../TransactionForm";
-import { useAppSelector } from "@/store/hooks";
-import {
-  selectCurrentBalance,
-  selectExpenses,
-  selectIncome,
-} from "@/features/transactions/transactionsSlice";
-import { useState } from "react";
+import { useDashboardStore } from "@/stores/dashboardStore";
 
 export const AccountBalance = () => {
-  const [selectedDate, setSelectedDate] = useState<{
-    month: number;
-    year: number;
-  }>({
-    month: new Date().getMonth() + 1,
-    year: new Date().getFullYear(),
-  });
-  const balance = useAppSelector((state) => selectCurrentBalance(state));
-  const income = useAppSelector(
-    selectIncome(selectedDate.month, selectedDate.year)
-  );
-  const expenses = useAppSelector(
-    selectExpenses(selectedDate.month, selectedDate.year)
-  );
+  const balance = useDashboardStore((state) => state.balance);
+  const income = useDashboardStore((state) => state.income);
+  const expenses = useDashboardStore((state) => state.expenses);
+
+  const setSelectedDate = (month: number, year: number) => {
+    useDashboardStore.setState({ month, year });
+  };
 
   return (
     <Card className="col-span-4">

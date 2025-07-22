@@ -1,5 +1,4 @@
 "use client";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 import { Plus } from "lucide-react";
 import { useState } from "react";
@@ -25,32 +24,24 @@ import { Input } from "@workspace/ui/Input";
 import { Label } from "@workspace/ui/Label";
 import { Button } from "@workspace/ui/Button";
 import { TransactionEnum } from "@workspace/types/transaction";
+import { useDashboardStore } from "@/stores/dashboardStore";
 
 export const TransactionForm = () => {
   const [transactionType, setTransactionType] = useState<TransactionEnum>(
     TransactionEnum.INCOME
   );
   const [transactionValue, setTransactionValue] = useState<string>("");
-  const transactionTypes = useAppSelector(
-    (state) => state.transactionTypes.types
-  );
+  const transactionTypes = Object.values(TransactionEnum);
 
   function createTransaction(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
-    if (transactionType && transactionValue) {
-      dispatch({
-        type: "transactions/addTransaction",
-        payload: {
-          type: transactionType,
-          value: parseFloat(transactionValue),
-        },
-      });
-      setTransactionType(TransactionEnum.INCOME);
-      setTransactionValue("");
-    }
+    const transaction = {
+      date: new Date().toISOString(),
+      type: transactionType,
+      value: parseFloat(transactionValue),
+    };
+    useDashboardStore.getState().addTransaction(transaction);
   }
-
-  const dispatch = useAppDispatch();
 
   return (
     <Dialog>
@@ -67,21 +58,22 @@ export const TransactionForm = () => {
               Preencha os campos abaixo para registrar uma nova transação.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4">
+          <div className="grid gap-4 mt-5">
             <div className="grid gap-3">
               <Label htmlFor="transactionType">Tipo</Label>
-              <Select>
+              <Select
+                onValueChange={(value) =>
+                  setTransactionType(value as TransactionEnum)
+                }
+                defaultValue={transactionType}
+              >
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Selecione" />
                 </SelectTrigger>
                 <SelectContent>
-                  {transactionTypes.map((type) => (
-                    <SelectItem
-                      key={type}
-                      value={type}
-                      onClick={() => setTransactionType(type as TransactionEnum)}
-                    >
-                      {type.charAt(0).toUpperCase() + type.slice(1)}
+                  {transactionTypes.map((transactionType: TransactionEnum) => (
+                    <SelectItem key={transactionType} value={transactionType}>
+                      {transactionType}
                     </SelectItem>
                   ))}
                 </SelectContent>

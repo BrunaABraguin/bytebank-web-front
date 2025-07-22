@@ -1,11 +1,17 @@
-import Sidebar from "@workspace/ui/Sidebar";
-import { NAV_LINKS } from "@workspace/utils/paths";
+import { BenefitsSection } from "../components/BenefitsSection";
+import Footer from "../components/Footer";
+import HeaderHome from "../components/HeaderHome";
+import { HomeGreetings } from "../components/HomeGreetings";
 
 export default function Shell() {
   return (
-    <div className="p-6 grid grid-cols-1 lg:grid-cols-5 gap-6">
-      <Sidebar navLinks={NAV_LINKS} />
-      <div className="grid col-span-1 lg:col-span-4 gap-5"></div>
+    <div>
+      <HeaderHome />
+      <div className="bg-gradient-to-b from-green-dark to-white">
+        <HomeGreetings />
+        <BenefitsSection />
+      </div>
+      <Footer />
     </div>
   );
 }

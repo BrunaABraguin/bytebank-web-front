@@ -1,13 +1,13 @@
 export enum TransactionEnum {
-  INCOME = "income",
-  EXPENSE = "expense",
-  TRANSFER = "transfer",
+  INCOME = "Receita",
+  EXPENSE = "Despesa",
+  TRANSFER = "Transferência",
 }
 
 export type Transaction = {
-  _id: string;
+  _id?: string;
   date: string;
   type: TransactionEnum;
   value: number;
-  accountId: string;
+  accountId?: string;
 };

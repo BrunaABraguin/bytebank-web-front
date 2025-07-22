@@ -24,7 +24,7 @@ const months = [
 
 interface MonthYearPickerProps {
   value?: { month: number; year: number };
-  onChange: (value: { month: number; year: number }) => void;
+  onChange: (month: number, year: number) => void;
   className?: string;
 }
 
@@ -46,7 +46,7 @@ export const MonthYearPicker: React.FC<MonthYearPickerProps> = ({
 
   const handleMonthChange = (month: number) => {
     setSelectedMonth(month);
-    onChange?.({ month, year: selectedYear });
+    onChange?.(month, selectedYear);
   };
 
   const handleYearChange = (delta: number) => {
@@ -55,9 +55,9 @@ export const MonthYearPicker: React.FC<MonthYearPickerProps> = ({
     setSelectedYear(newYear);
     if (newYear === currentYear && selectedMonth > currentMonth) {
       setSelectedMonth(currentMonth);
-      onChange?.({ month: currentMonth, year: newYear });
+      onChange?.(currentMonth, newYear);
     } else {
-      onChange?.({ month: selectedMonth, year: newYear });
+      onChange?.(selectedMonth, newYear);
     }
   };
 

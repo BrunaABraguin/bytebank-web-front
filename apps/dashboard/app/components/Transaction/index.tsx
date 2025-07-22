@@ -1,6 +1,6 @@
 import { Transaction as TransactionType } from "@workspace/types/transaction";
 import { Button } from "@workspace/ui/Button";
-import { Edit } from "lucide-react";
+import { Ellipsis } from "lucide-react";
 
 interface TransactionProps {
   transaction: TransactionType;
@@ -8,21 +8,9 @@ interface TransactionProps {
 
 export const Transaction = ({ transaction }: TransactionProps) => {
   const isNegative = (type: string) => {
-    return type !== "income";
+    return type !== "Receita";
   };
 
-  const handleTranslateType = (type: string) => {
-    switch (type) {
-      case "income":
-        return "Receita";
-      case "expense":
-        return "Despesa";
-      case "transfer":
-        return "Transferência";
-      default:
-        return type;
-    }
-  };
   return (
     <div key={transaction._id} className="mb-4 border-b border-green pb-2">
       <div className="flex justify-between text-sm text-green font-semibold">
@@ -39,11 +27,10 @@ export const Transaction = ({ transaction }: TransactionProps) => {
         </span>
       </div>
 
-      <div className="text-black font-medium flex items-center gap-2">
-        {handleTranslateType(transaction.type)}
-
-        <Button>
-          <Edit />
+      <div className="text-black font-medium flex justify-between gap-2">
+        {transaction.type}
+        <Button variant="ghost" size="icon" className="size-8">
+          <Ellipsis size={16} />
         </Button>
       </div>
 
