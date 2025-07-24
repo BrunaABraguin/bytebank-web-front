@@ -33,14 +33,13 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
   transactions: [],
   month: new Date().getMonth() + 1,
   year: new Date().getFullYear(),
-
   addTransaction: (transaction: Transaction) =>
     set((state) => {
       const newTransaction: TransactionType = {
         ...transaction,
         date: new Date().toISOString(),
       };
-      
+
       const updatedIncome =
         transaction.type === TransactionEnum.INCOME
           ? state.income + transaction.value
@@ -97,7 +96,29 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
       expenses: 0,
       transactions: [],
     })),
-
+  filterTransactionsMonthYear: (month: number, year: number) =>
+    set((state) => ({
+      transactions: state.transactions.filter((transaction) => {
+        const transactionDate = new Date(transaction.date);
+        return (
+          transactionDate.getMonth() + 1 === month &&
+          transactionDate.getFullYear() === year
+        );
+      }),
+    })),
+  filterTransactionsByType: (type: TransactionEnum) =>
+    set((state) => ({
+      transactions: state.transactions.filter(
+        (transaction) => transaction.type === type
+      ),
+    })),
+  filterTransactionsByDate: (startDate: Date, endDate: Date) =>
+    set((state) => ({
+      transactions: state.transactions.filter((transaction) => {
+        const transactionDate = new Date(transaction.date);
+        return transactionDate >= startDate && transactionDate <= endDate;
+      }),
+    })),
   setBalance: (balance: number) => set(() => ({ balance })),
   setIncome: (income: number) => set(() => ({ income })),
   setExpenses: (expenses: number) => set(() => ({ expenses })),

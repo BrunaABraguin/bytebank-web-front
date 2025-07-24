@@ -12,19 +12,20 @@
   },
   "dependencies": {
     "@workspace/types": "*",
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "formidable": "^3.5.4",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.0",
     "next": "15.3.4",
-    "next-auth": "^4.24.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/formidable": "^3.4.5",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.15.30",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.1",
