@@ -19,7 +19,7 @@ import { useLogin } from "../hooks/useLogin";
 export const DialogLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { mutate, errorMessage } = useLogin();
+  const { mutate, errorMessage } = useLogin(email);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

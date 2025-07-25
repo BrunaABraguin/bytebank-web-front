@@ -1,26 +1,27 @@
 import { useMutation } from "@tanstack/react-query";
 import { loginService } from "../services/login";
-import { redirect } from "next/navigation";
 import { AxiosError } from "axios";
-
+import { useSharedStore } from "@workspace/store";
 interface LoginParams {
   email: string;
   password: string;
 }
-export interface ApiMessage {
+interface ApiMessage {
   message: string;
 }
 
-export const useLogin = () => {
-  const { data, mutate, isPending, error } = useMutation({
-    mutationKey: ["login"],
+export const useLogin = (email: string) => {
+  const { setEmail } = useSharedStore();
+
+  const { data, mutate, isPending, error, isSuccess } = useMutation({
     mutationFn: async ({ email, password }: LoginParams) => {
       return loginService(email, password);
     },
     onSuccess: ({ token }) => {
       if (token) {
         localStorage.setItem("auth_token", token);
-        redirect("/dashboard");
+        setEmail(email);
+        window.location.assign("/dashboard");
       } else {
         console.error("Token está ausente na resposta.");
       }
@@ -35,6 +36,7 @@ export const useLogin = () => {
     data,
     mutate,
     isPending,
+    isSuccess,
     errorMessage: (error as AxiosError<ApiMessage>)?.response?.data.message,
   };
 };

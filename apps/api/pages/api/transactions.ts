@@ -3,11 +3,13 @@ import connectToMongoDB from "./libs/mongoDB";
 import Transaction from "./models/Transaction";
 import { Transaction as TransactionType } from "@workspace/types/transaction";
 import Account from "./models/Account";
+import runMiddleware, { cors } from "./libs/cors";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  await runMiddleware(req, res, cors);
   await connectToMongoDB();
 
   switch (req.method) {
@@ -34,14 +36,14 @@ async function handleGetTransactions(
   res: NextApiResponse
 ) {
   try {
-    const { accountId } = req.query;
-    if (!accountId) {
+    const { email } = req.query;
+    if (!email) {
       return res
         .status(400)
         .json({ error: "Campos obrigatórios não preenchidos" });
     }
 
-    const transactions = await Transaction.find({ accountId })
+    const transactions = await Transaction.find({ ownerEmail: email })
       .sort({ date: -1 })
       .lean<TransactionType[]>();
     return res.status(200).json(transactions);
@@ -55,9 +57,9 @@ async function handleCreateTransaction(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { type, amount, accountId } = req.body;
+  const { type, amount, email } = req.body;
 
-  if (!type || !amount || !accountId) {
+  if (!type || !amount || !email) {
     return res
       .status(400)
       .json({ error: "Campos obrigatórios não preenchidos" });
@@ -67,11 +69,11 @@ async function handleCreateTransaction(
     const newTransaction = await Transaction.create({
       type,
       amount,
-      accountId,
+      ownerEmail: email,
       date: new Date(),
     });
 
-    const account = await adjustAccountBalance(accountId, type, amount);
+    const account = await adjustAccountBalance(email, type, amount);
 
     if (!account) {
       return res.status(404).json({ error: "Conta não encontrada" });
@@ -105,7 +107,7 @@ async function handleUpdateTransaction(
     }
 
     const oldAccount = await adjustAccountBalance(
-      transaction.accountId,
+      transaction.ownerEmail,
       transaction.type,
       -transaction.amount
     );
@@ -119,7 +121,7 @@ async function handleUpdateTransaction(
     await transaction.save();
 
     await adjustAccountBalance(
-      transaction.accountId,
+      transaction.ownerEmail,
       transaction.type,
       transaction.amount
     );
@@ -148,7 +150,7 @@ async function handleDeleteTransaction(
     }
 
     await adjustAccountBalance(
-      transaction.accountId,
+      transaction.ownerEmail,
       transaction.type,
       -transaction.amount
     );
@@ -161,11 +163,11 @@ async function handleDeleteTransaction(
 }
 
 async function adjustAccountBalance(
-  accountId: string,
+  ownerEmail: string,
   type: string,
   amount: number
 ) {
-  const account = await Account.findById(accountId);
+  const account = await Account.findOne({ ownerEmail });
   if (!account) return null;
 
   if (type === "income") {

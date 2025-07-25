@@ -5,14 +5,13 @@ export interface ITransaction extends Document {
   type: TransactionEnum;
   value: number;
   date: Date;
-  accountId: string;
+  ownerEmail: string;
 }
 
 const TransactionSchema: Schema = new Schema(
   {
-    accountId: {
-      type: Schema.Types.ObjectId,
-      ref: "Account",
+    ownerEmail: {
+      type: String,
       required: true,
     },
     type: {

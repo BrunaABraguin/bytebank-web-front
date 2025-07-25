@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import connectToMongoDB from "../libs/mongoDB";
 import User from "../models/User";
 import Account from "../models/Account";
+import runMiddleware, { cors } from "../libs/cors";
 
 interface IUserPayload {
   name: string;
@@ -26,6 +27,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>
 ): Promise<void> {
+  await runMiddleware(req, res, cors);
+
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
     res.status(405).json({ message: "Método não permitido" });

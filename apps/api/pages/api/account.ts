@@ -2,25 +2,24 @@ import { NextApiRequest, NextApiResponse } from "next";
 import connectToMongoDB from "./libs/mongoDB";
 import Account from "./models/Account";
 import { Account as AccountType } from "@workspace/types/account";
+import runMiddleware, { cors } from "./libs/cors";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   await connectToMongoDB();
+  await runMiddleware(req, res, cors);
 
   if (req.method === "GET") {
-    return handleGetTransactions(req, res);
+    return handleGetAccount(req, res);
   } else {
     res.setHeader("Allow", ["GET"]);
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
 
-async function handleGetTransactions(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function handleGetAccount(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { email } = req.query;
     if (!email) {

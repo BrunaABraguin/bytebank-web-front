@@ -9,5 +9,7 @@ export type Transaction = {
   date: string;
   type: TransactionEnum;
   value: number;
-  accountId?: string;
+  ownerEmail?: string;
+  category?: string;
+  descriptions?: string;
 };

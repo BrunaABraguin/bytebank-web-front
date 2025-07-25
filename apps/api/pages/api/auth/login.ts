@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import User from "../models/User";
 import bcrypt from "bcryptjs";
 import runMiddleware, { cors } from "../libs/cors";
+import Account from "../models/Account";
+import { Account as AccountType } from "@workspace/types/account";
 
 export default async function handler(
   req: NextApiRequest,
@@ -36,6 +38,25 @@ export default async function handler(
       { expiresIn: "1h" }
     );
 
+    const account = await Account.findOne({
+      ownerEmail: email,
+    }).lean<AccountType>();
+
+    if (!account) {
+      return res
+        .status(401)
+        .json({ message: "Conta de usuário não encontrado" });
+    }
+
+    const isProduction = process.env.NODE_ENV === "production";
+    const domain = isProduction
+      ? "bytebank-bruna-braguin.vercel.app"
+      : "localhost";
+
+    res.setHeader("Set-Cookie", [
+      `email=${email}; Path=/; Domain=${domain}; HttpOnly; Secure; SameSite=Strict`,
+    ]);
+    res.setHeader("Authorization", `Bearer ${token}`);
     res.status(200).json({
       message: "Login bem-sucedido",
       token,
