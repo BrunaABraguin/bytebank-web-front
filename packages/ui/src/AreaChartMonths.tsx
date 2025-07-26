@@ -1,5 +1,5 @@
 import { XAxis, YAxis, Tooltip, Area, AreaChart } from "recharts";
-import { ChartConfig, ChartContainer } from "./Chart";
+import { ChartConfig, ChartContainer } from "./chart";
 import { MonthlyData } from "@workspace/types/monthlyData";
 
 interface AreaChartMonthsProps {

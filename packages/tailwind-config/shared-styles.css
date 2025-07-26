@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 @theme {
   --color-blue-light: #DEE9EA;
@@ -10,10 +13,6 @@
   --color-gray-light: #F5F5F5;
   --color-gray-dark: #CBCBCB;
 }
-
-@import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

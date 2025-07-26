@@ -7,7 +7,7 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "./Chart";
+} from "./chart";
 const chartData = [
   { month: "January", desktop: 186 },
   { month: "February", desktop: 305 },

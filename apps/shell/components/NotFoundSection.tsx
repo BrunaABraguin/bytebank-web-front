@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Button } from "@workspace/ui/Button";
+import { Button } from "@workspace/ui/button";
 
 const NotFoundSection: React.FC = () => {
   const router = useRouter();

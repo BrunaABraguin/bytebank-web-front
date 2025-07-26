@@ -8,8 +8,8 @@ import {
   RadialBarChart,
 } from "recharts";
 
-import { Card, CardContent } from "./Card";
-import { ChartConfig, ChartContainer } from "./Chart";
+import { Card, CardContent } from "./card";
+import { ChartConfig, ChartContainer } from "./chart";
 const chartData = [{ visitors: 200 }];
 
 const chartConfig = {
@@ -62,8 +62,7 @@ export const ChartRadialText = () => {
                           y={viewBox.cy}
                           className="fill-foreground text-4xl font-bold"
                         >
-                          {chartData[0]?.visitors?.toLocaleString()}
-                          %
+                          {chartData[0]?.visitors?.toLocaleString()}%
                         </tspan>
                         <tspan
                           x={viewBox.cx}

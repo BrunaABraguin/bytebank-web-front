@@ -1,7 +1,5 @@
-import { Card, CardContent } from "@workspace/ui/Card";
-import { MonthYearPicker } from "@workspace/ui/MonthYearPicker";
+import { Card, CardContent } from "@workspace/ui/card";
 import { TransactionForm } from "../TransactionForm";
-import { useDashboardStore } from "@/stores/dashboardStore";
 import { Account } from "@workspace/types/account";
 
 interface AccountBalanceProps {
@@ -9,10 +7,6 @@ interface AccountBalanceProps {
 }
 
 export const AccountBalance = ({ account }: AccountBalanceProps) => {
-  const setSelectedDate = (month: number, year: number) => {
-    useDashboardStore.setState({ month, year });
-  };
-
   return (
     <Card className="col-span-4">
       <CardContent>
@@ -33,7 +27,6 @@ export const AccountBalance = ({ account }: AccountBalanceProps) => {
           </div>
           <div className="flex gap-2">
             <TransactionForm />
-            <MonthYearPicker onChange={setSelectedDate} />
           </div>
         </div>
       </CardContent>

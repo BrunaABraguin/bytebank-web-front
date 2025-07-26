@@ -1,7 +1,4 @@
 import { Transaction as TransactionType } from "@workspace/types/transaction";
-import { Button } from "@workspace/ui/Button";
-import { Ellipsis } from "lucide-react";
-
 interface TransactionProps {
   transaction: TransactionType;
 }
@@ -27,11 +24,8 @@ export const Transaction = ({ transaction }: TransactionProps) => {
         </span>
       </div>
 
-      <div className="text-black font-medium flex justify-between gap-2">
+      <div className="text-black font-medium">
         {transaction.type}
-        <Button variant="ghost" size="icon" className="size-8">
-          <Ellipsis size={16} />
-        </Button>
       </div>
 
       <div

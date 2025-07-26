@@ -1,6 +1,6 @@
 import { MonthlyData } from "@workspace/types/monthlyData";
-import { AreaChartMonths } from "@workspace/ui/AreaChartMonths";
-import { Card, CardContent } from "@workspace/ui/Card";
+import { AreaChartMonths } from "@workspace/ui/areaChartMonths";
+import { Card, CardContent } from "@workspace/ui/card";
 
 interface IncomeExpensesChartProps {
   transactions: MonthlyData[] | undefined;

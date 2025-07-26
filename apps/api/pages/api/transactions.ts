@@ -172,8 +172,10 @@ async function adjustAccountBalance(
 
   if (type === "Receita") {
     account.balance += value;
+    account.income += value;
   } else {
     account.balance -= value;
+    account.expense += value;
   }
   await account.save();
 

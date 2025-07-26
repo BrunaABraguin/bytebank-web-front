@@ -12,17 +12,17 @@ import {
   DialogFooter,
   DialogClose,
   DialogDescription,
-} from "@workspace/ui/Dialog";
+} from "@workspace/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@workspace/ui/Select";
-import { Input } from "@workspace/ui/Input";
-import { Label } from "@workspace/ui/Label";
-import { Button } from "@workspace/ui/Button";
+} from "@workspace/ui/select";
+import { Input } from "@workspace/ui/input";
+import { Label } from "@workspace/ui/label";
+import { Button } from "@workspace/ui/button";
 import { TransactionEnum } from "@workspace/types/transaction";
 import { useAddTransaction } from "@/hooks/useAddTransaction";
 import { useSharedStore } from "@workspace/store";

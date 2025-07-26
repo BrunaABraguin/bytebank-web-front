@@ -5,7 +5,7 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "./Select";
+} from "./select";
 
 const months = [
   "Janeiro",

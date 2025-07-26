@@ -9,10 +9,10 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-} from "@workspace/ui/Dialog";
-import { Label } from "@workspace/ui/Label";
-import { Button } from "@workspace/ui/Button";
-import { Input } from "@workspace/ui/Input";
+} from "@workspace/ui/dialog";
+import { Label } from "@workspace/ui/label";
+import { Button } from "@workspace/ui/button";
+import { Input } from "@workspace/ui/input";
 import { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 

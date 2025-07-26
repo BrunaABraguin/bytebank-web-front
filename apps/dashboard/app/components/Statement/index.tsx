@@ -10,10 +10,9 @@ interface StatementProps {
 export const Statement = ({ transactions }: StatementProps) => {
   return (
     <div className="bg-white rounded-lg p-8 w-[300px]">
-      <div className="flex flex-col justify-between mb-4">
-        <h2 className="text-xl font-bold">Extrato</h2>
-
-        <div className="gap-9">
+      <div className="flex flex-col justify-between h-[400px]">
+        <h2 className="text-xl font-bold mb-4">Últimas transações</h2>
+        <div className="gap-9 h-full overflow-auto">
           {transactions?.length === 0 && (
             <div className="text-gray-500 text-center my-10 grid-cols-1">
               Nenhuma transação encontrada

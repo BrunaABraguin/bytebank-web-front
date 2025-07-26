@@ -1,6 +1,6 @@
 import { Progress } from "@radix-ui/react-progress";
-import { Card, CardContent } from "@workspace/ui/Card";
-import { ChartRadialText } from "@workspace/ui/ChartRadialText";
+import { Card, CardContent } from "@workspace/ui/card";
+import { ChartRadialText } from "@workspace/ui/chartRadialText";
 import {
   ResponsiveContainer,
   BarChart,
