@@ -1,12 +1,12 @@
 import { createHttpService } from "@workspace/utils/http";
 import { API_URL } from "../../../shell/contants";
-import { MonthlyData } from "@workspace/types/monthlyData";
+import { Account } from "@workspace/types/account";
 
-export const getMonthlyData = async (
+export const getBalanceAccount = async (
   ownerEmail: string | null
-): Promise<MonthlyData[]> => {
+): Promise<Account> => {
   const client = createHttpService(API_URL as string);
 
-  const response = await client.get(`/api/monthly-data?email=${ownerEmail}`);
+  const response = await client.get(`/api/account?email=${ownerEmail}`);
   return response.data;
 };

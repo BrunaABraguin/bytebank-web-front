@@ -2,12 +2,13 @@ import { Card, CardContent } from "@workspace/ui/Card";
 import { MonthYearPicker } from "@workspace/ui/MonthYearPicker";
 import { TransactionForm } from "../TransactionForm";
 import { useDashboardStore } from "@/stores/dashboardStore";
+import { Account } from "@workspace/types/account";
 
-export const AccountBalance = () => {
-  const balance = useDashboardStore((state) => state.balance);
-  const income = useDashboardStore((state) => state.income);
-  const expenses = useDashboardStore((state) => state.expenses);
+interface AccountBalanceProps {
+  account: Account | undefined;
+}
 
+export const AccountBalance = ({ account }: AccountBalanceProps) => {
   const setSelectedDate = (month: number, year: number) => {
     useDashboardStore.setState({ month, year });
   };
@@ -19,15 +20,15 @@ export const AccountBalance = () => {
           <div className="flex justify-between text-lg gap-8">
             <div className="grid font-semibold">
               <span className="text-sm text-gray-500">Saldo</span>
-              <span>R$ {balance.toLocaleString()}</span>
+              <span>R$ {account?.balance.toLocaleString()}</span>
             </div>
             <div className="grid font-semibold">
               <span className="text-sm text-gray-500">Receita</span>
-              <span>R$ {income.toLocaleString()}</span>
+              <span>R$ {account?.income.toLocaleString()}</span>
             </div>
             <div className="grid font-semibold">
               <span className="text-sm text-gray-500">Despesas</span>
-              <span>R$ {expenses.toLocaleString()}</span>
+              <span>R$ {account?.expense.toLocaleString()}</span>
             </div>
           </div>
           <div className="flex gap-2">

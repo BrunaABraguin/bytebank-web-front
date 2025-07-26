@@ -1,13 +1,12 @@
 import { XAxis, YAxis, Tooltip, Area, AreaChart } from "recharts";
 import { ChartConfig, ChartContainer } from "./Chart";
+import { MonthlyData } from "@workspace/types/monthlyData";
 
-export const AreaChartMonths = () => {
-  const dadosMensais = [
-    { month: "Janeiro", income: 0, expense: 0 },
-    { month: "Fevereiro", income: 0, expense: 0 },
-    { month: "Março", income: 11290, expense: 8322.45 },
-  ];
+interface AreaChartMonthsProps {
+  transactions: MonthlyData[] | undefined;
+}
 
+export const AreaChartMonths = ({ transactions }: AreaChartMonthsProps) => {
   const chartConfig = {
     desktop: {
       label: "Desktop",
@@ -22,7 +21,7 @@ export const AreaChartMonths = () => {
   return (
     <div className="h-full w-full">
       <ChartContainer config={chartConfig}>
-        <AreaChart data={dadosMensais}>
+        <AreaChart data={transactions}>
           <defs>
             <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#47A138" stopOpacity={0.8} />

@@ -24,9 +24,12 @@ import { Input } from "@workspace/ui/Input";
 import { Label } from "@workspace/ui/Label";
 import { Button } from "@workspace/ui/Button";
 import { TransactionEnum } from "@workspace/types/transaction";
-import { useDashboardStore } from "@/stores/dashboardStore";
+import { useAddTransaction } from "@/hooks/useAddTransaction";
+import { useSharedStore } from "@workspace/store";
 
 export const TransactionForm = () => {
+  const { mutate } = useAddTransaction();
+  const { email } = useSharedStore();
   const [transactionType, setTransactionType] = useState<TransactionEnum>(
     TransactionEnum.INCOME
   );
@@ -35,12 +38,14 @@ export const TransactionForm = () => {
 
   function createTransaction(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
-    const transaction = {
-      date: new Date().toISOString(),
-      type: transactionType,
-      value: parseFloat(transactionValue),
-    };
-    useDashboardStore.getState().addTransaction(transaction);
+    if (email) {
+      const transaction = {
+        type: transactionType,
+        value: parseFloat(transactionValue),
+        email,
+      };
+      mutate(transaction);
+    }
   }
 
   return (

@@ -57,9 +57,9 @@ async function handleCreateTransaction(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { type, amount, email } = req.body;
+  const { type, value, email } = req.body;
 
-  if (!type || !amount || !email) {
+  if (!type || !value || !email) {
     return res
       .status(400)
       .json({ error: "Campos obrigatórios não preenchidos" });
@@ -68,12 +68,12 @@ async function handleCreateTransaction(
   try {
     const newTransaction = await Transaction.create({
       type,
-      amount,
+      value,
       ownerEmail: email,
       date: new Date(),
     });
 
-    const account = await adjustAccountBalance(email, type, amount);
+    const account = await adjustAccountBalance(email, type, value);
 
     if (!account) {
       return res.status(404).json({ error: "Conta não encontrada" });
@@ -90,7 +90,7 @@ async function handleUpdateTransaction(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { id, type, amount } = req.body;
+  const { id, type, value } = req.body;
 
   if (!id) {
     return res.status(400).json({ error: "ID da transação é obrigatório" });
@@ -102,14 +102,14 @@ async function handleUpdateTransaction(
       return res.status(404).json({ error: "Transação não encontrada" });
     }
 
-    if (!type && !amount) {
+    if (!type && !value) {
       return res.status(400).json({ error: "Nenhum campo para atualizar" });
     }
 
     const oldAccount = await adjustAccountBalance(
       transaction.ownerEmail,
       transaction.type,
-      -transaction.amount
+      -transaction.value
     );
 
     if (!oldAccount) {
@@ -117,13 +117,13 @@ async function handleUpdateTransaction(
     }
 
     if (type) transaction.type = type;
-    if (amount) transaction.amount = amount;
+    if (value) transaction.value = value;
     await transaction.save();
 
     await adjustAccountBalance(
       transaction.ownerEmail,
       transaction.type,
-      transaction.amount
+      transaction.value
     );
 
     return res.status(200).json(transaction);
@@ -152,7 +152,7 @@ async function handleDeleteTransaction(
     await adjustAccountBalance(
       transaction.ownerEmail,
       transaction.type,
-      -transaction.amount
+      -transaction.value
     );
 
     return res.status(200).json({ message: "Transação deletada com sucesso" });
@@ -165,15 +165,15 @@ async function handleDeleteTransaction(
 async function adjustAccountBalance(
   ownerEmail: string,
   type: string,
-  amount: number
+  value: number
 ) {
   const account = await Account.findOne({ ownerEmail });
   if (!account) return null;
 
-  if (type === "income") {
-    account.balance += amount;
+  if (type === "Receita") {
+    account.balance += value;
   } else {
-    account.balance -= amount;
+    account.balance -= value;
   }
   await account.save();
 
