@@ -16,8 +16,20 @@ const nextConfig: NextConfig = {
         destination: `${process.env.NEXT_PUBLIC_DASHBOARD_DOMAIN}/dashboard-static/_next/:path+`,
       },
       {
+        source: "/transactions",
+        destination: `${process.env.NEXT_PUBLIC_TRANSACTIONS_DOMAIN}`,
+      },
+      {
+        source: "/transactions/:path*",
+        destination: `${process.env.NEXT_PUBLIC_TRANSACTIONS_DOMAIN}/transactions/:path*`,
+      },
+      {
+        source: "/transactions-static/_next/:path+",
+        destination: `${process.env.NEXT_PUBLIC_TRANSACTIONS_DOMAIN}/transactions-static/_next/:path+`,
+      },
+      {
         source: "/api/:path*",
-        destination: "http://localhost:4000/api/:path*",
+        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/:path*`,
       },
     ];
   },
