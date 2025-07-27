@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { loginService } from "../services/login";
 import { AxiosError } from "axios";
 import { useSharedStore } from "@workspace/store";
+import { AUTH_COOKIE_MAX_AGE, AUTH_COOKIE_NAME } from "../contants";
 interface LoginParams {
   email: string;
   password: string;
@@ -19,7 +20,7 @@ export const useLogin = (email: string) => {
     },
     onSuccess: ({ token }) => {
       if (token) {
-        localStorage.setItem("auth_token", token);
+        document.cookie = `${AUTH_COOKIE_NAME}=${token}; path=/; max-age=${AUTH_COOKIE_MAX_AGE}`;
         setEmail(email);
         window.location.assign("/dashboard");
       } else {

@@ -47,15 +47,6 @@ export default async function handler(
         .status(401)
         .json({ message: "Conta de usuário não encontrado" });
     }
-
-    const isProduction = process.env.NODE_ENV === "production";
-    const domain = isProduction
-      ? "bytebank-bruna-braguin.vercel.app"
-      : "localhost";
-
-    res.setHeader("Set-Cookie", [
-      `email=${email}; Path=/; Domain=${domain}; HttpOnly; Secure; SameSite=Strict`,
-    ]);
     res.setHeader("Authorization", `Bearer ${token}`);
     res.status(200).json({
       message: "Login bem-sucedido",
