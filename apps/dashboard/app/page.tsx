@@ -15,7 +15,7 @@ export default function Dashboard() {
   const { data } = useMonthlyChart(email);
 
   return (
-    <div className="p-6 grid grid-cols-1 lg:grid-cols-5 gap-6">
+    <div className="p-6 grid grid-cols-1 lg:grid-cols-4 gap-6 w-full">
       <div className="grid col-span-1 lg:col-span-4 gap-5">
         <AccountBalance account={account} />
         <IncomeExpensesChart transactions={data} />
