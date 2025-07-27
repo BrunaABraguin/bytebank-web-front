@@ -1,6 +1,7 @@
 import { XAxis, YAxis, Tooltip, Area, AreaChart } from "recharts";
-import { ChartConfig, ChartContainer } from "./chart";
+
 import { MonthlyData } from "@workspace/types/monthlyData";
+import { ChartConfig, ChartContainer } from "./chart"
 
 interface AreaChartMonthsProps {
   transactions: MonthlyData[] | undefined;
