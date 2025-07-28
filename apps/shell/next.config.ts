@@ -13,11 +13,11 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/dashboard-static/_next/:path+",
-        destination: `${process.env.MAIN}/dashboard-static/_next/:path+`,
+        destination: `${process.env.DASHBOARD_DOMAIN}/dashboard-static/_next/:path+`,
       },
       {
         source: "/transactions",
-        destination: `${process.env.
+        destination: `${process.env.TRANSACTIONS_DOMAIN}`,
       },
       {
         source: "/transactions/:path*",
