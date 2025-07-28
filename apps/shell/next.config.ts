@@ -5,31 +5,31 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/dashboard",
-        destination: `${process.env.NEXT_PUBLIC_DASHBOARD_DOMAIN}`,
+        destination: `${process.env.DASHBOARD_DOMAIN}`,
       },
       {
         source: "/dashboard/:path*",
-        destination: `${process.env.NEXT_PUBLIC_DASHBOARD_DOMAIN}/dashboard/:path*`,
+        destination: `${process.env.DASHBOARD_DOMAIN}/dashboard/:path*`,
       },
       {
         source: "/dashboard-static/_next/:path+",
-        destination: `${process.env.NEXT_PUBLIC_DASHBOARD_DOMAIN}/dashboard-static/_next/:path+`,
+        destination: `${process.env.MAIN}/dashboard-static/_next/:path+`,
       },
       {
         source: "/transactions",
-        destination: `${process.env.NEXT_PUBLIC_TRANSACTIONS_DOMAIN}`,
+        destination: `${process.env.
       },
       {
         source: "/transactions/:path*",
-        destination: `${process.env.NEXT_PUBLIC_TRANSACTIONS_DOMAIN}/transactions/:path*`,
+        destination: `${process.env.TRANSACTIONS_DOMAIN}/transactions/:path*`,
       },
       {
         source: "/transactions-static/_next/:path+",
-        destination: `${process.env.NEXT_PUBLIC_TRANSACTIONS_DOMAIN}/transactions-static/_next/:path+`,
+        destination: `${process.env.TRANSACTIONS_DOMAIN}/transactions-static/_next/:path+`,
       },
       {
         source: "/api/:path*",
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/:path*`,
+        destination: `${process.env.API_URL}/api/:path*`,
       },
     ];
   },
