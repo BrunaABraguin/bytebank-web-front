@@ -8,7 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@workspace/ui/sidebar";
+} from "./sidebar";
 import {
   BadgeCheck,
   ChevronsUpDown,
@@ -25,8 +25,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@workspace/ui/dropdownMenu";
-import { Avatar, AvatarImage, AvatarFallback } from "@workspace/ui/avatar";
+} from "./dropdownMenu";
+import { Avatar, AvatarImage, AvatarFallback } from "./avatar";
 
 const items = [
   {
