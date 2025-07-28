@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export const createHttpService = (contentType?: string) => {
+export const createHttpService = (base?: string, contentType?: string) => {
   return axios.create({
-    baseURL: `${process.env.API_URL}`,
+    baseURL: base,
     headers: {
       "Content-Type": contentType || "application/json",
     },

@@ -1,11 +1,12 @@
 import { createHttpService } from "@workspace/utils/http";
+import { API_URL } from "@/contants";
 
 export async function postTransaction(
   email: string,
   type: string,
-  value: number,
+  value: number
 ): Promise<{ message: string }> {
-  const client = createHttpService();
+  const client = createHttpService(API_URL);
   const transaction = {
     email,
     type,
