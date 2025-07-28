@@ -2,6 +2,7 @@
 import React from "react";
 import { Transaction } from "../Transaction";
 import { Transaction as TransactionType } from "@workspace/types/transaction";
+import { Card, CardContent } from "@workspace/ui/card";
 
 interface StatementProps {
   transactions: TransactionType[] | undefined;
@@ -9,8 +10,8 @@ interface StatementProps {
 
 export const Statement = ({ transactions }: StatementProps) => {
   return (
-    <div className="bg-white rounded-lg p-8 w-[300px]">
-      <div className="flex flex-col justify-between h-[400px]">
+    <Card className="col-span-1">
+      <CardContent>
         <h2 className="text-xl font-bold mb-4">Últimas transações</h2>
         <div className="gap-9 h-full overflow-auto">
           {transactions?.length === 0 && (
@@ -25,7 +26,7 @@ export const Statement = ({ transactions }: StatementProps) => {
             />
           ))}
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };

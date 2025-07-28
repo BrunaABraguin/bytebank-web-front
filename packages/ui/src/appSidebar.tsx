@@ -25,8 +25,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./dropdownMenu";
+} from "./dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "./avatar";
+import { useSharedStore } from "@workspace/store";
 
 const items = [
   {
@@ -44,11 +45,12 @@ const items = [
 const data = {
   user: {
     name: "shadcn",
-    email: "m@example.com",
   },
 };
 
 export function AppSidebar() {
+  const { email } = useSharedStore();
+
   return (
     <Sidebar>
       <SidebarHeader />
@@ -87,7 +89,7 @@ export function AppSidebar() {
                     <span className="truncate font-semibold">
                       {data.user.name}
                     </span>
-                    <span className="truncate text-xs">{data.user.email}</span>
+                    <span className="truncate text-xs">{email}</span>
                   </div>
                   <ChevronsUpDown className="ml-auto size-4" />
                 </SidebarMenuButton>
@@ -109,7 +111,7 @@ export function AppSidebar() {
                         {data.user.name}
                       </span>
                       <span className="truncate text-xs">
-                        {data.user.email}
+                        {email}
                       </span>
                     </div>
                   </div>

@@ -1,14 +1,50 @@
-"use client";
-import { useSharedStore } from "@workspace/store";
+import { Transaction } from "./components/ColumnsTable";
+import { TransactionsTable } from "./components/TransactionsTable";
+import { Card, CardContent } from "@workspace/ui/card";
 
-export default function Dashboard() {
-  const { email } = useSharedStore();
+async function getData(): Promise<Transaction[]> {
+  return [
+    {
+      id: "1",
+      description: "Salário",
+      amount: 5000,
+      type: "income",
+      category: "Trabalho",
+    },
+    {
+      id: "2",
+      description: "Supermercado",
+      amount: -300,
+      type: "expense",
+      category: "Alimentação",
+    },
+    {
+      id: "3",
+      description: "Cinema",
+      amount: -150,
+      type: "expense",
+      category: undefined,
+    },
+    {
+      id: "4",
+      description: "Freelance",
+      amount: 2000,
+      type: "income",
+      category: "Trabalho",
+    },
+  ];
+}
+
+export default async function Transactions() {
+  const data = await getData();
 
   return (
-    <div className="p-6 grid grid-cols-1 lg:grid-cols-4 gap-6 w-full">
-      <div className="grid col-span-1 lg:col-span-4 gap-5">
-        {email}
-      </div>
+    <div className="container mx-auto py-10">
+      <Card>
+        <CardContent>
+          <TransactionsTable data={data} />
+        </CardContent>
+      </Card>
     </div>
   );
 }
