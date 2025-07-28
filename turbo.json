@@ -3,6 +3,13 @@
   "ui": "tui",
   "tasks": {
     "build": {
+      "env": [
+        "API_URL", 
+        "JWT_SECRET", 
+        "DASHBOARD_DOMAIN", 
+        "TRANSACTIONS_DOMAIN",
+        "MONGODB_URI"
+      ],
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
