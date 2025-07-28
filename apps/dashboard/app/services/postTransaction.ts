@@ -1,4 +1,3 @@
-import { API_URL } from "@/contants";
 import { createHttpService } from "@workspace/utils/http";
 
 export async function postTransaction(
@@ -6,7 +5,7 @@ export async function postTransaction(
   type: string,
   value: number,
 ): Promise<{ message: string }> {
-  const client = createHttpService(API_URL as string);
+  const client = createHttpService();
   const transaction = {
     email,
     type,
