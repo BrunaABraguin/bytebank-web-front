@@ -27,6 +27,10 @@ const nextConfig: NextConfig = {
         source: "/transactions-static/_next/:path+",
         destination: `${process.env.TRANSACTIONS_DOMAIN}/transactions-static/_next/:path+`,
       },
+      {
+        source: "/api/:path*",
+        destination: `${process.env.API_URL}/api/:path*`,
+      },
     ];
   },
   typescript: {
