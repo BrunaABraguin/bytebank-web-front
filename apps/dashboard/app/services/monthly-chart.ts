@@ -7,6 +7,8 @@ export const getMonthlyData = async (
 ): Promise<MonthlyData[]> => {
   const client = createHttpService(API_URL);
 
-  const response = await client.get(`/api/monthly-data?email=${ownerEmail}`);
+  const response = await client.get("/api/monthly-data", {
+    params: { email: ownerEmail },
+  });
   return response.data;
 };

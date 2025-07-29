@@ -27,6 +27,14 @@ const TransactionSchema: Schema = new Schema(
       type: Date,
       default: Date.now,
     },
+    category: {
+      type: String,
+      default: "Sem categoria",
+    },
+    description: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );

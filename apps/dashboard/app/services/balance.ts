@@ -7,6 +7,8 @@ export const getBalanceAccount = async (
 ): Promise<Account> => {
   const client = createHttpService(API_URL);
 
-  const response = await client.get(`/api/account?email=${ownerEmail}`);
+  const response = await client.get("/api/account", {
+    params: { email: ownerEmail },
+  });
   return response.data;
 };

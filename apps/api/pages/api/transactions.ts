@@ -57,7 +57,7 @@ async function handleCreateTransaction(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { type, value, email } = req.body;
+  const { type, value, email, description, category } = req.body;
 
   if (!type || !value || !email) {
     return res
@@ -71,6 +71,8 @@ async function handleCreateTransaction(
       value,
       ownerEmail: email,
       date: new Date(),
+      description: description || "",
+      category: category || "Sem categoria",
     });
 
     const account = await adjustAccountBalance(email, type, value);
@@ -90,7 +92,7 @@ async function handleUpdateTransaction(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { id, type, value } = req.body;
+  const { id, type, value, description, category } = req.body;
 
   if (!id) {
     return res.status(400).json({ error: "ID da transação é obrigatório" });
@@ -102,7 +104,7 @@ async function handleUpdateTransaction(
       return res.status(404).json({ error: "Transação não encontrada" });
     }
 
-    if (!type && !value) {
+    if (!type && !value && !description && !category) {
       return res.status(400).json({ error: "Nenhum campo para atualizar" });
     }
 
@@ -118,6 +120,8 @@ async function handleUpdateTransaction(
 
     if (type) transaction.type = type;
     if (value) transaction.value = value;
+    if (description) transaction.description = description;
+    if (category) transaction.category = category;
     await transaction.save();
 
     await adjustAccountBalance(
@@ -137,7 +141,7 @@ async function handleDeleteTransaction(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { id } = req.body;
+  const { id } = req.query;
 
   if (!id) {
     return res.status(400).json({ error: "ID da transação é obrigatório" });

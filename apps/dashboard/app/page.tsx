@@ -4,9 +4,9 @@ import { useSharedStore } from "@workspace/store";
 import { Statement } from "./components/Statement";
 import { AccountBalance } from "./components/AccountBalance";
 import { IncomeExpensesChart } from "./components/IncomeExpensesChart";
-import { useTransactions } from "./hooks/useTransactions";
 import { useBalance } from "./hooks/useBalance";
 import { useMonthlyChart } from "./hooks/useMonthlyChart";
+import { useTransactions } from "@workspace/utils/use-transactions";
 
 export default function Dashboard() {
   const { email } = useSharedStore();

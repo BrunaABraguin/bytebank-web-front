@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@workspace/ui/card";
-import { TransactionForm } from "../TransactionForm";
 import { Account } from "@workspace/types/account";
+import { TransactionForm } from "@workspace/ui/transactionForm";
 
 interface AccountBalanceProps {
   account: Account | undefined;

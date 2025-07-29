@@ -1,5 +1,5 @@
 import { createHttpService } from "@workspace/utils/http";
-import { API_URL } from "@/contants";
+import { API_URL } from "./contants.js";
 
 export async function postTransaction(
   email: string,
@@ -11,6 +11,8 @@ export async function postTransaction(
     email,
     type,
     value,
+    description: "",
+    category: "Sem categoria",
   };
   const response = await client.post("api/transactions", transaction);
   return { message: response.data.message };

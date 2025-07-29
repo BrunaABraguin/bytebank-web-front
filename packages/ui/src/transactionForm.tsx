@@ -24,12 +24,13 @@ import { Input } from "@workspace/ui/input";
 import { Label } from "@workspace/ui/label";
 import { Button } from "@workspace/ui/button";
 import { TransactionEnum } from "@workspace/types/transaction";
-import { useAddTransaction } from "@/hooks/useAddTransaction";
+import { useAddTransaction } from "@workspace/utils/use-add-transaction";
 import { useSharedStore } from "@workspace/store";
 
 export const TransactionForm = () => {
   const { mutate } = useAddTransaction();
   const { email } = useSharedStore();
+  const [open, setOpen] = useState(false);
   const [transactionType, setTransactionType] = useState<TransactionEnum>(
     TransactionEnum.INCOME
   );
@@ -45,11 +46,14 @@ export const TransactionForm = () => {
         email,
       };
       mutate(transaction);
+      setTransactionValue("");
+      setTransactionType(TransactionEnum.INCOME);
+      setOpen(false);
     }
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" size="icon" className="size-8">
           <Plus />

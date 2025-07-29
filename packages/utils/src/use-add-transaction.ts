@@ -1,6 +1,6 @@
-import { postTransaction } from "@/services/postTransaction";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "@workspace/utils/react-query";
+import { postTransaction } from "./post-transaction.js";
 
 export const useAddTransaction = () => {
   const { data, mutate } = useMutation({

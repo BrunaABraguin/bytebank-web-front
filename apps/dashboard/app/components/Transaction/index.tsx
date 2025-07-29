@@ -23,14 +23,12 @@ export const Transaction = ({ transaction }: TransactionProps) => {
           {new Date(transaction.date).toLocaleDateString("pt-BR")}
         </span>
       </div>
-
-      <div className="text-black font-medium">
-        {transaction.type}
-      </div>
+      <div className="text-black font-medium">{transaction.type}</div>
+      <div className="text-gray-600 font-medium">{transaction.description}</div>
 
       <div
         className={`font-bold ${
-          isNegative(transaction.type) ? "text-red-600" : "text-black"
+          isNegative(transaction.type) ? "text-red-600" : "text-green-600"
         }`}
       >
         {isNegative(transaction.type)
