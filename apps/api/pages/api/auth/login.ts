@@ -51,6 +51,7 @@ export default async function handler(
     res.status(200).json({
       message: "Login bem-sucedido",
       token,
+      name: user.name,
     });
   } catch (error) {
     console.error(error);

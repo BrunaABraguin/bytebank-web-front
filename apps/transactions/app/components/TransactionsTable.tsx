@@ -45,7 +45,13 @@ import { TransactionForm } from "@workspace/ui/transactionForm";
 
 export function TransactionsTable() {
   const { email } = useSharedStore();
-  const { transactions } = useTransactions(email);
+  const [pageSize, setPageSize] = useState(3);
+  const [pageIndex, setPageIndex] = useState(0);
+  const { transactions, isLoading, totalPages } = useTransactions(
+    email,
+    pageIndex + 1,
+    pageSize
+  );
   const [editRowId, setEditRowId] = useState<string | null>(null);
   const { mutate } = useEditTransaction();
   const { mutateDelete } = useDeleteTransaction();
@@ -209,7 +215,7 @@ export function TransactionsTable() {
                 Salvar
               </Button>
             ) : (
-              <>
+              <div className="flex space-x-2">
                 <Button
                   variant="secondary"
                   size="icon"
@@ -226,7 +232,7 @@ export function TransactionsTable() {
                 >
                   <Trash />
                 </Button>
-              </>
+              </div>
             )}
           </div>
         );
@@ -240,114 +246,141 @@ export function TransactionsTable() {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    pageCount: totalPages,
+    manualPagination: true,
+    state: {
+      pagination: {
+        pageIndex,
+        pageSize,
+      },
+    },
+    onPaginationChange: (updater) => {
+      let newPagination;
+      if (typeof updater === "function") {
+        newPagination = updater({ pageIndex, pageSize });
+      } else {
+        newPagination = updater;
+      }
+      setPageIndex(newPagination.pageIndex ?? 0);
+      setPageSize(newPagination.pageSize ?? 10);
+    },
   });
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Buscar por descrição..."
-          className="max-w-sm"
-          value={
-            (table.getColumn("description")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn("description")?.setFilterValue(event.target.value)
-          }
-        />
-        <div className="flex items-center space-x-2 ml-auto">
-          <TransactionForm />
-          {transactions && transactions.length > 0 && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="ml-auto">
-                  Colunas <ChevronDown />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {table
-                  .getAllColumns()
-                  .filter((column) => column.getCanHide())
-                  .map((column) => {
-                    return (
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                          column.toggleVisibility(!!value)
-                        }
-                      >
-                        {column.id}
-                      </DropdownMenuCheckboxItem>
-                    );
-                  })}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
-        </div>
-      </div>
-      <div className="overflow-hidden rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </TableHead>
+      {isLoading ? (
+        <div>Carregando...</div>
+      ) : (
+        <>
+          <div className="flex items-center py-4">
+            <Input
+              placeholder="Buscar por descrição..."
+              className="max-w-sm"
+              value={
+                (table.getColumn("description")?.getFilterValue() as string) ??
+                ""
+              }
+              onChange={(event) =>
+                table
+                  .getColumn("description")
+                  ?.setFilterValue(event.target.value)
+              }
+            />
+            <div className="flex items-center space-x-2 ml-auto">
+              <TransactionForm />
+              {transactions && transactions.length > 0 && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="ml-auto">
+                      Colunas <ChevronDown />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    {table
+                      .getAllColumns()
+                      .filter((column) => column.getCanHide())
+                      .map((column) => {
+                        return (
+                          <DropdownMenuCheckboxItem
+                            key={column.id}
+                            className="capitalize"
+                            checked={column.getIsVisible()}
+                            onCheckedChange={(value) =>
+                              column.toggleVisibility(!!value)
+                            }
+                          >
+                            {column.id}
+                          </DropdownMenuCheckboxItem>
+                        );
+                      })}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
+          </div>
+          <div className="overflow-hidden rounded-md border">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id}>
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
                 ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow key={row.id}>
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      Sem resultados.
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  Sem resultados.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Anterior
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Próximo
-        </Button>
-      </div>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          <div className="flex items-center justify-end space-x-2 py-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Anterior
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Próximo
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

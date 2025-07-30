@@ -12,16 +12,17 @@ interface ApiMessage {
 }
 
 export const useLogin = (email: string) => {
-  const { setEmail } = useSharedStore();
+  const { setEmail, setName } = useSharedStore();
 
   const { data, mutate, isPending, error, isSuccess } = useMutation({
     mutationFn: async ({ email, password }: LoginParams) => {
       return loginService(email, password);
     },
-    onSuccess: ({ token }) => {
+    onSuccess: ({ token, name }) => {
       if (token) {
         document.cookie = `${AUTH_COOKIE_NAME}=${token}; path=/; max-age=${AUTH_COOKIE_MAX_AGE}`;
         setEmail(email);
+        setName(name);
         window.location.assign("/dashboard");
       } else {
         console.error("Token está ausente na resposta.");

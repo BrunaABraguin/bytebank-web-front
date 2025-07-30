@@ -9,6 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "./sidebar";
+import Image from "next/image";
 import {
   BadgeCheck,
   ChevronsUpDown,
@@ -42,18 +43,21 @@ const items = [
   },
 ];
 
-const data = {
-  user: {
-    name: "shadcn",
-  },
-};
-
 export function AppSidebar() {
-  const { email } = useSharedStore();
+  const { email, name } = useSharedStore();
 
   return (
     <Sidebar>
-      <SidebarHeader />
+      <SidebarHeader className="flex">
+        <Image
+          src="/logo.svg"
+          alt="Bytebank"
+          width={150}
+          height={32}
+          className="h-6 my-4"
+          priority
+        />
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
@@ -82,13 +86,11 @@ export function AppSidebar() {
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage alt={data.user.name} />
+                    <AvatarImage alt={name ?? undefined} />
                     <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">
-                      {data.user.name}
-                    </span>
+                    <span className="truncate font-semibold">{name}</span>
                     <span className="truncate text-xs">{email}</span>
                   </div>
                   <ChevronsUpDown className="ml-auto size-4" />
@@ -103,16 +105,12 @@ export function AppSidebar() {
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="h-8 w-8 rounded-lg">
-                      <AvatarImage alt={data.user.name} />
+                      <AvatarImage alt={name ?? undefined} />
                       <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-semibold">
-                        {data.user.name}
-                      </span>
-                      <span className="truncate text-xs">
-                        {email}
-                      </span>
+                      <span className="truncate font-semibold">{name}</span>
+                      <span className="truncate text-xs">{email}</span>
                     </div>
                   </div>
                 </DropdownMenuLabel>

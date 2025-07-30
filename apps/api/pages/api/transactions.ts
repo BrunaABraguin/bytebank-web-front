@@ -36,17 +36,46 @@ async function handleGetTransactions(
   res: NextApiResponse
 ) {
   try {
-    const { email } = req.query;
+    const { email, page = "1", pageSize = "10" } = req.query;
+
     if (!email) {
       return res
         .status(400)
         .json({ error: "Campos obrigatórios não preenchidos" });
     }
 
+    const pageNumber = parseInt(page as string, 10);
+    const pageSizeNumber = parseInt(pageSize as string, 10);
+
+    if (
+      isNaN(pageNumber) ||
+      isNaN(pageSizeNumber) ||
+      pageNumber < 1 ||
+      pageSizeNumber < 1
+    ) {
+      return res.status(400).json({ error: "Valores de paginação inválidos" });
+    }
+
+    const totalTransactions = await Transaction.countDocuments({
+      ownerEmail: email,
+    });
+
+    const totalPages = Math.ceil(totalTransactions / pageSizeNumber);
+
+    const currentPage = Math.min(pageNumber, totalPages);
+
     const transactions = await Transaction.find({ ownerEmail: email })
       .sort({ date: -1 })
+      .skip((currentPage - 1) * pageSizeNumber) 
+      .limit(pageSizeNumber)
       .lean<TransactionType[]>();
-    return res.status(200).json(transactions);
+
+    return res.status(200).json({
+      transactions,
+      totalPages,
+      currentPage,
+      pageSize: pageSizeNumber,
+    });
   } catch (error) {
     console.error("Erro ao buscar transações:", error);
     return res.status(500).json({ error: "Erro ao buscar transações" });
