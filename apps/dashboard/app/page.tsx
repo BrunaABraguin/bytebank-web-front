@@ -10,7 +10,7 @@ import { useTransactions } from "@workspace/utils/use-transactions";
 
 export default function Dashboard() {
   const { email } = useSharedStore();
-  const { transactions } = useTransactions(email);
+  const { transactions } = useTransactions(email, 1, 10);
   const { account } = useBalance(email);
   const { data } = useMonthlyChart(email);
 
