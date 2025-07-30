@@ -1,8 +1,7 @@
-import fs from "fs/promises";
 import { NextApiRequest, NextApiResponse } from "next";
-import formidable, { Files } from "formidable";
+import fs from "fs/promises";
 import pdfParse from "pdf-parse";
-import runMiddleware, { cors } from "../libs/cors";
+import formidable, { Files, Fields } from "formidable";
 
 export const config = {
   api: {
@@ -10,58 +9,81 @@ export const config = {
   },
 };
 
+const parseForm = (
+  req: NextApiRequest
+): Promise<{ fields: Fields; files: Files }> =>
+  new Promise((resolve, reject) => {
+    const form = formidable({ keepExtensions: true });
+    form.parse(req, (err, fields, files) => {
+      if (err) reject(new Error(String(err)));
+      else resolve({ fields, files });
+    });
+  });
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  await runMiddleware(req, res, cors);
-
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Método não permitido" });
+    return res.status(405).json({ error: "Método não permitido. Use POST" });
   }
 
-  const form = formidable({ keepExtensions: true, multiples: false });
+  try {
+    const { files } = await parseForm(req);
 
-  form.parse(req, async (err: Error | null, fields: Fields, files: Files) => {
-    if (err) {
-      console.error("Erro ao fazer parse do formulário:", err);
-      return res.status(500).json({ message: "Erro ao processar o upload" });
-    }
-
-    const uploadedFile = Array.isArray(files.file) ? files.file[0] : files.file;
+    const uploadedFile =
+      Array.isArray(files.file) ? files.file[0] : files.file;
 
     if (!uploadedFile?.filepath) {
-      console.error("Arquivo não recebido corretamente");
-      return res
-        .status(400)
-        .json({ message: "Arquivo não recebido corretamente" });
+      return res.status(400).json({ error: "Nenhum arquivo válido enviado." });
     }
 
-    try {
-      const fileBuffer = await fs.readFile(uploadedFile.filepath);
-      const pdfData = await pdfParse(fileBuffer);
-      const extractedData = extractTransactionData(pdfData.text);
-      await fs.unlink(uploadedFile.filepath);
+    const fileBuffer = await fs.readFile(uploadedFile.filepath);
+    const pdfData = await pdfParse(fileBuffer);
 
-      return res.status(200).json({
-        message: "Processamento concluído",
-        extractedData,
-      });
-    } catch (error) {
-      console.error("Erro ao processar PDF:", error);
-      return res.status(500).json({ message: "Erro ao processar o PDF" });
-    }
-  });
+    const transactions = extractTransactions(pdfData.text);
+
+    return res.status(200).json({
+      message: "PDF processado com sucesso",
+      transactions,
+    });
+  } catch (error) {
+    console.error("Erro ao processar o PDF:", error);
+    return res.status(500).json({ error: "Erro interno ao processar o PDF." });
+  }
 }
 
-function extractTransactionData(pdfText: string) {
-  const transactionIdMatch = pdfText.match(/Transaction ID:\s*(\d+)/i);
-  const amountMatch = pdfText.match(/Amount:\s*([\d,.]+)/i);
-  const currencyMatch = pdfText.match(/Currency:\s*([A-Z]{3})/i);
+function extractTransactions(text: string) {
+  const transactions: { data: string; descricao: string; valor: number }[] = [];
+  const lines = text.split("\n");
 
-  return {
-    transaction_id: transactionIdMatch ? transactionIdMatch[1] : null,
-    amount: amountMatch ? amountMatch[1] : null,
-    currency: currencyMatch ? currencyMatch[1] : null,
-  };
+  let currentDate: string | null = null;
+
+  for (let i = 0; i < lines.length - 1; i++) {
+    const line = lines[i].trim();
+    const nextLine = lines[i + 1].trim();
+
+    const dateRegex = /^(\d{2}\/\d{2}\/\d{4})\s+(.+)$/;
+    const dateMatch = dateRegex.exec(line);
+    if (dateMatch) {
+      currentDate = dateMatch[1];
+      const description = dateMatch[2];
+
+      const valueRegex = /^(-?\d{1,3}(?:\.\d{3})*,\d{2})$/;
+      const valueMatch = valueRegex.exec(nextLine);
+      if (valueMatch) {
+        const value = parseFloat(
+          valueMatch[1].replace(/\./g, "").replace(",", ".")
+        );
+
+        transactions.push({
+          data: currentDate,
+          descricao: description,
+          valor: value,
+        });
+      }
+    }
+  }
+
+  return transactions;
 }
