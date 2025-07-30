@@ -17,6 +17,6 @@
     "next.config.ts",
     ".next/types/**/*.ts",
     "middleware.ts"  
-  ],
+, "../../packages/utils/src/use-upload-file.ts", "../../packages/utils/src/post-upload.ts"  ],
   "exclude": ["node_modules"]
 }

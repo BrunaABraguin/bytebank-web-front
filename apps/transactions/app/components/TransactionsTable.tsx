@@ -18,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@bytebank-web/ui/table";
+import { FileUpload } from "@bytebank-web/ui/fileUpload";
 import { Input } from "@bytebank-web/ui/input";
 import { Button } from "@bytebank-web/ui/button";
 import {
@@ -287,6 +288,7 @@ export function TransactionsTable() {
               }
             />
             <div className="flex items-center space-x-2 ml-auto">
+              <FileUpload />
               <TransactionForm />
               {transactions && transactions.length > 0 && (
                 <DropdownMenu>

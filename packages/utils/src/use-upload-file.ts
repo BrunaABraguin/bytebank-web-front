@@ -1,5 +1,6 @@
-import { postUpload } from "@/services/postUpload";
+
 import { useMutation } from "@tanstack/react-query";
+import { postUpload } from "./post-upload.js";
 
 export const useUploadFile = () => {
   const { data, mutate } = useMutation({

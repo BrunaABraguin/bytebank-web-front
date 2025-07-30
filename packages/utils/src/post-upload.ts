@@ -1,4 +1,5 @@
 import { createHttpService } from "@bytebank-web/utils/http";
+import { API_URL } from "./contants.js";
 
 export const postUpload = async (
   email: string,
@@ -7,7 +8,7 @@ export const postUpload = async (
   const formData = new FormData();
   formData.append("file", file);
   formData.append("email", email);
-  const client = createHttpService("multipart/form-data");
+  const client = createHttpService(API_URL, "multipart/form-data");
   const response = await client.post("api/upload", formData);
   return { message: response.data.message };
 };

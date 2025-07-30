@@ -1,8 +1,7 @@
 import fs from "fs/promises";
 import { NextApiRequest, NextApiResponse } from "next";
-import formidable, { Fields, Files } from "formidable";
-import connectToMongoDB from "../libs/mongoDB";
-import BillingFile from "../models/BillingFile";
+import formidable, { Files } from "formidable";
+import pdfParse from "pdf-parse";
 import runMiddleware, { cors } from "../libs/cors";
 
 export const config = {
@@ -16,48 +15,53 @@ export default async function handler(
   res: NextApiResponse
 ) {
   await runMiddleware(req, res, cors);
+
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Método não permitido" });
+  }
+
   const form = formidable({ keepExtensions: true, multiples: false });
 
   form.parse(req, async (err: Error | null, fields: Fields, files: Files) => {
     if (err) {
       console.error("Erro ao fazer parse do formulário:", err);
-      return res.status(500).json({ message: "Erro ao processar upload" });
+      return res.status(500).json({ message: "Erro ao processar o upload" });
     }
 
     const uploadedFile = Array.isArray(files.file) ? files.file[0] : files.file;
 
     if (!uploadedFile?.filepath) {
+      console.error("Arquivo não recebido corretamente");
       return res
         .status(400)
         .json({ message: "Arquivo não recebido corretamente" });
     }
 
-    const email = Array.isArray(fields.email) ? fields.email[0] : fields.email;
-
-    if (!email) {
-      return res.status(400).json({ message: "E-mail é obrigatório" });
-    }
-
     try {
-      await connectToMongoDB();
-
       const fileBuffer = await fs.readFile(uploadedFile.filepath);
-
-      const newBillingFile = await BillingFile.create({
-        email,
-        filename: uploadedFile.originalFilename || "unknown-file",
-        mimetype: uploadedFile.mimetype || "application/octet-stream",
-        size: uploadedFile.size,
-        file: fileBuffer,
-      });
+      const pdfData = await pdfParse(fileBuffer);
+      const extractedData = extractTransactionData(pdfData.text);
+      await fs.unlink(uploadedFile.filepath);
 
       return res.status(200).json({
-        message: "Arquivo salvo com sucesso",
-        id: newBillingFile._id,
+        message: "Processamento concluído",
+        extractedData,
       });
     } catch (error) {
-      console.error("Erro ao salvar no MongoDB:", error);
-      return res.status(500).json({ message: "Erro ao salvar no MongoDB" });
+      console.error("Erro ao processar PDF:", error);
+      return res.status(500).json({ message: "Erro ao processar o PDF" });
     }
   });
+}
+
+function extractTransactionData(pdfText: string) {
+  const transactionIdMatch = pdfText.match(/Transaction ID:\s*(\d+)/i);
+  const amountMatch = pdfText.match(/Amount:\s*([\d,.]+)/i);
+  const currencyMatch = pdfText.match(/Currency:\s*([A-Z]{3})/i);
+
+  return {
+    transaction_id: transactionIdMatch ? transactionIdMatch[1] : null,
+    amount: amountMatch ? amountMatch[1] : null,
+    currency: currencyMatch ? currencyMatch[1] : null,
+  };
 }
