@@ -31,8 +31,7 @@ export default async function handler(
   try {
     const { files } = await parseForm(req);
 
-    const uploadedFile =
-      Array.isArray(files.file) ? files.file[0] : files.file;
+    const uploadedFile = Array.isArray(files.file) ? files.file[0] : files.file;
 
     if (!uploadedFile?.filepath) {
       return res.status(400).json({ error: "Nenhum arquivo válido enviado." });
@@ -59,19 +58,22 @@ function extractTransactions(text: string) {
 
   let currentDate: string | null = null;
 
-  for (let i = 0; i < lines.length - 1; i++) {
+  for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
-    const nextLine = lines[i + 1].trim();
 
-    const dateRegex = /^(\d{2}\/\d{2}\/\d{4})\s+(.+)$/;
+    const dateRegex = /^(\d{2}\/\d{2}\/\d{4})(.+)$/;
     const dateMatch = dateRegex.exec(line);
+
     if (dateMatch) {
       currentDate = dateMatch[1];
-      const description = dateMatch[2];
+      let description = dateMatch[2].trim();
 
-      const valueRegex = /^(-?\d{1,3}(?:\.\d{3})*,\d{2})$/;
-      const valueMatch = valueRegex.exec(nextLine);
+      const valueRegex = /(-?\d{1,3}(?:\.\d{3})*,\d{2})$/;
+      const valueMatch = valueRegex.exec(description);
+
       if (valueMatch) {
+        description = description.replace(valueRegex, "").trim();
+
         const value = parseFloat(
           valueMatch[1].replace(/\./g, "").replace(",", ".")
         );
@@ -81,6 +83,23 @@ function extractTransactions(text: string) {
           descricao: description,
           valor: value,
         });
+      } else {
+        const nextLine = lines[i + 1]?.trim() || "";
+        const nextValueMatch = valueRegex.exec(nextLine);
+
+        if (nextValueMatch) {
+          const value = parseFloat(
+            nextValueMatch[1].replace(/\./g, "").replace(",", ".")
+          );
+
+          transactions.push({
+            data: currentDate,
+            descricao: description,
+            valor: value,
+          });
+
+          i++;
+        }
       }
     }
   }
