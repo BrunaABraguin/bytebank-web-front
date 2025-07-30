@@ -9,10 +9,10 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-} from "@workspace/ui/dialog";
-import { Label } from "@workspace/ui/label";
-import { Button } from "@workspace/ui/button";
-import { Input } from "@workspace/ui/input";
+} from "@bytebank-web/ui/dialog";
+import { Label } from "@bytebank-web/ui/label";
+import { Button } from "@bytebank-web/ui/button";
+import { Input } from "@bytebank-web/ui/input";
 import { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 

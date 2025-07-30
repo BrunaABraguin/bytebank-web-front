@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectToMongoDB from "./libs/mongoDB";
 import Transaction from "./models/Transaction";
-import { Transaction as TransactionType } from "@workspace/types/transaction";
+import { Transaction as TransactionType } from "@bytebank-web/types/transaction";
 import Account from "./models/Account";
 import runMiddleware, { cors } from "./libs/cors";
 

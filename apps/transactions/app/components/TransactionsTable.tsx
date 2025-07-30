@@ -17,31 +17,31 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@workspace/ui/table";
-import { Input } from "@workspace/ui/input";
-import { Button } from "@workspace/ui/button";
+} from "@bytebank-web/ui/table";
+import { Input } from "@bytebank-web/ui/input";
+import { Button } from "@bytebank-web/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@workspace/ui/dropdown-menu";
+} from "@bytebank-web/ui/dropdown-menu";
 import { ChevronDown, Edit, Trash } from "lucide-react";
-import { useSharedStore } from "@workspace/store";
-import { useTransactions } from "@workspace/utils/use-transactions";
-import { Transaction, TransactionEnum } from "@workspace/types/transaction";
+import { useSharedStore } from "@bytebank-web/store";
+import { useTransactions } from "@bytebank-web/utils/use-transactions";
+import { Transaction, TransactionEnum } from "@bytebank-web/types/transaction";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@workspace/ui/select";
-import categories from "@workspace/utils/categories";
+} from "@bytebank-web/ui/select";
+import categories from "@bytebank-web/utils/categories";
 import { useState } from "react";
 import { useEditTransaction } from "@/hooks/use-edit-transaction";
 import { useDeleteTransaction } from "@/hooks/use-delete-transaction";
-import { TransactionForm } from "@workspace/ui/transactionForm";
+import { TransactionForm } from "@bytebank-web/ui/transactionForm";
 
 export function TransactionsTable() {
   const { email } = useSharedStore();

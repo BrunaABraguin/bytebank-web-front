@@ -1,5 +1,5 @@
-import { createHttpService } from "@workspace/utils/http";
-import { MonthlyData } from "@workspace/types/monthlyData";
+import { createHttpService } from "@bytebank-web/utils/http";
+import { MonthlyData } from "@bytebank-web/types/monthlyData";
 import { API_URL } from "@/contants";
 
 export const getMonthlyData = async (

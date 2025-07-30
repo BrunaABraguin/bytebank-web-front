@@ -1,7 +1,7 @@
 import { deleteTransaction } from "@/services/deleteTransaction";
 import { useMutation } from "@tanstack/react-query";
-import { Transaction } from "@workspace/types/transaction";
-import { queryClient } from "@workspace/utils/react-query";
+import { Transaction } from "@bytebank-web/types/transaction";
+import { queryClient } from "@bytebank-web/utils/react-query";
 
 export const useDeleteTransaction = () => {
   const { mutate: mutateDelete } = useMutation({

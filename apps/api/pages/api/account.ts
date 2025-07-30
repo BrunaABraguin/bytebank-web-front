@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import connectToMongoDB from "./libs/mongoDB";
 import Account from "./models/Account";
-import { Account as AccountType } from "@workspace/types/account";
+import { Account as AccountType } from "@bytebank-web/types/account";
 import runMiddleware, { cors } from "./libs/cors";
 
 export default async function handler(

@@ -1,5 +1,5 @@
 {
-  "name": "@workspace/store",
+  "name": "@bytebank-web/store",
   "version": "1.0.0",
   "license": "MIT",  
   "type": "module",
@@ -16,7 +16,7 @@
     "zustand": "^5.0.6"
   },
   "devDependencies": {
-    "@workspace/typescript-config": "*",
+    "@bytebank-web/typescript-config": "*",
     "typescript": "5.8.2"
   }
 }

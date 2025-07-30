@@ -4,8 +4,8 @@ import Transaction from "./models/Transaction";
 import {
   TransactionEnum,
   Transaction as TransactionType,
-} from "@workspace/types/transaction";
-import { MonthlyData } from "@workspace/types/monthlyData";
+} from "@bytebank-web/types/transaction";
+import { MonthlyData } from "@bytebank-web/types/monthlyData";
 import runMiddleware, { cors } from "./libs/cors";
 
 export default async function handler(

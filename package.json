@@ -1,5 +1,5 @@
 {
-  "name": "bytebank-workspace",
+  "name": "bytebank-web",
   "private": true,
   "scripts": {
     "build": "turbo run build",

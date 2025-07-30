@@ -11,8 +11,8 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@workspace/types": "*",
-    "@workspace/utils": "*",
+    "@bytebank-web/types": "*",
+    "@bytebank-web/utils": "*",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
@@ -30,9 +30,9 @@
     "@types/node": "^22.15.30",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.1",
-    "@workspace/eslint-config": "*",
-    "@workspace/tailwind-config": "*",
-    "@workspace/typescript-config": "*",
+    "@bytebank-web/eslint-config": "*",
+    "@bytebank-web/tailwind-config": "*",
+    "@bytebank-web/typescript-config": "*",
     "eslint": "^9.29.0",
     "eslint-config-next": "15.3.4",
     "typescript": "5.8.2"

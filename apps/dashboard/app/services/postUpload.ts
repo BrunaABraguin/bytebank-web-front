@@ -1,4 +1,4 @@
-import { createHttpService } from "@workspace/utils/http";
+import { createHttpService } from "@bytebank-web/utils/http";
 
 export const postUpload = async (
   email: string,

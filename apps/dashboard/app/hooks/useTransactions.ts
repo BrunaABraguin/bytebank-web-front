@@ -1,6 +1,6 @@
 import { getTransactions } from "@/services/transactions";
 import { useQuery } from "@tanstack/react-query";
-import { Transaction } from "@workspace/types/transaction";
+import { Transaction } from "@bytebank-web/types/transaction";
 
 /**
  * Hook para buscar transações com base no email do proprietário.
@@ -14,8 +14,8 @@ export const useTransactions = (ownerEmail: string | null) => {
     error,
   } = useQuery<Transaction[], Error>({
     queryKey: ["transactions", ownerEmail],
-    queryFn: () => getTransactions(ownerEmail), 
-    enabled: !!ownerEmail, 
+    queryFn: () => getTransactions(ownerEmail),
+    enabled: !!ownerEmail,
     staleTime: 5 * 60 * 1000,
     retry: 1,
   });

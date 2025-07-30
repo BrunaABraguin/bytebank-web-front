@@ -1,5 +1,5 @@
 import { TransactionsTable } from "./components/TransactionsTable";
-import { Card, CardContent } from "@workspace/ui/card";
+import { Card, CardContent } from "@bytebank-web/ui/card";
 
 export default function Transactions() {
   return (

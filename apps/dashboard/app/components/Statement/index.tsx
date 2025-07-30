@@ -1,8 +1,8 @@
 "use client";
 import React, { useRef, useCallback } from "react";
 import { Transaction } from "../Transaction";
-import { Transaction as TransactionType } from "@workspace/types/transaction";
-import { Card, CardContent } from "@workspace/ui/card";
+import { Transaction as TransactionType } from "@bytebank-web/types/transaction";
+import { Card, CardContent } from "@bytebank-web/ui/card";
 
 interface StatementProps {
   transactions: TransactionType[] | undefined;

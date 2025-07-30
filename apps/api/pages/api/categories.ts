@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import runMiddleware, { cors } from "./libs/cors";
 import connectToMongoDB from "./libs/mongoDB";
-import categories from "@workspace/utils/categories";
+import categories from "@bytebank-web/utils/categories";
 
 export default async function handler(
   req: NextApiRequest,

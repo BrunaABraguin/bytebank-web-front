@@ -1,6 +1,6 @@
 import { getBalanceAccount } from "@/services/balance";
 import { useQuery } from "@tanstack/react-query";
-import { Account } from "@workspace/types/account";
+import { Account } from "@bytebank-web/types/account";
 
 /**
  * Hook para buscar transações com base no email do proprietário.

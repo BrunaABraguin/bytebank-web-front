@@ -1,5 +1,5 @@
 {
-  "name": "@workspace/utils",
+  "name": "@bytebank-web/utils",
   "license": "MIT",
   "version": "1.0.0",
   "type": "module",
@@ -13,7 +13,7 @@
     "./*": "./dist/*.js"
   },
   "devDependencies": {
-    "@workspace/typescript-config": "*",
+    "@bytebank-web/typescript-config": "*",
     "typescript": "5.8.2"
   },
   "dependencies": {

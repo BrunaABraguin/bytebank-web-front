@@ -1,12 +1,12 @@
 "use client";
-import { useSharedStore } from "@workspace/store";
+import { useSharedStore } from "@bytebank-web/store";
 
 import { Statement } from "./components/Statement";
 import { AccountBalance } from "./components/AccountBalance";
 import { IncomeExpensesChart } from "./components/IncomeExpensesChart";
 import { useBalance } from "./hooks/useBalance";
 import { useMonthlyChart } from "./hooks/useMonthlyChart";
-import { useTransactions } from "@workspace/utils/use-transactions";
+import { useTransactions } from "@bytebank-web/utils/use-transactions";
 
 export default function Dashboard() {
   const { email } = useSharedStore();

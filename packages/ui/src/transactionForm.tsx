@@ -12,20 +12,20 @@ import {
   DialogFooter,
   DialogClose,
   DialogDescription,
-} from "@workspace/ui/dialog";
+} from "@bytebank-web/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@workspace/ui/select";
-import { Input } from "@workspace/ui/input";
-import { Label } from "@workspace/ui/label";
-import { Button } from "@workspace/ui/button";
-import { TransactionEnum } from "@workspace/types/transaction";
-import { useAddTransaction } from "@workspace/utils/use-add-transaction";
-import { useSharedStore } from "@workspace/store";
+} from "@bytebank-web/ui/select";
+import { Input } from "@bytebank-web/ui/input";
+import { Label } from "@bytebank-web/ui/label";
+import { Button } from "@bytebank-web/ui/button";
+import { TransactionEnum } from "@bytebank-web/types/transaction";
+import { useAddTransaction } from "@bytebank-web/utils/use-add-transaction";
+import { useSharedStore } from "@bytebank-web/store";
 
 export const TransactionForm = () => {
   const { mutate } = useAddTransaction();

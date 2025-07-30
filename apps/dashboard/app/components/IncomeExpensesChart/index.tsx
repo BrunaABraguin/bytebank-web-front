@@ -1,6 +1,6 @@
-import { MonthlyData } from "@workspace/types/monthlyData";
-import { Card, CardContent } from "@workspace/ui/card";
-import { AreaChartMonths } from "@workspace/ui/areaChartMonths";
+import { MonthlyData } from "@bytebank-web/types/monthlyData";
+import { Card, CardContent } from "@bytebank-web/ui/card";
+import { AreaChartMonths } from "@bytebank-web/ui/areaChartMonths";
 
 interface IncomeExpensesChartProps {
   transactions: MonthlyData[] | undefined;

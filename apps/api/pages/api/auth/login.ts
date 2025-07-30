@@ -5,7 +5,7 @@ import User from "../models/User";
 import bcrypt from "bcryptjs";
 import runMiddleware, { cors } from "../libs/cors";
 import Account from "../models/Account";
-import { Account as AccountType } from "@workspace/types/account";
+import { Account as AccountType } from "@bytebank-web/types/account";
 
 export default async function handler(
   req: NextApiRequest,

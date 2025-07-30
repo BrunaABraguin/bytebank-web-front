@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { TransactionEnum } from "@workspace/types/transaction";
+import { TransactionEnum } from "@bytebank-web/types/transaction";
 
 export interface ITransaction extends Document {
   type: TransactionEnum;

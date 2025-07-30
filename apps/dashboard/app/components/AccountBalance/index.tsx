@@ -1,6 +1,6 @@
-import { Card, CardContent } from "@workspace/ui/card";
-import { Account } from "@workspace/types/account";
-import { TransactionForm } from "@workspace/ui/transactionForm";
+import { Card, CardContent } from "@bytebank-web/ui/card";
+import { Account } from "@bytebank-web/types/account";
+import { TransactionForm } from "@bytebank-web/ui/transactionForm";
 
 interface AccountBalanceProps {
   account: Account | undefined;

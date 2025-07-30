@@ -1,4 +1,4 @@
-import { createHttpService } from "@workspace/utils/http";
+import { createHttpService } from "@bytebank-web/utils/http";
 import { API_URL } from "../contants";
 
 export const loginService = async (

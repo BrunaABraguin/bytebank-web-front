@@ -28,7 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "./dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "./avatar";
-import { useSharedStore } from "@workspace/store";
+import { useSharedStore } from "@bytebank-web/store";
 
 const items = [
   {

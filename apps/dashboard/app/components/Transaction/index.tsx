@@ -1,4 +1,4 @@
-import { Transaction as TransactionType } from "@workspace/types/transaction";
+import { Transaction as TransactionType } from "@bytebank-web/types/transaction";
 interface TransactionProps {
   transaction: TransactionType;
 }

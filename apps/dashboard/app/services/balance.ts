@@ -1,5 +1,5 @@
-import { createHttpService } from "@workspace/utils/http";
-import { Account } from "@workspace/types/account";
+import { createHttpService } from "@bytebank-web/utils/http";
+import { Account } from "@bytebank-web/types/account";
 import { API_URL } from "@/contants";
 
 export const getBalanceAccount = async (

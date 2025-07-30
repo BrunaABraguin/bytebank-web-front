@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Transaction } from "@workspace/types/transaction";
+import { Transaction } from "@bytebank-web/types/transaction";
 import { getTransactions } from "./get-transactions.js";
 
 export const useTransactions = (
