@@ -14,14 +14,17 @@ const AccountSchema: Schema = new Schema(
     balance: {
       type: Number,
       default: 0,
+      set: (v: number) => Number(v.toFixed(2)),
     },
     income: {
       type: Number,
       default: 0,
+      set: (v: number) => Number(v.toFixed(2)),
     },
     expense: {
       type: Number,
       default: 0,
+      set: (v: number) => Number(v.toFixed(2)),
     },
   },
   { timestamps: true }

@@ -44,7 +44,9 @@ export const BenefitsSection = () => {
             <h3 className="text-xl text-green mt-2 mb-1 font-bold">
               {benefit.title}
             </h3>
-            <p className="text-gray-medium">{benefit.desc}</p>
+            <p className="leading-7 [&:not(:first-child)]:mt-6 text-gray-medium">
+              {benefit.desc}
+            </p>
           </div>
         ))}
       </div>

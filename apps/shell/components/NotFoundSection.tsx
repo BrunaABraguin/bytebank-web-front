@@ -11,7 +11,7 @@ const NotFoundSection: React.FC = () => {
         Ops! Não encontramos a página...
       </h1>
       <div className="w-96 max-sm:w-2xs line-clamp-2 max-sm:line-clamp-3">
-        <p className="text-black">
+        <p className="leading-7 [&:not(:first-child)]:mt-6 text-black">
           E olha que exploramos o universo procurando por ela! Que tal voltar e
           tentar novamente?
         </p>

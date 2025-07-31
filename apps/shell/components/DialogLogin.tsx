@@ -19,7 +19,7 @@ import { useLogin } from "../hooks/useLogin";
 export const DialogLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { mutate, errorMessage } = useLogin(email);
+  const { mutate, errorMessage, isPending } = useLogin(email);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,34 +47,49 @@ export const DialogLogin = () => {
             <DialogTitle className="text-center my-5">Login</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 mt-5">
-            <div className="grid gap-3">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                placeholder="Digite seu email"
-                type="text"
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-                required
-              />
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="password">Senha</Label>
-              <Input
-                id="password"
-                name="password"
-                placeholder="Digite sua senha"
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-                required
-              />
-            </div>
-            {errorMessage && <p className="text-red-600">{errorMessage}</p>}
+            {isPending ? (
+              <p className="text-center">Carregando...</p>
+            ) : (
+              <>
+                <div className="grid gap-3">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    placeholder="Digite seu email"
+                    type="text"
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                    required
+                  />
+                </div>
+                <div className="grid gap-3">
+                  <Label htmlFor="password">Senha</Label>
+                  <Input
+                    id="password"
+                    name="password"
+                    placeholder="Digite sua senha"
+                    type="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                    required
+                  />
+                </div>
+              </>
+            )}
+            {errorMessage && (
+              <p className="leading-7 [&:not(:first-child)]:mt-6 text-red-600">
+                {errorMessage}
+              </p>
+            )}
           </div>
           <DialogFooter>
-            <Button type="submit" className="bg-green">
+            <Button
+              size="lg"
+              type="submit"
+              className="bg-green mt-5"
+              disabled={isPending}
+            >
               Acessar
             </Button>
           </DialogFooter>

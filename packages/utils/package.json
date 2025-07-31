@@ -17,6 +17,7 @@
     "typescript": "5.8.2"
   },
   "dependencies": {
+    "@bytebank-web/store": "*",
     "@tanstack/react-query": "^5.83.0",
     "axios": "^1.10.0"
   }

@@ -46,7 +46,7 @@ import { TransactionForm } from "@bytebank-web/ui/transactionForm";
 
 export function TransactionsTable() {
   const { email } = useSharedStore();
-  const [pageSize, setPageSize] = useState(3);
+  const [pageSize, setPageSize] = useState(10);
   const [pageIndex, setPageIndex] = useState(0);
   const { transactions, isLoading, totalPages } = useTransactions(
     email,

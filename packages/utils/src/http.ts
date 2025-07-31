@@ -6,5 +6,6 @@ export const createHttpService = (base?: string, contentType?: string) => {
     headers: {
       "Content-Type": contentType || "application/json",
     },
+    timeout: 180000, // 3 minutes
   });
 };

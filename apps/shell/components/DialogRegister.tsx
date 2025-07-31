@@ -67,7 +67,7 @@ export const DialogRegister = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" className="bg-orange">
+            <Button size="lg" type="submit" className="bg-orange">
               Criar conta
             </Button>
           </DialogFooter>

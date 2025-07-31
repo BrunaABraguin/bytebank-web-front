@@ -36,7 +36,7 @@ async function handleGetMonthlyData(req: NextApiRequest, res: NextApiResponse) {
 
     const currentDate = new Date();
     const threeMonthsAgo = new Date();
-    threeMonthsAgo.setMonth(currentDate.getMonth() - 2);
+    threeMonthsAgo.setMonth(currentDate.getMonth() - 3);
 
     const transactions = await Transaction.find({
       date: { $gte: threeMonthsAgo },
@@ -69,10 +69,15 @@ function aggregateTransactionsToModelData(
     }
 
     if (type === TransactionEnum.INCOME) {
-      groupedData[month].income += value;
+      groupedData[month].income += parseFloat(value.toFixed(2));
     } else {
-      groupedData[month].expense += value;
+      groupedData[month].expense += Math.abs(parseFloat(value.toFixed(2)));
     }
+  });
+
+  Object.keys(groupedData).forEach((month) => {
+    groupedData[month].income = parseFloat(groupedData[month].income.toFixed(2));
+    groupedData[month].expense = parseFloat(groupedData[month].expense.toFixed(2));
   });
 
   return groupedData;

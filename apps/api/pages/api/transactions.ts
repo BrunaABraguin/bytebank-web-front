@@ -2,8 +2,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import connectToMongoDB from "./libs/mongoDB";
 import Transaction from "./models/Transaction";
 import { Transaction as TransactionType } from "@bytebank-web/types/transaction";
-import Account from "./models/Account";
 import runMiddleware, { cors } from "./libs/cors";
+import { adjustAccountBalance } from "./utils/transactions";
 
 export default async function handler(
   req: NextApiRequest,
@@ -186,24 +186,4 @@ async function handleDeleteTransaction(
     console.error("Erro ao deletar transação:", error);
     return res.status(500).json({ error: "Erro ao deletar transação" });
   }
-}
-
-async function adjustAccountBalance(
-  ownerEmail: string,
-  type: string,
-  value: number
-) {
-  const account = await Account.findOne({ ownerEmail });
-  if (!account) return null;
-
-  if (type === "Receita") {
-    account.balance += value;
-    account.income += value;
-  } else {
-    account.balance -= value;
-    account.expense += value;
-  }
-  await account.save();
-
-  return account;
 }

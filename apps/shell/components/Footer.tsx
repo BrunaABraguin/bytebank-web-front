@@ -35,7 +35,9 @@ const Footer: React.FC = () => (
     <div className="flex flex-col gap-4">
       <h4 className="font-bold">Contato</h4>
       {contacts.map((contact) => (
-        <p key={contact}>{contact}</p>
+        <p className="leading-7 [&:not(:first-child)]:mt-6" key={contact}>
+          {contact}
+        </p>
       ))}
     </div>
     <div className="flex flex-col gap-4">
