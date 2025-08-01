@@ -4,7 +4,7 @@ import { API_URL } from "./contants.js";
 export async function postTransaction(
   email: string,
   type: string,
-  value: number
+  value: string
 ): Promise<{ message: string }> {
   const client = createHttpService(API_URL);
   const transaction = {

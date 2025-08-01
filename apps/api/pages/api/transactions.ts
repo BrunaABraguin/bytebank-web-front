@@ -63,11 +63,12 @@ async function handleGetTransactions(
       .limit(pageSizeNumber)
       .lean<TransactionType[]>();
 
+    const hasMore = currentPage < totalPages;
+
     return res.status(200).json({
       transactions,
       totalPages,
-      currentPage,
-      pageSize: pageSizeNumber,
+      hasMore,
     });
   } catch (error) {
     console.error("Erro ao buscar transações:", error);

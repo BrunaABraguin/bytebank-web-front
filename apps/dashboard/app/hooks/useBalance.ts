@@ -10,7 +10,7 @@ import { Account } from "@bytebank-web/types/account";
 export const useBalance = (ownerEmail: string | null) => {
   const {
     data: account,
-    isLoading,
+    isLoading: isLoadingAccount,
     error,
   } = useQuery<Account, Error>({
     queryKey: ["balance"],
@@ -20,5 +20,5 @@ export const useBalance = (ownerEmail: string | null) => {
     retry: 1,
   });
 
-  return { account, isLoading, error };
+  return { account, isLoadingAccount, error };
 };

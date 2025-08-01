@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./select";
+import { Loading } from "./loading";
 
 export const FileUpload = () => {
   const [open, setOpen] = useState(false);
@@ -93,9 +94,7 @@ export const FileUpload = () => {
             transações válidas. Máximo de 50 transações serão processadas.
           </DialogDescription>
         </DialogHeader>
-        {isPending && (
-          <p className="text-sm text-gray-500">Enviando arquivo...</p>
-        )}
+        {isPending && <Loading aria-label="Enviando arquivo" />}
         <div className="flex flex-col gap-3 space-y-2">
           <div className="flex flex-col gap-2">
             <Label>Banco</Label>
@@ -121,21 +120,25 @@ export const FileUpload = () => {
           {data && file && (
             <p className="leading-7 [&:not(:first-child)]:mt-6">
               Deseja processar o arquivo? Foram encontradas{" "}
-              <strong>{data.totalTransactions}</strong> transações. Máximo de 50
+              <strong>{data.totalTransactions}</strong> transações. Máximo de 20
               transações serão processadas.
             </p>
           )}
         </div>
         <DialogFooter>
-          {data ? (
-            <Button type="submit" onClick={handleUpload} disabled={isPending}>
+          {data && !isPending && !isPendingProcess ? (
+            <Button
+              type="submit"
+              onClick={handleUpload}
+              disabled={isPending || isPendingProcess}
+            >
               Processar arquivo ({data.totalTransactions} transações)
             </Button>
           ) : (
             <Button
               type="submit"
               onClick={handleProcessFile}
-              disabled={isPendingProcess}
+              disabled={isPendingProcess || isPending}
             >
               Enviar arquivo
             </Button>

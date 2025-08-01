@@ -11,13 +11,15 @@ export const useAddTransaction = () => {
       type,
     }: {
       email: string;
-      value: number;
+      value: string;
       type: string;
     }) => {
       return postTransaction(email, type, value);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["monthly-chart"] });
+      queryClient.invalidateQueries({ queryKey: ["balance"] });
     },
   });
   return { data, mutate };

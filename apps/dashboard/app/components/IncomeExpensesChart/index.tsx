@@ -10,12 +10,18 @@ export const IncomeExpensesChart = ({
   transactions,
 }: IncomeExpensesChartProps) => {
   return (
-    <Card className="col-span-1 lg:col-span-3">
+    <Card className="col-span-3" aria-labelledby="income-expenses-title">
       <CardContent>
-        <h2 className="text-xl font-bold mb-4 text-gray-400">
+        <h2
+          id="income-expenses-title"
+          className="text-xl font-bold mb-4 text-gray-400"
+        >
           Receitas e Despesas
         </h2>
-        <AreaChartMonths transactions={transactions} />
+        <AreaChartMonths
+          transactions={transactions}
+          aria-label="Gráfico de receitas e despesas mensais"
+        />
       </CardContent>
     </Card>
   );

@@ -21,6 +21,8 @@ export const useUploadFile = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["monthly-chart"] });
+      queryClient.invalidateQueries({ queryKey: ["balance"] });
     },
   });
   return { data, uploadMutate, isPending };

@@ -8,7 +8,7 @@ export const useTransactions = (
   pageSize: number
 ) => {
   const { data, isLoading, error } = useQuery<
-    { transactions: Transaction[]; totalPages: number },
+    { transactions: Transaction[]; totalPages: number; hasMore: boolean },
     Error
   >({
     queryKey: ["transactions", ownerEmail, page, pageSize],
@@ -21,6 +21,7 @@ export const useTransactions = (
   return {
     transactions: data?.transactions || [],
     totalPages: data?.totalPages || 0,
+    hasMore: data?.hasMore || false,
     isLoading,
     error,
   };

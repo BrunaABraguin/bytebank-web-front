@@ -44,7 +44,7 @@ export function extractTransactions(text: string) {
   }
   return transactions
     .filter((tx) => tx.value !== 0 && tx.description !== "SALDO DO DIA")
-    .slice(0, 50);
+    .slice(0, 20);
 }
 
 export const parseForm = (

@@ -35,14 +35,26 @@ export const TransactionForm = () => {
     TransactionEnum.INCOME
   );
   const [transactionValue, setTransactionValue] = useState<string>("");
+  const [errors, setErrors] = useState<{ transactionValue?: string }>({});
   const transactionTypes = Object.values(TransactionEnum);
+
+  function validateForm() {
+    const newErrors: { transactionValue?: string } = {};
+    if (!transactionValue || parseFloat(transactionValue) <= 0) {
+      newErrors.transactionValue = "O valor deve ser maior que 0.";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }
 
   function createTransaction(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
+    if (!validateForm()) return;
+
     if (email) {
       const transaction = {
         type: transactionType,
-        value: parseFloat(transactionValue),
+        value: parseFloat(transactionValue).toFixed(2),
         email,
       };
       mutate(transaction);
@@ -60,7 +72,7 @@ export const TransactionForm = () => {
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <form onSubmit={createTransaction}>
+        <form onSubmit={createTransaction} noValidate>
           <DialogHeader>
             <DialogTitle>Registre uma transação</DialogTitle>
             <DialogDescription>
@@ -76,7 +88,10 @@ export const TransactionForm = () => {
                 }
                 defaultValue={transactionType}
               >
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger
+                  className="w-[180px]"
+                  aria-label="Tipo de transação"
+                >
                   <SelectValue placeholder="Selecione" />
                 </SelectTrigger>
                 <SelectContent>
@@ -98,12 +113,24 @@ export const TransactionForm = () => {
                 value={transactionValue}
                 className="w-[180px]"
                 onChange={(e) => setTransactionValue(e.target.value)}
+                aria-invalid={!!errors.transactionValue}
+                aria-describedby="transactionValue-error"
               />
+              {errors.transactionValue && (
+                <span
+                  id="transactionValue-error"
+                  className="text-red-500 text-sm"
+                >
+                  {errors.transactionValue}
+                </span>
+              )}
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Registrar</Button>
-            <DialogClose asChild>
+            <Button type="submit" className="mt-5">
+              Registrar
+            </Button>
+            <DialogClose asChild className="mt-5">
               <Button variant="secondary" type="button">
                 Cancelar
               </Button>

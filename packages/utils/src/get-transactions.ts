@@ -6,7 +6,7 @@ export const getTransactions = async (
   ownerEmail: string | null,
   page: number,
   pageSize: number
-): Promise<{ transactions: Transaction[]; totalPages: number }> => {
+): Promise<{ transactions: Transaction[]; totalPages: number; hasMore: boolean }> => {
   const client = createHttpService(API_URL);
 
   const response = await client.get("/api/transactions", {

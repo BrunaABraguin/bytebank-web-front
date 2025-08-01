@@ -10,6 +10,8 @@ export const useEditTransaction = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["monthly-chart"] });
+      queryClient.invalidateQueries({ queryKey: ["balance"] });
     },
   });
 
