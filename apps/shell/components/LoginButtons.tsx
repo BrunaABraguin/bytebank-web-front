@@ -4,9 +4,12 @@ import { DialogLogin } from "./DialogLogin";
 
 export const LoginButtons: React.FC = () => {
   return (
-    <div className={`flex flex-wrap gap-4`}>
+    <fieldset
+      className={`flex flex-wrap gap-4`}
+      aria-label="Opções de Login e Cadastro"
+    >
       <DialogRegister />
       <DialogLogin />
-    </div>
+    </fieldset>
   );
 };

@@ -78,7 +78,7 @@ export const DialogRegister = () => {
             {isSuccess && (
               <Alert className="text-center text-green">
                 <CheckCircle2Icon />
-                Cadastro realizado com sucesso!
+                Cadastro realizado com sucesso! Você será redirecionado.
               </Alert>
             )}
             {!isPending && !isSuccess && (
@@ -161,6 +161,12 @@ export const DialogRegister = () => {
               type="submit"
               className="bg-orange mt-5"
               disabled={isPending || isSuccess}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleRegister(e);
+                }
+              }}
             >
               Criar conta
             </Button>

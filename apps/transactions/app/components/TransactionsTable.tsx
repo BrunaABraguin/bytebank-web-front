@@ -43,6 +43,7 @@ import { useState } from "react";
 import { useEditTransaction } from "@/hooks/use-edit-transaction";
 import { useDeleteTransaction } from "@/hooks/use-delete-transaction";
 import { TransactionForm } from "@bytebank-web/ui/transactionForm";
+import { Loading } from "@bytebank-web/ui/loading";
 
 export function TransactionsTable() {
   const { email } = useSharedStore();
@@ -270,7 +271,9 @@ export function TransactionsTable() {
   return (
     <div className="w-full">
       {isLoading ? (
-        <div>Carregando...</div>
+        <div className="flex items-center justify-center h-80">
+          <Loading />
+        </div>
       ) : (
         <>
           <div className="flex items-center py-4">

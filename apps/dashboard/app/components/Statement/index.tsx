@@ -3,6 +3,7 @@ import React, { useRef, useCallback } from "react";
 import { Transaction } from "../Transaction";
 import { Transaction as TransactionType } from "@bytebank-web/types/transaction";
 import { Card, CardContent } from "@bytebank-web/ui/card";
+import { Loading } from "@bytebank-web/ui/loading";
 
 interface StatementProps {
   transactions: TransactionType[] | undefined;
@@ -46,7 +47,7 @@ export const Statement = ({
             />
           ))}
           {hasMore && (
-            <div className="text-center text-gray-400 py-4">Carregando...</div>
+            <Loading />
           )}
         </div>
       </CardContent>
