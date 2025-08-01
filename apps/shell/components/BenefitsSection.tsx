@@ -25,20 +25,28 @@ const benefits = [
 
 export const BenefitsSection = () => {
   return (
-    <section className="text-center py-10 xl:px-28">
-      <h2 className="text-2xl font-bold mb-6">Vantagens do nosso banco:</h2>
-      <div className="flex flex-wrap justify-center gap-6 px-4">
+    <section
+      className="text-center py-10 xl:px-28"
+      aria-labelledby="benefits-heading"
+    >
+      <h2 id="benefits-heading" className="text-2xl font-bold mb-6">
+        Vantagens do nosso banco:
+      </h2>
+      <ul
+        className="flex flex-wrap justify-center gap-6 px-4"
+        aria-label="Lista de benefícios do banco"
+      >
         {benefits.map((benefit) => (
-          <div
+          <li
             key={benefit.title}
             className="text-gray-600 text-center max-w-xs text-md"
           >
             <Image
               src={benefit.icon}
-              alt={benefit.title}
+              alt={`Ícone representando ${benefit.title}`}
               width={73}
               height={56}
-              className="mx-auto"
+              className="mx-auto w-auto h-auto"
               style={{ width: "auto", height: "auto" }}
             />
             <h3 className="text-xl text-green mt-2 mb-1 font-bold">
@@ -47,9 +55,9 @@ export const BenefitsSection = () => {
             <p className="leading-7 [&:not(:first-child)]:mt-6 text-gray-medium">
               {benefit.desc}
             </p>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 };

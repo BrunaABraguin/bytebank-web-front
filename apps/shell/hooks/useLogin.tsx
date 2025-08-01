@@ -1,24 +1,25 @@
 import { useMutation } from "@tanstack/react-query";
 import { loginService } from "../services/login";
 import { AxiosError } from "axios";
-import { setToken } from "@bytebank-web/utils/set-token";
+import { useSharedStore } from "@bytebank-web/store";
 import { ApiMessage } from "@bytebank-web/types/api";
+import { AUTH_COOKIE_MAX_AGE, AUTH_COOKIE_NAME } from "@bytebank-web/utils/contants";
 interface LoginParams {
   email: string;
   password: string;
 }
 
 export const useLogin = (email: string) => {
+  const { setEmail, setName } = useSharedStore();
   const { data, mutate, isPending, error, isSuccess } = useMutation({
     mutationFn: async ({ email, password }: LoginParams) => {
       return loginService(email, password);
     },
     onSuccess: ({ token, name }) => {
-      if (!token || !name) {
-        console.error("Token ou nome ausente na resposta.");
-        return;
-      }
-      setToken(token, name, email);
+      document.cookie = `${AUTH_COOKIE_NAME}=${token}; path=/; max-age=${AUTH_COOKIE_MAX_AGE}`;
+      setEmail(email);
+      setName(name);
+      window.location.assign("/dashboard");
     },
     onError: (error: AxiosError) => {
       const apiError = error?.response?.data as ApiMessage;

@@ -9,12 +9,16 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
+  DialogDescription,
 } from "@bytebank-web/ui/dialog";
 import { Label } from "@bytebank-web/ui/label";
 import { Button } from "@bytebank-web/ui/button";
 import { Input } from "@bytebank-web/ui/input";
 import { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
+import { Alert, AlertDescription, AlertTitle } from "@bytebank-web/ui/alert";
+import { AlertCircleIcon } from "lucide-react"
+
 
 export const DialogLogin = () => {
   const [email, setEmail] = useState("");
@@ -35,17 +39,21 @@ export const DialogLogin = () => {
         <Button variant="secondary">Já tenho conta</Button>
       </DialogTrigger>
       <DialogContent className="h-full overflow-y-auto">
+        <DialogHeader>
+          <Image
+            src="/login.svg"
+            alt="Computador Login Usuário"
+            width={334}
+            height={267}
+            className="mx-auto my-auto"
+          />
+          <DialogTitle className="text-center my-5">Login</DialogTitle>
+          <DialogDescription className="text-center">
+            Faça login para acessar sua conta e aproveitar todos os recursos do
+            ByteBank.
+          </DialogDescription>
+        </DialogHeader>
         <form onSubmit={handleLogin}>
-          <DialogHeader>
-            <Image
-              src="/login.svg"
-              alt="Computador Login Usuário"
-              width={334}
-              height={267}
-              className="mx-auto my-auto"
-            />
-            <DialogTitle className="text-center my-5">Login</DialogTitle>
-          </DialogHeader>
           <div className="grid gap-4 mt-5">
             {isPending ? (
               <p className="text-center">Carregando...</p>
@@ -78,9 +86,11 @@ export const DialogLogin = () => {
               </>
             )}
             {errorMessage && (
-              <p className="leading-7 [&:not(:first-child)]:mt-6 text-red-600">
-                {errorMessage}
-              </p>
+              <Alert variant="destructive">
+                <AlertCircleIcon />
+                <AlertTitle>Erro ao fazer login</AlertTitle>
+                <AlertDescription>{errorMessage}</AlertDescription>
+              </Alert>
             )}
           </div>
           <DialogFooter>

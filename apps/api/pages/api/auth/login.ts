@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectToMongoDB from "../libs/mongoDB";
-import jwt from "jsonwebtoken";
 import User from "../models/User";
 import bcrypt from "bcryptjs";
 import runMiddleware, { cors } from "../libs/cors";
 import Account from "../models/Account";
 import { Account as AccountType } from "@bytebank-web/types/account";
+import { generateToken } from "../utils/auth";
 
 export default async function handler(
   req: NextApiRequest,
@@ -32,11 +32,7 @@ export default async function handler(
       return res.status(401).json({ message: "Credenciais inválidas" });
     }
 
-    const token = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.JWT_SECRET!,
-      { expiresIn: "1h" }
-    );
+    const token = await generateToken(user.id, user.email);
 
     const account = await Account.findOne({
       ownerEmail: email,
@@ -49,7 +45,6 @@ export default async function handler(
     }
     res.setHeader("Authorization", `Bearer ${token}`);
     res.status(200).json({
-      message: "Login bem-sucedido",
       token,
       name: user.name,
     });

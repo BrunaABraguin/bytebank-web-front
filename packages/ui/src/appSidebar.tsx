@@ -126,12 +126,12 @@ export function AppSidebar() {
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <a href="/" className="flex items-center gap-2">
+                <a href="/" className="flex items-center gap-2">
+                  <DropdownMenuItem>
                     <LogOut />
                     Sair
-                  </a>
-                </DropdownMenuItem>
+                  </DropdownMenuItem>
+                </a>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>

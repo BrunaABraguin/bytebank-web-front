@@ -4,24 +4,20 @@ import connectToMongoDB from "../libs/mongoDB";
 import User from "../models/User";
 import Account from "../models/Account";
 import runMiddleware, { cors } from "../libs/cors";
+import { generateToken } from "../utils/auth";
 
 interface IUserPayload {
   name: string;
   email: string;
   password: string;
 }
-
-interface INewUser {
-  id: string;
-  name: string;
-  email: string;
-}
-
 interface ErrorResponse {
   message: string;
 }
 
-type ApiResponse = { message: string; user: INewUser } | ErrorResponse;
+type ApiResponse =
+  | { token: string; name: string; email: string }
+  | ErrorResponse;
 
 export default async function handler(
   req: NextApiRequest,
@@ -63,13 +59,14 @@ export default async function handler(
       ownerEmail: newUser.email,
     });
 
+    const token = await generateToken(newUser._id.toString(), newUser.email);
+
+    res.setHeader("Authorization", `Bearer ${token}`);
+
     res.status(201).json({
-      message: "Usuário e conta registrados com sucesso.",
-      user: {
-        id: newUser._id.toString(),
-        name: newUser.name,
-        email: newUser.email,
-      },
+      token,
+      name: newUser.name,
+      email: newUser.email,
     });
   } catch (error) {
     console.error("Erro ao registrar usuário:", error);

@@ -2,11 +2,11 @@ import { createHttpService } from "@bytebank-web/utils/http";
 import { API_URL } from "../contants";
 
 export const postRegister = async (
+  name: string,
   email: string,
-  password: string,
-  name: string
+  password: string
 ): Promise<{
-  token?: string;
+  token: string;
   name: string;
   email: string;
 }> => {

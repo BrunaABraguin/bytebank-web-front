@@ -10,36 +10,48 @@ const socialLinks = [
   {
     href: "https://instagram.com",
     src: "/instagram.svg",
-    alt: "Instagram",
+    alt: "Visite nosso Instagram",
   },
   {
     href: "https://wa.me/",
     src: "/whatsapp.svg",
-    alt: "WhatsApp",
+    alt: "Entre em contato pelo WhatsApp",
   },
   {
     href: "https://youtube.com",
     src: "/youtube.svg",
-    alt: "YouTube",
+    alt: "Acesse nosso canal no YouTube",
   },
 ];
 
 const Footer: React.FC = () => (
-  <footer className="bg-black text-white p-10 flex flex-wrap gap-10 justify-between text-base xl:px-28">
-    <div className="flex flex-col gap-4">
+  <footer
+    className="bg-black text-white p-10 flex flex-wrap gap-10 justify-between text-base xl:px-28"
+    aria-label="Rodapé do site"
+  >
+    <nav className="flex flex-col gap-4" aria-label="Serviços oferecidos">
       <h4 className="font-bold">Serviços</h4>
-      {services.map((service) => (
-        <p key={service}>{service}</p>
-      ))}
-    </div>
-    <div className="flex flex-col gap-4">
+      <ul>
+        {services.map((service) => (
+          <li key={service}>
+            <p>{service}</p>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <nav className="flex flex-col gap-4" aria-label="Informações de contato">
       <h4 className="font-bold">Contato</h4>
-      {contacts.map((contact) => (
-        <p className="leading-7 [&:not(:first-child)]:mt-6" key={contact}>
-          {contact}
-        </p>
-      ))}
-    </div>
+      <ul>
+        {contacts.map((contact) => (
+          <li
+            className="leading-7 [&:not(:first-child)]:mt-6"
+            key={contact}
+          >
+            <p>{contact}</p>
+          </li>
+        ))}
+      </ul>
+    </nav>
     <div className="flex flex-col gap-4">
       <h4 className="font-bold">Desenvolvido por Alura</h4>
       <Image
@@ -49,9 +61,15 @@ const Footer: React.FC = () => (
         height={35}
         style={{ width: "auto", height: "auto" }}
       />
-      <div className="flex gap-3 mt-2">
+      <nav className="flex gap-3 mt-2" aria-label="Redes sociais">
         {socialLinks.map(({ href, src, alt }) => (
-          <a key={alt} href={href} target="_blank" rel="noopener noreferrer">
+          <a
+            key={alt}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={alt}
+          >
             <Image
               src={src}
               alt={alt}
@@ -61,7 +79,7 @@ const Footer: React.FC = () => (
             />
           </a>
         ))}
-      </div>
+      </nav>
     </div>
   </footer>
 );

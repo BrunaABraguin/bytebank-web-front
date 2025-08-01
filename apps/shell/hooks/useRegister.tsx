@@ -1,8 +1,12 @@
 import { ApiMessage } from "@bytebank-web/types/api";
-import { setToken } from "@bytebank-web/utils/set-token";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { postRegister } from "../services/register";
+import { useSharedStore } from "@bytebank-web/store";
+import {
+  AUTH_COOKIE_NAME,
+  AUTH_COOKIE_MAX_AGE,
+} from "@bytebank-web/utils/contants";
 
 interface RegisterData {
   name: string;
@@ -11,16 +15,16 @@ interface RegisterData {
 }
 
 export const useRegister = () => {
-  const { mutate, error, isPending } = useMutation({
+  const { setEmail, setName } = useSharedStore();
+  const { mutate, error, isPending, isSuccess } = useMutation({
     mutationFn: async ({ name, email, password }: RegisterData) => {
       return postRegister(name, email, password);
     },
     onSuccess: ({ token, name, email }) => {
-      if (!token || !name) {
-        console.error("Token ou nome ausente na resposta.");
-        return;
-      }
-      setToken(token, name, email);
+      document.cookie = `${AUTH_COOKIE_NAME}=${token}; path=/; max-age=${AUTH_COOKIE_MAX_AGE}`;
+      setEmail(email);
+      setName(name);
+      window.location.assign("/dashboard");
     },
     onError: (error: AxiosError) => {
       const apiError = error?.response?.data as ApiMessage;
@@ -28,5 +32,10 @@ export const useRegister = () => {
     },
   });
 
-  return { mutate, error, isPending };
+  return {
+    mutate,
+    errorMessage: (error as AxiosError<ApiMessage>)?.response?.data.message,
+    isPending,
+    isSuccess,
+  };
 };

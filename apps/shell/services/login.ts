@@ -5,7 +5,7 @@ export const loginService = async (
   email: string,
   password: string
 ): Promise<{
-  token?: string;
+  token: string;
   name: string;
 }> => {
   const client = createHttpService(API_URL);
