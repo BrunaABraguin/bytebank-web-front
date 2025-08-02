@@ -13,6 +13,7 @@ export const patchTransaction = async (
     value: transaction.value,
     description: transaction.description,
     category: transaction.category,
+    date: transaction.date,
   });
   return response.data;
 };

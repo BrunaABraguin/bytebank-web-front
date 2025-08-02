@@ -7,6 +7,7 @@ export const useUploadFile = () => {
     data,
     mutate: uploadMutate,
     isPending,
+    isSuccess,
   } = useMutation({
     mutationKey: ["uploadFile"],
     mutationFn: async ({
@@ -25,5 +26,5 @@ export const useUploadFile = () => {
       queryClient.invalidateQueries({ queryKey: ["balance"] });
     },
   });
-  return { data, uploadMutate, isPending };
+  return { data, uploadMutate, isPending, isSuccess };
 };

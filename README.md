@@ -1,58 +1,131 @@
-# Turborepo Tailwind CSS starter
+# 💰 ByteBank - Tech Challenge (Fase 2)
 
-This Turborepo starter is maintained by the Turborepo core team.
+Este projeto é a continuação do Tech Challenge da Fase 01, com o objetivo de aprimorar e escalar a aplicação de gerenciamento financeiro existente. Nesta fase, aplicamos conceitos avançados como **microfrontends com multi zones**, **deploy em ambiente cloud**, **validações inteligentes**, **melhorias de performance**, **UX**, **acessibilidade** e **segurança**.
 
-## Using this example
+---
 
-Run the following command:
+## 🚀 Tecnologias Utilizadas
 
-```sh
-npx create-turbo@latest -e with-tailwind
+- Next.js (com suporte a SSR e SSG)
+- React 19+
+- TypeScript
+- Tailwind CSS
+- **Zustand** para gestão de estado global
+- **Multi Zones** (Next.js) para arquitetura de microfrontends
+- **shadcn/ui** como Design System
+- **Turborepo** para gerenciamento monorepo
+- Vercel (deploy)
+- Figma (referência visual)
+
+---
+
+## 📦 Funcionalidades
+
+### 🏠 Página Inicial (Home)
+
+- Balamço mensal
+- Filtro de mês e ano
+- Adição de nova transação
+- Gráfico de Receitas e Despesas
+- Gráfico de % de despesas/transferências por Categoria
+- Últimas transações
+
+### 📄 Listagem de Transações
+
+- Filtros de categoria
+- Campo de pesquisa
+- Paginação na lista de transações
+- Envio de extrato em PDF (Itaú)
+- Validação de entradas
+
+---
+
+## 🧱 Arquitetura e Organização
+
+### 🧩 Microfrontends com Multi Zones
+
+- Divisão do sistema em aplicações Next.js independentes
+- Cada zona (app) é responsável por um domínio funcional (ex: dashboard, transações, api)
+- Comunicação via rotas e contexto compartilhado
+- Integração orquestrada pela Vercel
+
+### ☁️ Deploy em Cloud
+
+- Uso da **Vercel** para deploy de cada zona com CI/CD automatizado
+- Ambientes separados para cada app Next.js (subdomínios ou caminhos distintos)
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+apps/
+├── api/                 # App Next.js para API apartada
+├── dashboard/           # App Next.js do painel financeiro
+├── shell/               # App Next.js que envolve a aplicação
+├── transactions/        # App Next.js de listagem e edição de transações
+packages/
+├── eslint-config/       # Configuração compartilhada do ESLint
+├── typescript-config/   # Configurações compartilhadas do TypeScript
+├── utils/               # Funções utilitárias reutilizáveis
+├── ui/                  # Componentes compartilhados com shadcn/ui
+├── types/               # Tipagens globais (TypeScript)
+├── store/               # Estado global compartilhado com Zustand
+├── tailwind-config/     # Configuração compartilhada do Tailwind CSS
 ```
 
-## What's inside?
+---
 
-This Turborepo includes the following packages/apps:
+## 🧪 Como Executar Localmente
 
-### Apps and Packages
+Clone o repositório:
 
-- `shell`: a [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
-- `dashboard`: another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
-- `ui`: a stub React component library with [Tailwind CSS](https://tailwindcss.com/) shared by both `dashboard` and `shell` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Building packages/ui
-
-This example is set up to produce compiled styles for `ui` components into the `dist` directory. The component `.tsx` files are consumed by the Next.js apps directly using `transpilePackages` in `next.config.ts`. This was chosen for several reasons:
-
-- Make sharing one `tailwind.config.ts` to apps and packages as easy as possible.
-- Make package compilation simple by only depending on the Next.js Compiler and `tailwindcss`.
-- Ensure Tailwind classes do not overwrite each other. The `ui` package uses a `ui-` prefix for it's classes.
-- Maintain clear package export boundaries.
-
-Another option is to consume `packages/ui` directly from source without building. If using this option, you will need to update the `tailwind.config.ts` in your apps to be aware of your package locations, so it can find all usages of the `tailwindcss` class names for CSS compilation.
-
-For example, in [tailwind.config.ts](packages/tailwind-config/tailwind.config.ts):
-
-```js
-  content: [
-    // app content
-    `src/**/*.{js,ts,jsx,tsx}`,
-    // include packages if not transpiling
-    "../../packages/ui/*.{js,ts,jsx,tsx}",
-  ],
+```bash
+git clone https://github.com/BrunaABraguin/bytebank-web-front.git
 ```
 
-If you choose this strategy, you can remove the `tailwindcss` and `autoprefixer` dependencies from the `ui` package.
+Instale as dependências:
 
-### Utilities
+```bash
+yarn
+```
 
-This Turborepo has some additional tools already setup for you:
+Inicie os servidores de desenvolvimento:
 
-- [Tailwind CSS](https://tailwindcss.com/) for styles
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+```bash
+yarn dev
+```
+
+Acesse:
+
+- Api: http://localhost:4000
+- Shell: http://localhost:3000
+- Dashboard: http://localhost:3001
+- Transações: http://localhost:3002
+
+---
+
+## ♿ Acessibilidade
+
+- Navegação por teclado
+- Suporte a leitores de tela
+- Contraste de cores adequado
+- Labels semânticos e atributos ARIA aplicados
+
+---
+
+## 🎥 Vídeo Demonstrativo
+
+Demonstração completa da aplicação com:
+
+- Microfrontends com multi zones em execução
+- Deploy individual em cloud via Vercel
+- Funcionalidades implementadas conforme os requisitos
+
+🔗 Link para o vídeo Fase 2: 
+
+---
+
+## 👩‍💻 Desenvolvido por
+
+Bruna de Andrade Braguin

@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
 import connectToMongoDB from "../libs/mongoDB";
 import User from "../models/User";
-import Account from "../models/Account";
 import runMiddleware, { cors } from "../libs/cors";
 import { generateToken } from "../utils/auth";
 
@@ -53,10 +52,6 @@ export default async function handler(
       name,
       email,
       password: hashedPassword,
-    });
-
-    await Account.create({
-      ownerEmail: newUser.email,
     });
 
     const token = await generateToken(newUser._id.toString(), newUser.email);

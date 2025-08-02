@@ -3,7 +3,7 @@ import { queryClient } from "@bytebank-web/utils/react-query";
 import { postTransaction } from "./post-transaction.js";
 
 export const useAddTransaction = () => {
-  const { data, mutate } = useMutation({
+  const { data, mutate, isSuccess, isPending } = useMutation({
     mutationKey: ["uploadFile"],
     mutationFn: async ({
       email,
@@ -22,5 +22,5 @@ export const useAddTransaction = () => {
       queryClient.invalidateQueries({ queryKey: ["balance"] });
     },
   });
-  return { data, mutate };
+  return { data, mutate, isSuccess, isPending };
 };

@@ -49,10 +49,12 @@ export function TransactionsTable() {
   const { email } = useSharedStore();
   const [pageSize, setPageSize] = useState(10);
   const [pageIndex, setPageIndex] = useState(0);
+  const [type, setType] = useState<TransactionEnum | "">("");
   const { transactions, isLoading, totalPages } = useTransactions(
     email,
     pageIndex + 1,
-    pageSize
+    pageSize,
+    type
   );
   const [editRowId, setEditRowId] = useState<string | null>(null);
   const { mutate } = useEditTransaction();
@@ -68,6 +70,32 @@ export function TransactionsTable() {
   };
 
   const columns: ColumnDef<Transaction>[] = [
+    {
+      accessorKey: "date",
+      header: "Data",
+      cell: ({ row }) => {
+        const isEditing = editRowId === row.id;
+        const date = new Date(row.original.date);
+        const formattedDate = date.toLocaleDateString("pt-BR", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        });
+
+        if (isEditing) {
+          return (
+            <Input
+              className="w-28"
+              type="date"
+              defaultValue={formattedDate}
+              onChange={(e) => (row.original.date = e.target.value)}
+            />
+          );
+        }
+
+        return <div>{formattedDate}</div>;
+      },
+    },
     {
       accessorKey: "description",
       header: "Descrição",
@@ -137,6 +165,7 @@ export function TransactionsTable() {
                 setEditedType(value as TransactionEnum);
                 row.original.type = value as TransactionEnum;
               }}
+              autoComplete="select"
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecione" />
@@ -293,6 +322,29 @@ export function TransactionsTable() {
             <div className="flex items-center space-x-2 ml-auto">
               <FileUpload />
               <TransactionForm />
+              <Select
+                defaultValue={type}
+                onValueChange={(value) => {
+                  setType(value as TransactionEnum);
+                }}
+                autoComplete="select"
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Filtrar por tipo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all"> Todos</SelectItem>
+                  <SelectItem value={TransactionEnum.INCOME}>
+                    Receita
+                  </SelectItem>
+                  <SelectItem value={TransactionEnum.EXPENSE}>
+                    Despesa
+                  </SelectItem>
+                  <SelectItem value={TransactionEnum.TRANSFER}>
+                    Transferência
+                  </SelectItem>
+                </SelectContent>
+              </Select>
               {transactions && transactions.length > 0 && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -314,7 +366,7 @@ export function TransactionsTable() {
                               column.toggleVisibility(!!value)
                             }
                           >
-                            {column.id}
+                            {column.columnDef.header as string}
                           </DropdownMenuCheckboxItem>
                         );
                       })}

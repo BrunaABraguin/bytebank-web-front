@@ -1,14 +1,18 @@
 import { Card, CardContent } from "@bytebank-web/ui/card";
-import { Account } from "@bytebank-web/types/account";
 import { TransactionForm } from "@bytebank-web/ui/transactionForm";
 import { Loading } from "@bytebank-web/ui/loading";
+import { MonthYearPicker } from "@bytebank-web/ui/monthYearPicker";
+import { useBalance } from "@/hooks/useBalance";
 
 interface AccountBalanceProps {
-  account: Account | undefined;
-  isLoading: boolean;
+  ownerEmail: string | null; 
+  month: number;
+  year: number;
+  onMonthChange: (selectedMonth: number, selectedYear: number) => void;
 }
+export const AccountBalance = ({ ownerEmail, month, year, onMonthChange }: AccountBalanceProps) => {
+  const { account, isLoadingAccount } = useBalance(ownerEmail, month, year);
 
-export const AccountBalance = ({ account, isLoading }: AccountBalanceProps) => {
   return (
     <Card className="col-span-4">
       <CardContent>
@@ -19,11 +23,17 @@ export const AccountBalance = ({ account, isLoading }: AccountBalanceProps) => {
           <h2 id="account-balance-section-title" className="sr-only">
             Informações do Saldo da Conta
           </h2>
-          {isLoading ? (
-            <Loading aria-label="Carregando informações do saldo" />
-          ) : (
-            <>
-              <div className="flex justify-between text-lg gap-8">
+          <div className="flex justify-between items-center text-lg gap-11">
+            <div className="flex gap-5">
+              <h3 className="font-semibold" id="account-balance-title">
+                Balanço mensal
+              </h3>
+              <MonthYearPicker onChange={onMonthChange} />
+            </div>
+            {isLoadingAccount ? (
+              <Loading aria-label="Carregando informações do saldo" />
+            ) : (
+              <>
                 <div className="grid font-semibold">
                   <span
                     id="account-balance-title"
@@ -47,12 +57,12 @@ export const AccountBalance = ({ account, isLoading }: AccountBalanceProps) => {
                     R$ {account?.expense.toLocaleString()}
                   </span>
                 </div>
-              </div>
-              <div className="flex gap-2">
-                <TransactionForm aria-label="Formulário de Transações" />
-              </div>
-            </>
-          )}
+              </>
+            )}
+          </div>
+          <div className="flex gap-2">
+            <TransactionForm aria-label="Formulário de Transações" />
+          </div>
         </section>
       </CardContent>
     </Card>

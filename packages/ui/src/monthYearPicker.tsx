@@ -62,13 +62,14 @@ export const MonthYearPicker: React.FC<MonthYearPickerProps> = ({
   };
 
   return (
-    <div className={`flex items-center ${className}`}>
+    <div className={`flex items-center ${className} gap-2`}>
       <Select
         value={selectedMonth.toString()}
         onValueChange={(value) => handleMonthChange(Number(value))}
         disabled={selectedYear === currentYear && selectedMonth > currentMonth}
+        autoComplete="select"
       >
-        <SelectTrigger className="w-[180px] ml-4">
+        <SelectTrigger className="w-fit">
           <SelectValue placeholder="Mês" />
         </SelectTrigger>
         <SelectContent>
@@ -86,8 +87,9 @@ export const MonthYearPicker: React.FC<MonthYearPickerProps> = ({
       <Select
         value={selectedYear.toString()}
         onValueChange={(value) => handleYearChange(Number(value))}
+        autoComplete="select"
       >
-        <SelectTrigger className="w-[100px]">
+        <SelectTrigger className="w-fit">
           <SelectValue placeholder="Ano" />
         </SelectTrigger>
         <SelectContent>

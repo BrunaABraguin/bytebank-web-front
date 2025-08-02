@@ -3,8 +3,6 @@ import connectToMongoDB from "../libs/mongoDB";
 import User from "../models/User";
 import bcrypt from "bcryptjs";
 import runMiddleware, { cors } from "../libs/cors";
-import Account from "../models/Account";
-import { Account as AccountType } from "@bytebank-web/types/account";
 import { generateToken } from "../utils/auth";
 
 export default async function handler(
@@ -33,16 +31,7 @@ export default async function handler(
     }
 
     const token = await generateToken(user.id, user.email);
-
-    const account = await Account.findOne({
-      ownerEmail: email,
-    }).lean<AccountType>();
-
-    if (!account) {
-      return res
-        .status(401)
-        .json({ message: "Conta de usuário não encontrado" });
-    }
+    
     res.setHeader("Authorization", `Bearer ${token}`);
     res.status(200).json({
       token,

@@ -1,6 +1,5 @@
 import formidable, { Fields, Files } from "formidable";
 import { NextApiRequest } from "next";
-import Account from "../models/Account";
 
 export function extractTransactions(text: string) {
   const transactions: { date: string; description: string; value: number }[] =
@@ -57,27 +56,3 @@ export const parseForm = (
       else resolve({ fields, files });
     });
   });
-
-export async function adjustAccountBalance(
-  ownerEmail: string,
-  type: string,
-  value: number
-) {
-  const account = await Account.findOne({ ownerEmail });
-  if (!account) return null;
-
-  console.log(account.balance, type, Math.abs(value));
-
-  const adjustedValue = Math.abs(value);
-
-  if (type === "Receita") {
-    account.balance = Number((account.balance + adjustedValue).toFixed(2));
-    account.income = Number((account.income + adjustedValue).toFixed(2));
-  } else {
-    account.balance = Number((account.balance - adjustedValue).toFixed(2));
-    account.expense = Number((account.expense + adjustedValue).toFixed(2));
-  }
-  await account.save();
-
-  return account;
-}

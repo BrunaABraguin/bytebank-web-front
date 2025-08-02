@@ -5,14 +5,15 @@ import { getTransactions } from "./get-transactions.js";
 export const useTransactions = (
   ownerEmail: string | null,
   page: number,
-  pageSize: number
+  pageSize: number,
+  type: string | undefined
 ) => {
   const { data, isLoading, error } = useQuery<
     { transactions: Transaction[]; totalPages: number; hasMore: boolean },
     Error
   >({
-    queryKey: ["transactions", ownerEmail, page, pageSize],
-    queryFn: () => getTransactions(ownerEmail, page, pageSize),
+    queryKey: ["transactions", ownerEmail, page, pageSize, type],
+    queryFn: () => getTransactions(ownerEmail, page, pageSize, type),
     enabled: !!ownerEmail,
     staleTime: 5 * 60 * 1000,
     retry: 1,

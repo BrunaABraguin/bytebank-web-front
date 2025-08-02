@@ -1,14 +1,12 @@
-import { MonthlyData } from "@bytebank-web/types/monthlyData";
 import { Card, CardContent } from "@bytebank-web/ui/card";
 import { AreaChartMonths } from "@bytebank-web/ui/areaChartMonths";
+import { useSharedStore } from "@bytebank-web/store";
+import { useMonthlyChart } from "@/hooks/useMonthlyChart";
 
-interface IncomeExpensesChartProps {
-  transactions: MonthlyData[] | undefined;
-}
+export const IncomeExpensesChart = () => {
+  const { email } = useSharedStore();
+  const { data, isLoading } = useMonthlyChart(email);
 
-export const IncomeExpensesChart = ({
-  transactions,
-}: IncomeExpensesChartProps) => {
   return (
     <Card className="col-span-3" aria-labelledby="income-expenses-title">
       <CardContent>
@@ -18,10 +16,30 @@ export const IncomeExpensesChart = ({
         >
           Receitas e Despesas
         </h2>
-        <AreaChartMonths
-          transactions={transactions}
-          aria-label="Gráfico de receitas e despesas mensais"
-        />
+        {(() => {
+          if (isLoading) {
+            return (
+              <div className="flex justify-center items-center h-64">
+                <p className="text-gray-500">Carregando gráfico...</p>
+              </div>
+            );
+          }
+
+          if (data?.length === 0) {
+            return (
+              <div className="flex justify-center items-center h-64">
+                <p className="text-gray-500">Nenhum dado disponível.</p>
+              </div>
+            );
+          }
+
+          return (
+            <AreaChartMonths
+              transactions={data}
+              aria-label="Gráfico de receitas e despesas mensais"
+            />
+          );
+        })()}
       </CardContent>
     </Card>
   );

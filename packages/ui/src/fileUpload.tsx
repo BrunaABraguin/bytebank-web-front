@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useProcessFile } from "@bytebank-web/utils/use-process-file";
 import { useUploadFile } from "@bytebank-web/utils/use-upload-file";
 import { useSharedStore } from "@bytebank-web/store";
@@ -33,7 +33,13 @@ export const FileUpload = () => {
   const [bank, setBank] = useState("itau");
   const { email } = useSharedStore();
   const { data, mutate, isPendingProcess } = useProcessFile();
-  const { uploadMutate, isPending } = useUploadFile();
+  const { uploadMutate, isPending, isSuccess } = useUploadFile();
+
+  useEffect(() => {
+    if (isSuccess) {
+      handleClose();
+    }
+  }, [isSuccess]);
 
   const handleClose = () => {
     setOpen(false);
@@ -91,7 +97,7 @@ export const FileUpload = () => {
             Preencha os campos abaixo para enviar um novo arquivo. Seu arquivo
             será pré-processado e os resultados serão apresentados. Apenas
             arquivos PDF são aceitos. Certifique-se de que o arquivo contém
-            transações válidas. Máximo de 50 transações serão processadas.
+            transações válidas. Máximo de 20 transações serão processadas.
           </DialogDescription>
         </DialogHeader>
         {isPending && <Loading aria-label="Enviando arquivo" />}

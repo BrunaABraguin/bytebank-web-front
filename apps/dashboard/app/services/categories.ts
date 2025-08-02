@@ -1,15 +1,15 @@
 import { createHttpService } from "@bytebank-web/utils/http";
-import { Account } from "@bytebank-web/types/account";
 import { API_URL } from "@/contants";
+import { CategoryData } from "@bytebank-web/types/categoryData";
 
-export const getBalanceAccount = async (
+export const getCategoriesData = async (
   ownerEmail: string | null,
   month: number,
   year: number
-): Promise<Account> => {
+): Promise<CategoryData[]> => {
   const client = createHttpService(API_URL);
 
-  const response = await client.get("/api/account", {
+  const response = await client.get("/api/categories-data", {
     params: { email: ownerEmail, month, year },
   });
   return response.data;

@@ -1,11 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs/promises";
 import pdfParse from "pdf-parse";
-import {
-  adjustAccountBalance,
-  extractTransactions,
-  parseForm,
-} from "./utils/transactions";
+import { extractTransactions, parseForm } from "./utils/transactions";
 import Transaction from "./models/Transaction";
 
 export const config = {
@@ -65,22 +61,10 @@ export default async function handler(
         date: parsedDate,
         description: description || "",
         category: "Sem categoria",
-      })
-        .catch((error) => {
-          console.error("Erro ao criar transação:", error);
-          return res.status(500).json({ error: "Erro ao criar transação" });
-        })
-        .then(async () => {
-          const account = await adjustAccountBalance(
-            email as string,
-            type,
-            value
-          );
-
-          if (!account) {
-            return res.status(404).json({ error: "Conta não encontrada" });
-          }
-        });
+      }).catch((error) => {
+        console.error("Erro ao criar transação:", error);
+        return res.status(500).json({ error: "Erro ao criar transação" });
+      });
     }
     return res.status(200).json({
       message: "PDF processado com sucesso",

@@ -1,7 +1,7 @@
 "use client";
 
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Dialog,
@@ -28,7 +28,7 @@ import { useAddTransaction } from "@bytebank-web/utils/use-add-transaction";
 import { useSharedStore } from "@bytebank-web/store";
 
 export const TransactionForm = () => {
-  const { mutate } = useAddTransaction();
+  const { mutate, isSuccess, isPending } = useAddTransaction();
   const { email } = useSharedStore();
   const [open, setOpen] = useState(false);
   const [transactionType, setTransactionType] = useState<TransactionEnum>(
@@ -37,6 +37,14 @@ export const TransactionForm = () => {
   const [transactionValue, setTransactionValue] = useState<string>("");
   const [errors, setErrors] = useState<{ transactionValue?: string }>({});
   const transactionTypes = Object.values(TransactionEnum);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setOpen(false);
+      setTransactionValue("");
+      setTransactionType(TransactionEnum.INCOME);
+    }
+  }, [isSuccess]);
 
   function validateForm() {
     const newErrors: { transactionValue?: string } = {};
@@ -58,9 +66,6 @@ export const TransactionForm = () => {
         email,
       };
       mutate(transaction);
-      setTransactionValue("");
-      setTransactionType(TransactionEnum.INCOME);
-      setOpen(false);
     }
   }
 
@@ -81,7 +86,7 @@ export const TransactionForm = () => {
           </DialogHeader>
           <div className="grid gap-4 mt-5">
             <div className="grid gap-3">
-              <Label htmlFor="transactionType">Tipo</Label>
+              <Label htmlFor="transactionType" id="transactionType-label">Tipo</Label>
               <Select
                 onValueChange={(value) =>
                   setTransactionType(value as TransactionEnum)
@@ -91,6 +96,8 @@ export const TransactionForm = () => {
                 <SelectTrigger
                   className="w-[180px]"
                   aria-label="Tipo de transação"
+                  id="transactionType"
+                  aria-labelledby="transactionType-label"
                 >
                   <SelectValue placeholder="Selecione" />
                 </SelectTrigger>
@@ -127,10 +134,14 @@ export const TransactionForm = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" className="mt-5">
+            <Button
+              type="submit"
+              className="mt-5"
+              disabled={!email || isPending || !transactionValue}
+            >
               Registrar
             </Button>
-            <DialogClose asChild className="mt-5">
+            <DialogClose asChild className="mt-5" disabled={isPending}>
               <Button variant="secondary" type="button">
                 Cancelar
               </Button>

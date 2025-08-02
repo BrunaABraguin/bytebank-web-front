@@ -1,25 +1,29 @@
 "use client";
-import { useSharedStore } from "@bytebank-web/store";
 
 import { Statement } from "./components/Statement";
 import { AccountBalance } from "./components/AccountBalance";
 import { IncomeExpensesChart } from "./components/IncomeExpensesChart";
-import { useBalance } from "./hooks/useBalance";
-import { useMonthlyChart } from "./hooks/useMonthlyChart";
-import { useTransactions } from "@bytebank-web/utils/use-transactions";
+import { CategoriesChart } from "./components/CategoriesChart";
+import { useSharedStore } from "@bytebank-web/store";
+import { useState } from "react";
 
 export default function Dashboard() {
-  const { email } = useSharedStore();
-  const { transactions, isLoading } = useTransactions(email, 1, 20);
-  const { account, isLoadingAccount } = useBalance(email);
-  const { data } = useMonthlyChart(email);
+   const { email } = useSharedStore();
+    const [month, setMonth] = useState<number>(new Date().getMonth() + 1);
+  const [year, setYear] = useState<number>(new Date().getFullYear());
+
+  const handleMonthChange = (selectedMonth: number, selectedYear: number) => {
+    setMonth(selectedMonth + 1);
+    setYear(selectedYear);
+  };
 
   return (
     <div className="p-6 grid grid-cols-1 lg:grid-cols-4 gap-6 w-full">
       <div className="grid col-span-1 lg:col-span-4 gap-5">
-        <AccountBalance account={account} isLoading={isLoadingAccount} />
-        <IncomeExpensesChart transactions={data} />
-        <Statement transactions={transactions} isLoading={isLoading} />
+        <AccountBalance ownerEmail={email} month={month} year={year} onMonthChange={handleMonthChange} />
+        <IncomeExpensesChart />
+        <Statement />
+        <CategoriesChart ownerEmail={email} month={month} year={year} />
       </div>
     </div>
   );

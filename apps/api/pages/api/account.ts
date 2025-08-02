@@ -1,8 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import connectToMongoDB from "./libs/mongoDB";
-import Account from "./models/Account";
-import { Account as AccountType } from "@bytebank-web/types/account";
 import runMiddleware, { cors } from "./libs/cors";
+import Transaction from "./models/Transaction";
+import {
+  TransactionEnum,
+  Transaction as TransactionType,
+} from "@bytebank-web/types/transaction";
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,17 +24,41 @@ export default async function handler(
 
 async function handleGetAccount(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { email } = req.query;
-    if (!email) {
+    const { email, month, year } = req.query;
+    if (!email || !month || !year) {
       return res
         .status(400)
         .json({ error: "Campos obrigatórios não preenchidos" });
     }
 
-    const accounts = await Account.findOne({ ownerEmail: email })
-      .sort({ date: -1 })
-      .lean<AccountType>();
-    return res.status(200).json(accounts);
+    const parsedMonth = parseInt(month as string, 10);
+    const parsedYear = parseInt(year as string, 10);
+
+    const transactions = await Transaction.find({
+      ownerEmail: email,
+      date: {
+        $gte: new Date(parsedYear, parsedMonth - 1, 1),
+        $lt: new Date(parsedYear, parsedMonth, 1),
+      },
+    }).lean<TransactionType[]>();
+
+    const summary = transactions.reduce(
+      (acc, transaction) => {
+        if (transaction.type === TransactionEnum.EXPENSE) {
+          acc.expense += transaction.value;
+        } else if (transaction.type === TransactionEnum.INCOME) {
+          acc.income += transaction.value;
+        }
+        return acc;
+      },
+      { income: 0, expense: 0 }
+    );
+
+    return res.status(200).json({
+      balance: summary.income - summary.expense,
+      income: summary.income,
+      expense: summary.expense,
+    });
   } catch (error) {
     console.error("Erro ao buscar conta:", error);
     return res.status(500).json({ error: "Erro ao buscar conta" });

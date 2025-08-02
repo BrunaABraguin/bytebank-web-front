@@ -1,9 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectToMongoDB from "./libs/mongoDB";
 import Transaction from "./models/Transaction";
-import { Transaction as TransactionType } from "@bytebank-web/types/transaction";
+import {
+  Transaction as TransactionType,
+  TransactionEnum,
+} from "@bytebank-web/types/transaction";
 import runMiddleware, { cors } from "./libs/cors";
-import { adjustAccountBalance } from "./utils/transactions";
 
 export default async function handler(
   req: NextApiRequest,
@@ -36,7 +38,7 @@ async function handleGetTransactions(
   res: NextApiResponse
 ) {
   try {
-    const { email, page = "1", pageSize = "10" } = req.query;
+    const { email, page, pageSize, type } = req.query;
 
     if (!email) {
       return res
@@ -47,21 +49,42 @@ async function handleGetTransactions(
     const pageNumber = Math.max(1, parseInt(page as string, 10));
     const pageSizeNumber = Math.max(1, parseInt(pageSize as string, 10));
 
-    const totalTransactions = await Transaction.countDocuments({
+    let totalTransactions = await Transaction.countDocuments({
       ownerEmail: email,
     });
 
+    if (
+      type === TransactionEnum.INCOME ||
+      type === TransactionEnum.EXPENSE ||
+      type === TransactionEnum.TRANSFER
+    ) {
+      totalTransactions = await Transaction.countDocuments({
+        ownerEmail: email,
+        type,
+      });
+    }
+    
     const totalPages = Math.ceil(totalTransactions / pageSizeNumber);
-
     const currentPage = Math.min(pageNumber, totalPages || 1);
-
     const skipValue = Math.max(0, (currentPage - 1) * pageSizeNumber);
 
-    const transactions = await Transaction.find({ ownerEmail: email })
+    let transactions = await Transaction.find({ ownerEmail: email })
       .sort({ date: -1 })
       .skip(skipValue)
       .limit(pageSizeNumber)
       .lean<TransactionType[]>();
+
+    if (
+      type === TransactionEnum.INCOME ||
+      type === TransactionEnum.EXPENSE ||
+      type === TransactionEnum.TRANSFER
+    ) {
+      transactions = await Transaction.find({ ownerEmail: email, type })
+        .sort({ date: -1 })
+        .skip(skipValue)
+        .limit(pageSizeNumber)
+        .lean<TransactionType[]>();
+    }
 
     const hasMore = currentPage < totalPages;
 
@@ -98,12 +121,6 @@ async function handleCreateTransaction(
       category: category || "Sem categoria",
     });
 
-    const account = await adjustAccountBalance(email, type, value);
-
-    if (!account) {
-      return res.status(404).json({ error: "Conta não encontrada" });
-    }
-
     return res.status(201).json(newTransaction);
   } catch (error) {
     console.error("Erro ao criar transação:", error);
@@ -115,7 +132,8 @@ async function handleUpdateTransaction(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { id, type, value, description, category } = req.body;
+  const { id, type, value, description, category, date } = req.body;
+  console.log(date);
 
   if (!id) {
     return res.status(400).json({ error: "ID da transação é obrigatório" });
@@ -131,27 +149,24 @@ async function handleUpdateTransaction(
       return res.status(400).json({ error: "Nenhum campo para atualizar" });
     }
 
-    const oldAccount = await adjustAccountBalance(
-      transaction.ownerEmail,
-      transaction.type,
-      -transaction.value
-    );
-
-    if (!oldAccount) {
-      return res.status(404).json({ error: "Conta não encontrada" });
-    }
+    console.log("Atualizando transação:", {
+      id,
+      type,
+      value,
+      description,
+      category,
+      date: new Date(new Date(date).getTime() + 3 * 60 * 60 * 1000),
+    });
 
     if (type) transaction.type = type;
     if (value) transaction.value = value;
     if (description) transaction.description = description;
     if (category) transaction.category = category;
+    if (date)
+      transaction.date = new Date(
+        new Date(date).getTime() + 3 * 60 * 60 * 1000
+      );
     await transaction.save();
-
-    await adjustAccountBalance(
-      transaction.ownerEmail,
-      transaction.type,
-      transaction.value
-    );
 
     return res.status(200).json(transaction);
   } catch (error) {
@@ -175,12 +190,6 @@ async function handleDeleteTransaction(
     if (!transaction) {
       return res.status(404).json({ error: "Transação não encontrada" });
     }
-
-    await adjustAccountBalance(
-      transaction.ownerEmail,
-      transaction.type,
-      -transaction.value
-    );
 
     return res.status(200).json({ message: "Transação deletada com sucesso" });
   } catch (error) {
