@@ -12,6 +12,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  await connectToMongoDB();
   await runMiddleware(req, res, cors);
 
   if (req.method === "GET") {
@@ -23,8 +24,6 @@ export default async function handler(
 }
 
 async function handleGetMonthlyData(req: NextApiRequest, res: NextApiResponse) {
-  await connectToMongoDB();
-
   try {
     const { email } = req.query;
 
@@ -76,8 +75,12 @@ function aggregateTransactionsToModelData(
   });
 
   Object.keys(groupedData).forEach((month) => {
-    groupedData[month].income = parseFloat(groupedData[month].income.toFixed(2));
-    groupedData[month].expense = parseFloat(groupedData[month].expense.toFixed(2));
+    groupedData[month].income = parseFloat(
+      groupedData[month].income.toFixed(2)
+    );
+    groupedData[month].expense = parseFloat(
+      groupedData[month].expense.toFixed(2)
+    );
   });
 
   return groupedData;
