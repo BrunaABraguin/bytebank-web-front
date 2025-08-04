@@ -55,7 +55,7 @@ async function handleGetAccount(req: NextApiRequest, res: NextApiResponse) {
     );
 
     return res.status(200).json({
-      balance: summary.income - summary.expense,
+      balance: summary.income - Math.abs(summary.expense),
       income: summary.income,
       expense: summary.expense,
     });
