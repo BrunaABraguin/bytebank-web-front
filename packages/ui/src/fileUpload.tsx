@@ -49,6 +49,10 @@ export const FileUpload = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (file) {
+      setFile(null);
+      setMessage("");
+    }
     if (e.target.files?.length) {
       setFile(e.target.files[0] ?? null);
     }

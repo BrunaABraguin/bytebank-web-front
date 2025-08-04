@@ -2,6 +2,7 @@ import { Card, CardContent } from "@bytebank-web/ui/card";
 import { AreaChartMonths } from "@bytebank-web/ui/areaChartMonths";
 import { useSharedStore } from "@bytebank-web/store";
 import { useMonthlyChart } from "@/hooks/useMonthlyChart";
+import { Loading } from "@bytebank-web/ui/loading";
 
 export const IncomeExpensesChart = () => {
   const { email } = useSharedStore();
@@ -20,7 +21,7 @@ export const IncomeExpensesChart = () => {
           if (isLoading) {
             return (
               <div className="flex justify-center items-center h-64">
-                <p className="text-gray-500">Carregando gráfico...</p>
+                <Loading />
               </div>
             );
           }

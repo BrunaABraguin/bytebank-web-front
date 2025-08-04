@@ -44,10 +44,10 @@ async function handleGetAccount(req: NextApiRequest, res: NextApiResponse) {
 
     const summary = transactions.reduce(
       (acc, transaction) => {
-        if (transaction.type === TransactionEnum.EXPENSE) {
-          acc.expense += transaction.value;
-        } else if (transaction.type === TransactionEnum.INCOME) {
+        if (transaction.type === TransactionEnum.INCOME) {
           acc.income += transaction.value;
+        } else {
+          acc.expense += transaction.value;
         }
         return acc;
       },

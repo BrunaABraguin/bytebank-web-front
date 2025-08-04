@@ -35,7 +35,6 @@ export const CategoriesChart = ({ ownerEmail, month, year }: CategoriesChartProp
               return (
                 <div className="flex justify-center items-center h-64">
                   <Loading />
-                  <span className="ml-2 text-gray-500">Carregando gráfico...</span>
                 </div>
               );
             }
