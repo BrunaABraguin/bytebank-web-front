@@ -122,7 +122,7 @@ Demonstração completa da aplicação com:
 - Deploy individual em cloud via Vercel
 - Funcionalidades implementadas conforme os requisitos
 
-🔗 Link para o vídeo Fase 2: 
+🔗 [Link para o vídeo Fase 2](https://youtu.be/YHi8pEaladI)
 
 ---
 
