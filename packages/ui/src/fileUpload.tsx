@@ -136,7 +136,7 @@ export const FileUpload = () => {
           )}
         </div>
         <DialogFooter>
-          {data && !isPending && !isPendingProcess ? (
+          {(data && !isPending && !isPendingProcess && file) ? (
             <Button
               type="submit"
               onClick={handleUpload}
