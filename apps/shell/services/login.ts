@@ -1,5 +1,5 @@
+import { API_URL } from "@bytebank-web/utils/constants";
 import { createHttpService } from "@bytebank-web/utils/http";
-import { API_URL } from "../constants";
 
 export const loginService = async (
   email: string,

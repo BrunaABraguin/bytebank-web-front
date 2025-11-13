@@ -1,5 +1,5 @@
 import { createHttpService } from "@bytebank-web/utils/http";
-import { API_URL } from "@/constants";
+import { API_URL } from "@bytebank-web/utils/constants";
 import { CategoryData } from "@bytebank-web/types/categoryData";
 
 export const getCategoriesData = async (

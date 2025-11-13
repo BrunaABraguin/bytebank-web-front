@@ -1,6 +1,6 @@
 import { createHttpService } from "@bytebank-web/utils/http";
 import { MonthlyData } from "@bytebank-web/types/monthlyData";
-import { API_URL } from "@/constants";
+import { API_URL } from "@bytebank-web/utils/constants";
 
 export const getMonthlyData = async (
   ownerEmail: string | null

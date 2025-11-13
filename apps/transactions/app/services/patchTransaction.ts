@@ -1,6 +1,6 @@
 import { createHttpService } from "@bytebank-web/utils/http";
 import { Transaction } from "@bytebank-web/types/transaction";
-import { API_URL } from "@/constants";
+import { API_URL } from "@bytebank-web/utils/constants";
 
 export const patchTransaction = async (
   transaction: Transaction
