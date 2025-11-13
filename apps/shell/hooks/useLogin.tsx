@@ -3,7 +3,10 @@ import { loginService } from "../services/login";
 import { AxiosError } from "axios";
 import { useSharedStore } from "@bytebank-web/store";
 import { ApiMessage } from "@bytebank-web/types/api";
-import { AUTH_COOKIE_MAX_AGE, AUTH_COOKIE_NAME } from "@bytebank-web/utils/contants";
+import {
+  AUTH_COOKIE_MAX_AGE,
+  AUTH_COOKIE_NAME,
+} from "@bytebank-web/utils/constants";
 interface LoginParams {
   email: string;
   password: string;

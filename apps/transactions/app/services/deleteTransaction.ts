@@ -1,6 +1,6 @@
 import { createHttpService } from "@bytebank-web/utils/http";
 import { Transaction } from "@bytebank-web/types/transaction";
-import { API_URL } from "@/contants";
+import { API_URL } from "@/constants";
 
 export const deleteTransaction = async (
   transactionId: Transaction["_id"]

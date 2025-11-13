@@ -1,5 +1,5 @@
 import { createHttpService } from "@bytebank-web/utils/http";
-import { API_URL } from "./contants.js";
+import { API_URL } from "./constants.js";
 
 export const postUploadFile = async (
   email: string,
