@@ -30,8 +30,8 @@ export function extractTransactions(text: string) {
       if (valueMatch) {
         currentDescription = currentDescription.replace(valueRegex, "").trim();
 
-        const currentValue = parseFloat(
-          valueMatch[1].replace(/\./g, "").replace(",", ".")
+        const currentValue = Number.parseFloat(
+          valueMatch[1].replaceAll(".", "").replace(",", ".")
         );
         transactions.push({
           date: currentDate,

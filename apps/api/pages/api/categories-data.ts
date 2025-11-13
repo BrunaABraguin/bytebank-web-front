@@ -39,8 +39,8 @@ async function handleGetCategoriesData(
         .json({ error: "Campos obrigatórios não preenchidos" });
     }
 
-    const parsedMonth = parseInt(month as string, 10);
-    const parsedYear = parseInt(year as string, 10);
+    const parsedMonth = Number.parseInt(month as string, 10);
+    const parsedYear = Number.parseInt(year as string, 10);
 
     const transactions = await Transaction.find({
       ownerEmail: email,
@@ -82,18 +82,18 @@ async function handleGetCategoriesData(
       const percentage = ((total / summary.expense) * 100).toFixed(2);
       categoryData.push({
         name: category,
-        percentage: parseFloat(percentage),
+        percentage: Number.parseFloat(percentage),
       });
     }
 
-    categories.forEach((cat) => {
+    for (const cat of categories) {
       if (!categoryData.some((data) => data.name === cat.name)) {
         categoryData.push({
           name: cat.name,
           percentage: 0,
         });
       }
-    });
+    }
 
     return res.status(200).json(categoryData);
   } catch (error) {
