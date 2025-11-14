@@ -50,7 +50,16 @@ export const parseForm = (
   req: NextApiRequest
 ): Promise<{ fields: Fields; files: Files }> =>
   new Promise((resolve, reject) => {
-    const form = formidable({ keepExtensions: true });
+    const form = formidable({
+      keepExtensions: false,
+      allowEmptyFiles: false,
+      maxFileSize: 10 * 1024 * 1024, // 10MB max
+      uploadDir: "/tmp", // Pasta específica e segura
+      filter: ({ mimetype }) => {
+        // Permitir apenas arquivos de texto
+        return mimetype === "text/plain" || mimetype === "text/csv";
+      },
+    });
     form.parse(req, (err, fields, files) => {
       if (err) reject(new Error(String(err)));
       else resolve({ fields, files });

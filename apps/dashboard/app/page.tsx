@@ -8,8 +8,8 @@ import { useSharedStore } from "@bytebank-web/store";
 import { useState } from "react";
 
 export default function Dashboard() {
-   const { email } = useSharedStore();
-    const [month, setMonth] = useState<number>(new Date().getMonth() + 1);
+  const { email } = useSharedStore();
+  const [month, setMonth] = useState<number>(new Date().getMonth() + 1);
   const [year, setYear] = useState<number>(new Date().getFullYear());
 
   const handleMonthChange = (selectedMonth: number, selectedYear: number) => {
@@ -20,7 +20,12 @@ export default function Dashboard() {
   return (
     <div className="p-6 grid grid-cols-1 lg:grid-cols-4 gap-6 w-full">
       <div className="grid col-span-1 lg:col-span-4 gap-5">
-        <AccountBalance ownerEmail={email} month={month} year={year} onMonthChange={handleMonthChange} />
+        <AccountBalance
+          ownerEmail={email}
+          month={month}
+          year={year}
+          onMonthChange={handleMonthChange}
+        />
         <IncomeExpensesChart />
         <Statement />
         <CategoriesChart ownerEmail={email} month={month} year={year} />
