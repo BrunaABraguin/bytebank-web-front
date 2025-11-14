@@ -1,9 +1,5 @@
-import { MongoTransactionRepository } from "../../infrastructure/database/mongo-transaction-repository";
-import { MongoAccountRepository } from "../../infrastructure/database/mongo-account-repository";
-import { GetTransactionsUseCase } from "../../core/use-cases/transaction/get-transactions";
-import { CreateTransactionUseCase } from "../../core/use-cases/transaction/create-transaction";
-import { GetMonthlyDataUseCase } from "../../core/use-cases/transaction/get-monthly-data";
-import { GetBalanceUseCase } from "../../core/use-cases/account/get-balance";
+import { MongoTransactionRepository, MongoAccountRepository } from "@bytebank-web/infrastructure";
+import { GetTransactionsUseCase, CreateTransactionUseCase, GetMonthlyDataUseCase, GetBalanceUseCase } from "@bytebank-web/core";
 
 let TransactionModel: any;
 let AccountModel: any;

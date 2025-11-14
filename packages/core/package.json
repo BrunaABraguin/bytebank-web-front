@@ -1,0 +1,18 @@
+{
+  "name": "@bytebank-web/core",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "check-types": "tsc --noEmit"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "devDependencies": {
+    "@bytebank-web/typescript-config": "*",
+    "typescript": "5.8.2"
+  },
+  "dependencies": {}
+}

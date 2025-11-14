@@ -11,6 +11,8 @@ export class GetTransactionsUseCase {
 
     const transactions = await this.transactionRepository.findByEmail(email);
 
-    return transactions.filter((tx) => tx.isValidTransaction()).slice(0, 20);
+    return transactions
+      .filter((tx: Transaction) => tx.isValidTransaction())
+      .slice(0, 20);
   }
 }

@@ -1,8 +1,8 @@
-import { TransactionRepository } from "../../core/repositories/transaction-repository";
 import {
+  TransactionRepository,
   Transaction as TransactionEntity,
   TransactionType,
-} from "../../core/entities/transaction";
+} from "@bytebank-web/core";
 
 interface TransactionModel {
   _id: string;

@@ -1,5 +1,4 @@
-import { AccountRepository } from "../../core/repositories/account-repository";
-import { Account as AccountEntity } from "../../core/entities/account";
+import { AccountRepository, Account as AccountEntity } from "@bytebank-web/core";
 
 interface AccountModel {
   _id: string;

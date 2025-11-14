@@ -1,0 +1,19 @@
+{
+  "extends": "@bytebank-web/typescript-config/base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationMap": true
+  },
+  "include": [
+    "index.ts",
+    "entities/**/*",
+    "repositories/**/*", 
+    "use-cases/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "build",
+    "node_modules"
+  ]
+}

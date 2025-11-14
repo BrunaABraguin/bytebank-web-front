@@ -11,6 +11,6 @@ export class User {
   }
 
   public getDisplayName(): string {
-    return this.name || this.email.split("@")[0];
+    return this.name ?? this.email.split("@")[0];
   }
 }
