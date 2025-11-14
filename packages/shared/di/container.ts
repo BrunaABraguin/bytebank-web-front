@@ -1,15 +1,27 @@
-import { MongoTransactionRepository, MongoAccountRepository } from "@bytebank-web/infrastructure";
-import { GetTransactionsUseCase, CreateTransactionUseCase, GetMonthlyDataUseCase, GetBalanceUseCase } from "@bytebank-web/core";
+import {
+  MongoTransactionRepository,
+  MongoAccountRepository,
+} from "@bytebank-web/infrastructure";
+import {
+  GetTransactionsUseCase,
+  CreateTransactionUseCase,
+  GetMonthlyDataUseCase,
+  GetBalanceUseCase,
+} from "@bytebank-web/core";
+import { Model } from "mongoose";
 
-let TransactionModel: any;
-let AccountModel: any;
+let TransactionModel: Model<any>;
+let AccountModel: Model<any>;
 
-export function configureModels(transactionModel: any, accountModel: any) {
+export function configureModels(
+  transactionModel: Model<any>,
+  accountModel: Model<any>
+) {
   TransactionModel = transactionModel;
   AccountModel = accountModel;
 }
 
-class DIContainer {
+class DIContainerImpl {
   private _transactionRepository?: MongoTransactionRepository;
   private _accountRepository?: MongoAccountRepository;
 
@@ -59,4 +71,30 @@ class DIContainer {
   }
 }
 
-export const container = new DIContainer();
+export const container = new DIContainerImpl();
+
+// Métodos estáticos para acesso global
+export class DIContainer {
+  private static readonly instance = container;
+
+  static getGetTransactionsUseCase(): GetTransactionsUseCase {
+    return DIContainer.instance.getTransactionsUseCase;
+  }
+
+  static getCreateTransactionUseCase(): CreateTransactionUseCase {
+    return DIContainer.instance.createTransactionUseCase;
+  }
+
+  static getGetMonthlyDataUseCase(): GetMonthlyDataUseCase {
+    return DIContainer.instance.getMonthlyDataUseCase;
+  }
+
+  static getGetBalanceUseCase(): GetBalanceUseCase {
+    return DIContainer.instance.getBalanceUseCase;
+  }
+
+  static init(): void {
+    // Método para inicialização se necessário
+    console.log("DIContainer inicializado");
+  }
+}

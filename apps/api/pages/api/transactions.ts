@@ -6,6 +6,8 @@ import {
   Transaction as TransactionType,
 } from "@bytebank-web/types/transaction";
 import runMiddleware, { cors } from "./libs/cors";
+import { DIContainer } from "@bytebank-web/shared";
+import { TransactionType as CoreTransactionType } from "@bytebank-web/core";
 
 export default async function handler(
   req: NextApiRequest,
@@ -112,6 +114,32 @@ async function handleCreateTransaction(
   }
 
   try {
+    // Tentar usar use case primeiro
+    try {
+      const createTransactionUseCase =
+        DIContainer.getCreateTransactionUseCase();
+
+      const transactionType =
+        type === TransactionEnum.INCOME
+          ? CoreTransactionType.INCOME
+          : CoreTransactionType.EXPENSE;
+
+      await createTransactionUseCase.execute({
+        ownerEmail: email,
+        description: description || "Transação criada",
+        value: Number.parseFloat(value),
+        type: transactionType,
+        category: category || "Sem categoria",
+      });
+
+      return res.status(201).json({
+        message: "Transação criada com sucesso usando Clean Architecture",
+      });
+    } catch (useCaseError) {
+      console.log("Use case não disponível, usando fallback:", useCaseError);
+    }
+
+    // Fallback para implementação original
     const newTransaction = await Transaction.create({
       type,
       value,
@@ -133,7 +161,6 @@ async function handleUpdateTransaction(
   res: NextApiResponse
 ) {
   const { id, type, value, description, category, date } = req.body;
-  console.log(date);
 
   if (!id) {
     return res.status(400).json({ error: "ID da transação é obrigatório" });
@@ -148,15 +175,6 @@ async function handleUpdateTransaction(
     if (!type && !value && !description && !category) {
       return res.status(400).json({ error: "Nenhum campo para atualizar" });
     }
-
-    console.log("Atualizando transação:", {
-      id,
-      type,
-      value,
-      description,
-      category,
-      date: new Date(new Date(date).getTime() + 3 * 60 * 60 * 1000),
-    });
 
     if (type) transaction.type = type;
     if (value) transaction.value = value;

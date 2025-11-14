@@ -1,4 +1,8 @@
-import { AccountRepository, Account as AccountEntity } from "@bytebank-web/core";
+import {
+  AccountRepository,
+  Account as AccountEntity,
+} from "@bytebank-web/core";
+import { Model } from "mongoose";
 
 interface AccountModel {
   _id: string;
@@ -9,8 +13,8 @@ interface AccountModel {
 
 export class MongoAccountRepository implements AccountRepository {
   constructor(
-    private readonly accountModel: any,
-    private readonly transactionModel: any
+    private readonly accountModel: Model<AccountModel>,
+    private readonly transactionModel: Model<any>
   ) {}
 
   async findByEmail(email: string): Promise<AccountEntity | null> {

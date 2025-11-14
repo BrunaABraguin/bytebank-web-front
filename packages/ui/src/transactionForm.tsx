@@ -26,6 +26,7 @@ import { Button } from "@bytebank-web/ui/button";
 import { TransactionEnum } from "@bytebank-web/types/transaction";
 import { useAddTransaction } from "@bytebank-web/utils/use-add-transaction";
 import { useSharedStore } from "@bytebank-web/store";
+import { Transaction, TransactionType } from "@bytebank-web/core";
 
 export const TransactionForm = () => {
   const { mutate, isSuccess, isPending } = useAddTransaction();
@@ -48,9 +49,32 @@ export const TransactionForm = () => {
 
   function validateForm() {
     const newErrors: { transactionValue?: string } = {};
-    if (!transactionValue || parseFloat(transactionValue) <= 0) {
-      newErrors.transactionValue = "O valor deve ser maior que 0.";
+
+    try {
+      const value = Number.parseFloat(transactionValue);
+      if (!transactionValue || value <= 0) {
+        newErrors.transactionValue = "O valor deve ser maior que 0.";
+      } else {
+        // Criar transaction para validar usando entity
+        const transaction = new Transaction(
+          crypto.randomUUID(),
+          email || "",
+          "Teste",
+          value,
+          transactionType === TransactionEnum.INCOME
+            ? TransactionType.INCOME
+            : TransactionType.EXPENSE,
+          new Date()
+        );
+
+        if (!transaction.isValidTransaction()) {
+          newErrors.transactionValue = "Transação inválida.";
+        }
+      }
+    } catch {
+      newErrors.transactionValue = "Valor inválido.";
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }
@@ -62,7 +86,7 @@ export const TransactionForm = () => {
     if (email) {
       const transaction = {
         type: transactionType,
-        value: parseFloat(transactionValue).toFixed(2),
+        value: Number.parseFloat(transactionValue).toFixed(2),
         email,
       };
       mutate(transaction);
@@ -86,7 +110,9 @@ export const TransactionForm = () => {
           </DialogHeader>
           <div className="grid gap-4 mt-5">
             <div className="grid gap-3">
-              <Label htmlFor="transactionType" id="transactionType-label">Tipo</Label>
+              <Label htmlFor="transactionType" id="transactionType-label">
+                Tipo
+              </Label>
               <Select
                 onValueChange={(value) =>
                   setTransactionType(value as TransactionEnum)

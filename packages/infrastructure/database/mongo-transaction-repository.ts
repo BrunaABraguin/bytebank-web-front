@@ -3,6 +3,7 @@ import {
   Transaction as TransactionEntity,
   TransactionType,
 } from "@bytebank-web/core";
+import { Model } from "mongoose";
 
 interface TransactionModel {
   _id: string;
@@ -15,7 +16,7 @@ interface TransactionModel {
 }
 
 export class MongoTransactionRepository implements TransactionRepository {
-  constructor(private readonly model: any) {}
+  constructor(private readonly model: Model<TransactionModel>) {}
 
   async findByEmail(email: string): Promise<TransactionEntity[]> {
     const transactions = await this.model

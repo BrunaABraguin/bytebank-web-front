@@ -19,6 +19,7 @@ import { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 import { Alert, AlertDescription, AlertTitle } from "@bytebank-web/ui/alert";
 import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
+import { User } from "@bytebank-web/core";
 
 export const DialogLogin = () => {
   const [email, setEmail] = useState("");
@@ -34,8 +35,9 @@ export const DialogLogin = () => {
   };
 
   const isEmailValid = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    if (!email) return false;
+    const user = new User(email, "", new Date());
+    return user.isValidEmail();
   };
 
   return (

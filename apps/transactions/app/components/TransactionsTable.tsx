@@ -133,7 +133,9 @@ export function TransactionsTable() {
               type="number"
               defaultValue={editedValue}
               onChange={(e) =>
-                setEditedValue(parseFloat(e.target.value) || row.original.value)
+                setEditedValue(
+                  Number.parseFloat(e.target.value) || row.original.value
+                )
               }
               onBlur={() => (row.original.value = editedValue)}
             />
@@ -208,8 +210,8 @@ export function TransactionsTable() {
             <Select
               defaultValue={editedCategory}
               onValueChange={(value) => {
-                setEditedCategory(value as string);
-                row.original.category = value as string;
+                setEditedCategory(value);
+                row.original.category = value;
               }}
             >
               <SelectTrigger>
