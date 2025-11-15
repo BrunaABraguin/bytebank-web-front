@@ -29,16 +29,16 @@ export const DialogRegister = () => {
   function validateForm() {
     const newErrors: Record<string, string> = {};
     if (!name.trim()) newErrors.name = "O nome é obrigatório.";
-    if (!email.trim()) {
-      newErrors.email = "O email é obrigatório.";
-    } else {
+    if (email.trim()) {
       const user = new User(email, name, new Date());
       if (!user.isValidEmail()) {
         newErrors.email = "Digite um email válido.";
       }
+    } else {
+      newErrors.email = "O email é obrigatório.";
     }
     if (!password.trim()) {
-      newErrors.password = "A senha é obrigatória.";
+      newErrors.password = "A senha é obrigatória e deve ter pelo menos 6 caracteres.";
     } else if (password.length < 6) {
       newErrors.password = "A senha deve ter pelo menos 6 caracteres.";
     }

@@ -11,10 +11,18 @@ interface AccountModel {
   lastUpdate: Date;
 }
 
+interface TransactionModel {
+  _id: string;
+  ownerEmail: string;
+  value: number;
+  type: string;
+  date: Date;
+}
+
 export class MongoAccountRepository implements AccountRepository {
   constructor(
     private readonly accountModel: Model<AccountModel>,
-    private readonly transactionModel: Model<any>
+    private readonly transactionModel: Model<TransactionModel>
   ) {}
 
   async findByEmail(email: string): Promise<AccountEntity | null> {
@@ -52,13 +60,16 @@ export class MongoAccountRepository implements AccountRepository {
       })
       .lean();
 
-    return transactions.reduce((total: number, transaction: any) => {
-      if (transaction.type === "INCOME") {
-        return total + transaction.value;
-      } else {
-        return total - Math.abs(transaction.value);
-      }
-    }, 0);
+    return transactions.reduce(
+      (total: number, transaction: TransactionModel) => {
+        if (transaction.type === "INCOME") {
+          return total + transaction.value;
+        } else {
+          return total - Math.abs(transaction.value);
+        }
+      },
+      0
+    );
   }
 
   private toDomain(data: AccountModel): AccountEntity {

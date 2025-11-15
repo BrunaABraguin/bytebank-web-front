@@ -57,12 +57,30 @@ export function TransactionsTable() {
     type
   );
   const [editRowId, setEditRowId] = useState<string | null>(null);
+  const [editingData, setEditingData] = useState<Partial<Transaction>>({});
   const { mutate } = useEditTransaction();
   const { mutateDelete } = useDeleteTransaction();
 
   const handleSave = (updatedRow: Transaction) => {
-    mutate(updatedRow);
+    const finalData = { ...updatedRow, ...editingData };
+    mutate(finalData);
     setEditRowId(null);
+    setEditingData({});
+  };
+
+  const handleStartEdit = (row: Transaction) => {
+    setEditRowId(row._id || null);
+    setEditingData({
+      description: row.description,
+      value: row.value,
+      type: row.type,
+      category: row.category,
+    });
+  };
+
+  const handleCancelEdit = () => {
+    setEditRowId(null);
+    setEditingData({});
   };
 
   const handleDelete = (transactionId: Transaction["_id"]) => {
@@ -101,17 +119,18 @@ export function TransactionsTable() {
       header: "Descrição",
       cell: ({ row }) => {
         const isEditing = editRowId === row.id;
-        const [editedDescription, setEditedDescription] = useState(
-          row.original.description
-        );
 
         if (isEditing) {
           return (
             <Input
               className="w-28"
-              defaultValue={editedDescription}
-              onChange={(e) => setEditedDescription(e.target.value)}
-              onBlur={() => (row.original.description = editedDescription)}
+              defaultValue={editingData.description || row.original.description}
+              onChange={(e) =>
+                setEditingData((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }))
+              }
             />
           );
         }
@@ -124,20 +143,20 @@ export function TransactionsTable() {
       header: "Valor",
       cell: ({ row }) => {
         const isEditing = editRowId === row.id;
-        const [editedValue, setEditedValue] = useState(row.original.value);
 
         if (isEditing) {
           return (
             <Input
               className="w-28"
               type="number"
-              defaultValue={editedValue}
+              defaultValue={editingData.value || row.original.value}
               onChange={(e) =>
-                setEditedValue(
-                  Number.parseFloat(e.target.value) || row.original.value
-                )
+                setEditingData((prev) => ({
+                  ...prev,
+                  value:
+                    Number.parseFloat(e.target.value) || row.original.value,
+                }))
               }
-              onBlur={() => (row.original.value = editedValue)}
             />
           );
         }
@@ -157,17 +176,17 @@ export function TransactionsTable() {
       header: "Tipo",
       cell: ({ row }) => {
         const isEditing = editRowId === row.id;
-        const [editedType, setEditedType] = useState(row.original.type);
 
         if (isEditing) {
           return (
             <Select
-              defaultValue={editedType}
+              defaultValue={editingData.type || row.original.type}
               onValueChange={(value) => {
-                setEditedType(value as TransactionEnum);
-                row.original.type = value as TransactionEnum;
+                setEditingData((prev) => ({
+                  ...prev,
+                  type: value as TransactionEnum,
+                }));
               }}
-              autoComplete="select"
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecione" />
@@ -201,17 +220,15 @@ export function TransactionsTable() {
       header: "Categoria",
       cell: ({ row }) => {
         const isEditing = editRowId === row.id;
-        const [editedCategory, setEditedCategory] = useState(
-          row.original.category || "Sem categoria"
-        );
 
         if (isEditing) {
           return (
             <Select
-              defaultValue={editedCategory}
+              defaultValue={
+                editingData.category || row.original.category || "Sem categoria"
+              }
               onValueChange={(value) => {
-                setEditedCategory(value);
-                row.original.category = value;
+                setEditingData((prev) => ({ ...prev, category: value }));
               }}
             >
               <SelectTrigger>
@@ -238,22 +255,27 @@ export function TransactionsTable() {
         const isEditing = editRowId === row.id;
 
         return (
-          <div className="flex">
+          <div className="flex space-x-2">
             {isEditing ? (
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => handleSave(row.original)}
-              >
-                Salvar
-              </Button>
+              <>
+                <Button size="sm" onClick={() => handleSave(row.original)}>
+                  Salvar
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleCancelEdit()}
+                >
+                  Cancelar
+                </Button>
+              </>
             ) : (
-              <div className="flex space-x-2">
+              <>
                 <Button
                   variant="secondary"
                   size="icon"
                   className="size-8"
-                  onClick={() => setEditRowId(row.id)}
+                  onClick={() => handleStartEdit(row.original)}
                 >
                   <Edit />
                 </Button>
@@ -265,7 +287,7 @@ export function TransactionsTable() {
                 >
                   <Trash />
                 </Button>
-              </div>
+              </>
             )}
           </div>
         );
