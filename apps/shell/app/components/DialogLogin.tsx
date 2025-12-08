@@ -20,6 +20,7 @@ import { useLogin } from "../hooks/useLogin";
 import { Alert, AlertDescription, AlertTitle } from "@bytebank-web/ui/alert";
 import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
 import { User } from "@bytebank-web/core";
+import { PASSWORD_VALIDATION } from "../contants";
 
 export const DialogLogin = () => {
   const [email, setEmail] = useState("");
@@ -112,17 +113,21 @@ export const DialogLogin = () => {
                     required
                     minLength={6}
                     autoComplete="current-password"
-                    aria-invalid={password.length > 0 && password.length < 6}
+                    aria-invalid={
+                      password.length > 0 &&
+                      password.length < PASSWORD_VALIDATION.MIN_LENGTH
+                    }
                     aria-describedby="password-error"
                   />
-                  {password.length > 0 && password.length < 6 && (
-                    <Alert variant="destructive" role="alert">
-                      <AlertCircleIcon />
-                      <AlertTitle id="password-error">
-                        A senha deve ter pelo menos 6 caracteres.
-                      </AlertTitle>
-                    </Alert>
-                  )}
+                  {password.length > 0 &&
+                    password.length < PASSWORD_VALIDATION.MIN_LENGTH && (
+                      <Alert variant="destructive" role="alert">
+                        <AlertCircleIcon />
+                        <AlertTitle id="password-error">
+                          {PASSWORD_VALIDATION.MIN_LENGTH_MESSAGE}
+                        </AlertTitle>
+                      </Alert>
+                    )}
                 </div>
               </>
             )}

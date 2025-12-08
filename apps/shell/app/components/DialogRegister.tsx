@@ -18,6 +18,7 @@ import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
 import { useRegister } from "../hooks/useRegister";
 import { useState } from "react";
 import { User } from "@bytebank-web/core";
+import { PASSWORD_VALIDATION } from "../contants";
 
 export const DialogRegister = () => {
   const [name, setName] = useState("");
@@ -38,10 +39,9 @@ export const DialogRegister = () => {
       newErrors.email = "O email é obrigatório.";
     }
     if (!password.trim()) {
-      newErrors.password =
-        "A senha é obrigatória e deve ter pelo menos 6 caracteres.";
-    } else if (password.length < 6) {
-      newErrors.password = "A senha deve ter pelo menos 6 caracteres.";
+      newErrors.password = PASSWORD_VALIDATION.COMBINED_MESSAGE;
+    } else if (password.length < PASSWORD_VALIDATION.MIN_LENGTH) {
+      newErrors.password = PASSWORD_VALIDATION.MIN_LENGTH_MESSAGE;
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
