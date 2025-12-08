@@ -38,7 +38,8 @@ export const DialogRegister = () => {
       newErrors.email = "O email é obrigatório.";
     }
     if (!password.trim()) {
-      newErrors.password = "A senha é obrigatória e deve ter pelo menos 6 caracteres.";
+      newErrors.password =
+        "A senha é obrigatória e deve ter pelo menos 6 caracteres.";
     } else if (password.length < 6) {
       newErrors.password = "A senha deve ter pelo menos 6 caracteres.";
     }
