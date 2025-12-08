@@ -61,7 +61,7 @@ export const DialogRegister = () => {
           <span className="block md:hidden">Abrir conta</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="h-full overflow-y-auto">
+      <DialogContent className="h-full">
         <DialogHeader>
           <Image
             src="/register.svg"
@@ -76,8 +76,12 @@ export const DialogRegister = () => {
             Preencha os campos abaixo para criar sua conta corrente!
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleRegister} noValidate>
-          <div className="grid gap-4 mt-5">
+        <form
+          onSubmit={handleRegister}
+          noValidate
+          className="h-full overflow-y-auto"
+        >
+          <div className="grid gap-4">
             {isPending && <p className="text-center">Carregando...</p>}
             {isSuccess && (
               <Alert className="text-center text-green">
