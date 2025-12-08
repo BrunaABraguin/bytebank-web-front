@@ -27,7 +27,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@bytebank-web/ui/dropdown-menu";
-import { ChevronDown, Edit, Trash } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useSharedStore } from "@bytebank-web/store";
 import { useTransactions } from "@bytebank-web/utils/use-transactions";
 import { Transaction, TransactionEnum } from "@bytebank-web/types/transaction";
@@ -38,12 +38,17 @@ import {
   SelectContent,
   SelectItem,
 } from "@bytebank-web/ui/select";
-import categories from "@bytebank-web/utils/categories";
 import { useState } from "react";
 import { useEditTransaction } from "@/hooks/use-edit-transaction";
 import { useDeleteTransaction } from "@/hooks/use-delete-transaction";
 import { TransactionForm } from "@bytebank-web/ui/transactionForm";
 import { Loading } from "@bytebank-web/ui/loading";
+import { DateCell } from "./cells/DateCell";
+import { DescriptionCell } from "./cells/DescriptionCell";
+import { ValueCell } from "./cells/ValueCell";
+import { TypeCell } from "./cells/TypeCell";
+import { CategoryCell } from "./cells/CategoryCell";
+import { ActionsCell } from "./cells/ActionsCell";
 
 export function TransactionsTable() {
   const { email } = useSharedStore();
@@ -91,207 +96,76 @@ export function TransactionsTable() {
     {
       accessorKey: "date",
       header: "Data",
-      cell: ({ row }) => {
-        const isEditing = editRowId === row.id;
-        const date = new Date(row.original.date);
-        const formattedDate = date.toLocaleDateString("pt-BR", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-        });
-
-        if (isEditing) {
-          return (
-            <Input
-              className="w-28"
-              type="date"
-              defaultValue={formattedDate}
-              onChange={(e) => (row.original.date = e.target.value)}
-            />
-          );
-        }
-
-        return <div>{formattedDate}</div>;
-      },
+      cell: ({ row }) => (
+        <DateCell
+          row={row}
+          isEditing={editRowId === row.id}
+          editingData={editingData}
+          onEditingDataChange={setEditingData}
+        />
+      ),
     },
     {
       accessorKey: "description",
       header: "Descrição",
-      cell: ({ row }) => {
-        const isEditing = editRowId === row.id;
-
-        if (isEditing) {
-          return (
-            <Input
-              className="w-28"
-              defaultValue={editingData.description || row.original.description}
-              onChange={(e) =>
-                setEditingData((prev) => ({
-                  ...prev,
-                  description: e.target.value,
-                }))
-              }
-            />
-          );
-        }
-
-        return <div>{row.original.description || "Sem descrição"}</div>;
-      },
+      cell: ({ row }) => (
+        <DescriptionCell
+          row={row}
+          isEditing={editRowId === row.id}
+          editingData={editingData}
+          onEditingDataChange={setEditingData}
+        />
+      ),
     },
     {
       accessorKey: "value",
       header: "Valor",
-      cell: ({ row }) => {
-        const isEditing = editRowId === row.id;
-
-        if (isEditing) {
-          return (
-            <Input
-              className="w-28"
-              type="number"
-              defaultValue={editingData.value || row.original.value}
-              onChange={(e) =>
-                setEditingData((prev) => ({
-                  ...prev,
-                  value:
-                    Number.parseFloat(e.target.value) || row.original.value,
-                }))
-              }
-            />
-          );
-        }
-
-        return (
-          <div>
-            {new Intl.NumberFormat("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            }).format(row.original.value || 0)}
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <ValueCell
+          row={row}
+          isEditing={editRowId === row.id}
+          editingData={editingData}
+          onEditingDataChange={setEditingData}
+        />
+      ),
     },
     {
       accessorKey: "type",
       header: "Tipo",
-      cell: ({ row }) => {
-        const isEditing = editRowId === row.id;
-
-        if (isEditing) {
-          return (
-            <Select
-              defaultValue={editingData.type || row.original.type}
-              onValueChange={(value) => {
-                setEditingData((prev) => ({
-                  ...prev,
-                  type: value as TransactionEnum,
-                }));
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={TransactionEnum.INCOME}>Receita</SelectItem>
-                <SelectItem value={TransactionEnum.EXPENSE}>Despesa</SelectItem>
-                <SelectItem value={TransactionEnum.TRANSFER}>
-                  Transferência
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          );
-        }
-
-        return (
-          <div
-            className={`${
-              row.original.type === TransactionEnum.INCOME
-                ? "text-green-500"
-                : "text-red-500"
-            }`}
-          >
-            {row.original.type}
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <TypeCell
+          row={row}
+          isEditing={editRowId === row.id}
+          editingData={editingData}
+          onEditingDataChange={setEditingData}
+        />
+      ),
     },
     {
       accessorKey: "category",
       header: "Categoria",
-      cell: ({ row }) => {
-        const isEditing = editRowId === row.id;
-
-        if (isEditing) {
-          return (
-            <Select
-              defaultValue={
-                editingData.category || row.original.category || "Sem categoria"
-              }
-              onValueChange={(value) => {
-                setEditingData((prev) => ({ ...prev, category: value }));
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.name}>
-                    {category.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          );
-        }
-
-        return <div>{row.original.category || "Sem categoria"}</div>;
-      },
+      cell: ({ row }) => (
+        <CategoryCell
+          row={row}
+          isEditing={editRowId === row.id}
+          editingData={editingData}
+          onEditingDataChange={setEditingData}
+        />
+      ),
     },
     {
       accessorKey: "actions",
       header: "Ações",
-      cell: ({ row }) => {
-        const isEditing = editRowId === row.id;
-
-        return (
-          <div className="flex space-x-2">
-            {isEditing ? (
-              <>
-                <Button size="sm" onClick={() => handleSave(row.original)}>
-                  Salvar
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleCancelEdit()}
-                >
-                  Cancelar
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  className="size-8"
-                  onClick={() => handleStartEdit(row.original)}
-                >
-                  <Edit />
-                </Button>
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  className="size-8"
-                  onClick={() => handleDelete(row.original._id)}
-                >
-                  <Trash />
-                </Button>
-              </>
-            )}
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <ActionsCell
+          row={row}
+          isEditing={editRowId === row.id}
+          onSave={() => handleSave(row.original)}
+          onCancel={handleCancelEdit}
+          onStartEdit={() => handleStartEdit(row.original)}
+          onDelete={() => handleDelete(row.original._id)}
+        />
+      ),
     },
   ];
 

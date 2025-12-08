@@ -19,10 +19,10 @@
     "formidable": "^3.5.4",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.0",
-    "next": "15.3.4",
+    "next": "15.3.6",
     "pdf-parse": "^1.1.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1"
   },
   "devDependencies": {
     "@bytebank-web/eslint-config": "*",
@@ -33,7 +33,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.15.30",
     "@types/pdf-parse": "^1.1.5",
-    "@types/react": "^19.0.0",
+    "@types/react": "^19.0.1",
     "@types/react-dom": "^19.1.1",
     "eslint": "^9.29.0",
     "eslint-config-next": "15.3.4",

@@ -316,13 +316,13 @@ Para cada package, criar um `tsconfig.json`:
     "@bytebank-web/core": "*",
     "@bytebank-web/shared": "*",
     "@tanstack/react-query": "^5.83.0",
-    "react": "^18.0.0"
+    "react": "^19.0.1"
   },
   "peerDependencies": {
-    "react": "^18.0.0"
+    "react": "^19.0.1"
   },
   "devDependencies": {
-    "@types/react": "^18.0.0"
+    "@types/react": "^19.0.1"
   }
 }
 ```
