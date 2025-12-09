@@ -6,8 +6,6 @@ import {
   Transaction as TransactionType,
 } from "@bytebank-web/types/transaction";
 import runMiddleware, { cors } from "./libs/cors";
-import { DIContainer } from "@bytebank-web/shared";
-import { TransactionType as CoreTransactionType } from "@bytebank-web/core";
 
 export default async function handler(
   req: NextApiRequest,
@@ -128,32 +126,7 @@ async function handleCreateTransaction(
   }
 
   try {
-    // Tentar usar use case primeiro (apenas se disponível)
-    try {
-      const createTransactionUseCase =
-        DIContainer.getCreateTransactionUseCase();
-
-      const transactionType =
-        type === TransactionEnum.INCOME
-          ? CoreTransactionType.INCOME
-          : CoreTransactionType.EXPENSE;
-
-      await createTransactionUseCase.execute({
-        ownerEmail: email,
-        description: description || "Transação criada",
-        value: numericValue,
-        type: transactionType,
-        category: category || "Sem categoria",
-      });
-
-      return res.status(201).json({
-        message: "Transação criada com sucesso usando Clean Architecture",
-      });
-    } catch (useCaseError) {
-      console.log("Use case não disponível, usando fallback:", useCaseError);
-    }
-
-    // Fallback para implementação original
+    // Criar transação usando modelo direto do MongoDB
     const newTransaction = await Transaction.create({
       type,
       value: numericValue,

@@ -20,8 +20,5 @@
     "@bytebank-web/shared": "*",
     "@tanstack/react-query": "^5.83.0",
     "react": "^19.0.1"
-  },
-  "peerDependencies": {
-    "react": "^19.0.1"
   }
 }

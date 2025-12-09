@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "buildCommand": "yarn build",
+  "installCommand": "yarn install --frozen-lockfile --production=false",
+  "framework": null,
+  "outputDirectory": null,
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD",
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "build": {
+    "env": {
+      "NODE_ENV": "production",
+      "TURBO_TEAM": "team_vercel",
+      "TURBO_TOKEN": ""
+    }
+  },
+  "functions": {
+    "apps/api/pages/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  }
+}
