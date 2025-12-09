@@ -2,7 +2,6 @@
   "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
   "globalDependencies": ["**/.env*"],
-  "globalEnv": ["NODE_ENV", "VERCEL_ENV"],
   "tasks": {
     "build": {
       "env": [
@@ -14,18 +13,13 @@
       ],
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "!.next/trace"],
-      "cache": true
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "lint": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$"],
-      "outputs": []
+      "dependsOn": ["^lint"]
     },
     "check-types": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$"],
-      "outputs": []
+      "dependsOn": ["^check-types"]
     },
     "dev": {
       "cache": false,
