@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import fs from "fs/promises";
+import fs from "node:fs/promises";
 import pdfParse from "pdf-parse";
 import { extractTransactions, parseForm } from "./utils/transactions";
 
