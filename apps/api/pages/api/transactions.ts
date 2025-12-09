@@ -48,8 +48,8 @@ async function handleGetTransactions(
         .json({ error: "Campos obrigatórios não preenchidos" });
     }
 
-    const pageNumber = Math.max(1, Number.parseInt(page as string, 10));
-    const pageSizeNumber = Math.max(1, Number.parseInt(pageSize as string, 10));
+    const pageNumber = Math.max(1, Number(page as string) || 1);
+    const pageSizeNumber = Math.max(1, Number(pageSize as string) || 10);
 
     let totalTransactions = await Transaction.countDocuments({
       ownerEmail: email,
@@ -107,14 +107,28 @@ async function handleCreateTransaction(
 ) {
   const { type, value, email, description, category } = req.body;
 
-  if (!type || !value || !email) {
+  // Validação mais robusta
+  if (!type || value === undefined || value === null || !email) {
     return res
       .status(400)
       .json({ error: "Campos obrigatórios não preenchidos" });
   }
 
+  // Validar se o valor é um número válido
+  const numericValue = Number(value);
+  if (Number.isNaN(numericValue) || numericValue === 0) {
+    return res
+      .status(400)
+      .json({ error: "Valor deve ser um número válido diferente de zero" });
+  }
+
+  // Validar tipo de transação
+  if (!Object.values(TransactionEnum).includes(type)) {
+    return res.status(400).json({ error: "Tipo de transação inválido" });
+  }
+
   try {
-    // Tentar usar use case primeiro
+    // Tentar usar use case primeiro (apenas se disponível)
     try {
       const createTransactionUseCase =
         DIContainer.getCreateTransactionUseCase();
@@ -127,7 +141,7 @@ async function handleCreateTransaction(
       await createTransactionUseCase.execute({
         ownerEmail: email,
         description: description || "Transação criada",
-        value: Number.parseFloat(value),
+        value: numericValue,
         type: transactionType,
         category: category || "Sem categoria",
       });
@@ -142,7 +156,7 @@ async function handleCreateTransaction(
     // Fallback para implementação original
     const newTransaction = await Transaction.create({
       type,
-      value,
+      value: numericValue,
       ownerEmail: email,
       date: new Date(),
       description: description || "",
