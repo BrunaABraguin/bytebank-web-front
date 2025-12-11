@@ -8,6 +8,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
+  CellContext,
 } from "@tanstack/react-table";
 
 import {
@@ -91,81 +92,92 @@ export function TransactionsTable() {
   const handleDelete = (transactionId: Transaction["_id"]) => {
     mutateDelete(transactionId);
   };
+  const renderDateCell = (info: CellContext<Transaction, unknown>) => (
+    <DateCell
+      row={info.row}
+      isEditing={editRowId === info.row.id}
+      editingData={editingData}
+      onEditingDataChange={setEditingData}
+    />
+  );
+
+  const renderDescriptionCell = (info: CellContext<Transaction, unknown>) => (
+    <DescriptionCell
+      row={info.row}
+      isEditing={editRowId === info.row.id}
+      editingData={editingData}
+      onEditingDataChange={setEditingData}
+    />
+  );
+
+  const renderValueCell = (info: CellContext<Transaction, unknown>) => (
+    <ValueCell
+      row={info.row}
+      isEditing={editRowId === info.row.id}
+      editingData={editingData}
+      onEditingDataChange={setEditingData}
+    />
+  );
+
+  const renderTypeCell = (info: CellContext<Transaction, unknown>) => (
+    <TypeCell
+      row={info.row}
+      isEditing={editRowId === info.row.id}
+      editingData={editingData}
+      onEditingDataChange={setEditingData}
+    />
+  );
+
+  const renderCategoryCell = (info: CellContext<Transaction, unknown>) => (
+    <CategoryCell
+      row={info.row}
+      isEditing={editRowId === info.row.id}
+      editingData={editingData}
+      onEditingDataChange={setEditingData}
+    />
+  );
+
+  const renderActionsCell = (info: CellContext<Transaction, unknown>) => (
+    <ActionsCell
+      row={info.row}
+      isEditing={editRowId === info.row.id}
+      onSave={() => handleSave(info.row.original)}
+      onCancel={handleCancelEdit}
+      onStartEdit={() => handleStartEdit(info.row.original)}
+      onDelete={() => handleDelete(info.row.original._id)}
+    />
+  );
 
   const columns: ColumnDef<Transaction>[] = [
     {
       accessorKey: "date",
       header: "Data",
-      cell: ({ row }) => (
-        <DateCell
-          row={row}
-          isEditing={editRowId === row.id}
-          editingData={editingData}
-          onEditingDataChange={setEditingData}
-        />
-      ),
+      cell: renderDateCell,
     },
     {
       accessorKey: "description",
       header: "Descrição",
-      cell: ({ row }) => (
-        <DescriptionCell
-          row={row}
-          isEditing={editRowId === row.id}
-          editingData={editingData}
-          onEditingDataChange={setEditingData}
-        />
-      ),
+      cell: renderDescriptionCell,
     },
     {
       accessorKey: "value",
       header: "Valor",
-      cell: ({ row }) => (
-        <ValueCell
-          row={row}
-          isEditing={editRowId === row.id}
-          editingData={editingData}
-          onEditingDataChange={setEditingData}
-        />
-      ),
+      cell: renderValueCell,
     },
     {
       accessorKey: "type",
       header: "Tipo",
-      cell: ({ row }) => (
-        <TypeCell
-          row={row}
-          isEditing={editRowId === row.id}
-          editingData={editingData}
-          onEditingDataChange={setEditingData}
-        />
-      ),
+      cell: renderTypeCell,
     },
     {
       accessorKey: "category",
       header: "Categoria",
-      cell: ({ row }) => (
-        <CategoryCell
-          row={row}
-          isEditing={editRowId === row.id}
-          editingData={editingData}
-          onEditingDataChange={setEditingData}
-        />
-      ),
+      cell: renderCategoryCell,
     },
     {
       accessorKey: "actions",
       header: "Ações",
-      cell: ({ row }) => (
-        <ActionsCell
-          row={row}
-          isEditing={editRowId === row.id}
-          onSave={() => handleSave(row.original)}
-          onCancel={handleCancelEdit}
-          onStartEdit={() => handleStartEdit(row.original)}
-          onDelete={() => handleDelete(row.original._id)}
-        />
-      ),
+      cell: renderActionsCell,
     },
   ];
 

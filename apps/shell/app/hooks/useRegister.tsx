@@ -24,7 +24,7 @@ export const useRegister = () => {
       document.cookie = `${AUTH_COOKIE_NAME}=${token}; path=/; max-age=${AUTH_COOKIE_MAX_AGE}`;
       setEmail(email);
       setName(name);
-      window.location.assign("/dashboard");
+      globalThis.location.assign("/dashboard");
     },
     onError: (error: AxiosError) => {
       const apiError = error?.response?.data as ApiMessage;
