@@ -1,27 +1,23 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import connectToMongoDB from "./libs/mongoDB";
-import runMiddleware, { cors } from "./libs/cors";
-import Transaction from "./models/Transaction";
-import { validateRequiredFields } from "./utils/requiredFields";
 import {
-  TransactionEnum,
-  Transaction as TransactionType,
-} from "@bytebank-web/types/transaction";
+  setupTransactionAPI,
+  validateAndExtractQuery,
+  fetchMonthlyTransactions,
+  sendTransactionError,
+} from "./utils/transactionHelpers";
+import { TransactionEnum } from "@bytebank-web/types/transaction";
 import { CategoryData } from "@bytebank-web/types/categoryData";
 import categories from "@bytebank-web/utils/categories";
-import { parsedMonth, parsedYear } from "./utils/parseDate";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  await runMiddleware(req, res, cors);
+  const isSetupValid = await setupTransactionAPI(req, res);
+  if (!isSetupValid) return;
 
   if (req.method === "GET") {
     return handleGetCategoriesData(req, res);
-  } else {
-    res.setHeader("Allow", ["GET"]);
-    return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
 
@@ -29,31 +25,12 @@ async function handleGetCategoriesData(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  await connectToMongoDB();
-
   try {
-    const { email, month, year } = req.query;
+    const queryData = validateAndExtractQuery(req, res);
+    if (!queryData) return;
 
-    const validation = validateRequiredFields({ email, month, year }, res);
-    if (!validation.isValid) {
-      return;
-    }
-
-    const transactions = await Transaction.find({
-      ownerEmail: email,
-      date: {
-        $gte: new Date(
-          parsedYear(year as string),
-          parsedMonth(month as string) - 1,
-          1
-        ),
-        $lt: new Date(
-          parsedYear(year as string),
-          parsedMonth(month as string),
-          1
-        ),
-      },
-    }).lean<TransactionType[]>();
+    const { email, month, year } = queryData;
+    const transactions = await fetchMonthlyTransactions(email, month, year);
 
     const categoryData: CategoryData[] = [];
 
@@ -102,7 +79,6 @@ async function handleGetCategoriesData(
 
     return res.status(200).json(categoryData);
   } catch (error) {
-    console.error("Erro ao buscar transações:", error);
-    return res.status(500).json({ error: "Erro ao buscar transações" });
+    return sendTransactionError(res, error, "buscar transações");
   }
 }
