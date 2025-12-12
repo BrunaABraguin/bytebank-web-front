@@ -5,15 +5,9 @@ export interface ValidationResult {
   response?: void;
 }
 
-/**
- * Validates required fields and automatically sends error response if validation fails
- * @param fields - Object with field names as keys and their values
- * @param res - NextApiResponse object to send error response
- * @param customMessage - Optional custom error message
- * @returns ValidationResult indicating if validation passed
- */
+
 export function validateRequiredFields(
-  fields: Record<string, any>,
+  fields: Record<string, unknown>,
   res: NextApiResponse,
   customMessage = "Campos obrigatórios não preenchidos"
 ): ValidationResult {
@@ -36,12 +30,8 @@ export function validateRequiredFields(
   return { isValid: true };
 }
 
-/**
- * Simplified version that only checks if fields exist (no automatic response)
- * @param fields - Object with field names as keys and their values
- * @returns boolean indicating if all fields are present and valid
- */
-export function areFieldsValid(fields: Record<string, any>): boolean {
+
+export function areFieldsValid(fields: Record<string, unknown>): boolean {
   return Object.values(fields).every(
     (value) => value && (typeof value !== "string" || value.trim() !== "")
   );

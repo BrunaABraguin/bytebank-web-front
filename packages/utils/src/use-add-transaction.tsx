@@ -16,7 +16,7 @@ export const useAddTransaction = () => {
       value: string;
       type: string;
     }) => {
-      // Tentar usar use case localmente se possível, senão usar API
+      
       try {
         const createTransactionUseCase =
           DIContainer.getCreateTransactionUseCase();
@@ -32,7 +32,7 @@ export const useAddTransaction = () => {
         });
         return { message: "Transação criada com sucesso" };
       } catch (error) {
-        // Log error and fallback para API se use case não estiver disponível
+        
         console.error("Use case não disponível, usando fallback:", error);
         return postTransaction(email, type, value);
       }

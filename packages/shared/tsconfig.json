@@ -3,15 +3,20 @@
   "compilerOptions": {
     "outDir": "./dist",
     "declaration": true,
-    "declarationMap": true
+    "declarationMap": true,
+    "jsx": "react-jsx"
   },
   "include": [
     "index.ts",
-    "di/**/*"
+    "di/**/*",
+    "validation/**/*",
+    "hooks/**/*",
+    "components/**/*",
+    "utils/**/*"
   ],
   "exclude": [
     "dist",
-    "build",
+    "build", 
     "node_modules"
   ]
 }

@@ -2,22 +2,22 @@ import Image from "next/image";
 
 const benefits = [
   {
-    icon: "./gift.svg",
+    icon: "/gift.svg",
     title: "Conta e cartão gratuitos",
     desc: "Isso mesmo, nossa conta é digital, sem custo fixo e mais que isso: sem tarifa de manutenção.",
   },
   {
-    icon: "./money.svg",
+    icon: "/money.svg",
     title: "Saques sem custo",
     desc: "Você pode sacar gratuitamente 4x por mês de qualquer Banco 24h.",
   },
   {
-    icon: "./points.svg",
+    icon: "/points.svg",
     title: "Programa de pontos",
     desc: "Você pode acumular pontos com suas compras no crédito sem pagar mensalidade!",
   },
   {
-    icon: "./devices.svg",
+    icon: "/devices.svg",
     title: "Seguro Dispositivos",
     desc: "Seus dispositivos móveis (computador e laptop) protegidos por uma mensalidade simbólica.",
   },

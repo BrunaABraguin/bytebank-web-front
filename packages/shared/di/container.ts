@@ -73,7 +73,7 @@ class DIContainerImpl {
 
 export const container = new DIContainerImpl();
 
-// Métodos estáticos para acesso global
+
 export class DIContainer {
   private static readonly instance = container;
 
@@ -94,7 +94,7 @@ export class DIContainer {
   }
 
   static init(): void {
-    // Método para inicialização se necessário
+    
     console.log("DIContainer inicializado");
   }
 }

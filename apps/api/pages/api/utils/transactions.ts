@@ -53,10 +53,10 @@ export const parseForm = (
     const form = formidable({
       keepExtensions: false,
       allowEmptyFiles: false,
-      maxFileSize: 10 * 1024 * 1024, // 10MB max
-      uploadDir: "/tmp", // Pasta específica e segura
+      maxFileSize: 10 * 1024 * 1024, 
+      uploadDir: "/tmp", 
       filter: ({ mimetype }) => {
-        // Permitir apenas arquivos de texto
+        
         return mimetype === "text/plain" || mimetype === "text/csv";
       },
     });

@@ -105,14 +105,12 @@ async function handleCreateTransaction(
 ) {
   const { type, value, email, description, category } = req.body;
 
-  // Validação mais robusta
   if (!type || value === undefined || value === null || !email) {
     return res
       .status(400)
       .json({ error: "Campos obrigatórios não preenchidos" });
   }
 
-  // Validar se o valor é um número válido
   const numericValue = Number(value);
   if (Number.isNaN(numericValue) || numericValue === 0) {
     return res
@@ -120,13 +118,11 @@ async function handleCreateTransaction(
       .json({ error: "Valor deve ser um número válido diferente de zero" });
   }
 
-  // Validar tipo de transação
   if (!Object.values(TransactionEnum).includes(type)) {
     return res.status(400).json({ error: "Tipo de transação inválido" });
   }
 
   try {
-    // Criar transação usando modelo direto do MongoDB
     const newTransaction = await Transaction.create({
       type,
       value: numericValue,

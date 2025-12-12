@@ -2,11 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getCategoriesData } from "@/domain/services/categories";
 import { CategoryData } from "@bytebank-web/types/categoryData";
 
-/**
- * Hook para buscar dados para o grafico de transações com base no email do proprietário.
- * @param ownerEmail O email do proprietário das transações.
- * @returns {object} Dados das transações, estado de carregamento e erros.
- */
+
 export const useCategoriesChart = (
   ownerEmail: string | null,
   month: number,

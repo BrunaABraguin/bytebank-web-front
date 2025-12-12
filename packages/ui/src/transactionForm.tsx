@@ -55,7 +55,7 @@ export const TransactionForm = () => {
       if (!transactionValue || value <= 0) {
         newErrors.transactionValue = "O valor deve ser maior que 0.";
       } else {
-        // Criar transaction para validar usando entity
+        
         const transaction = new Transaction(
           crypto.randomUUID(),
           email || "",

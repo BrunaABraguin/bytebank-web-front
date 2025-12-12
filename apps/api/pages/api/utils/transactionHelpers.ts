@@ -12,9 +12,7 @@ export interface QueryFilters {
   year: string;
 }
 
-/**
- * Common API handler setup for transaction-related endpoints
- */
+
 export async function setupTransactionAPI(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -32,9 +30,7 @@ export async function setupTransactionAPI(
   return true;
 }
 
-/**
- * Validates and extracts query parameters for transaction endpoints
- */
+
 export function validateAndExtractQuery(
   req: NextApiRequest,
   res: NextApiResponse
@@ -53,9 +49,7 @@ export function validateAndExtractQuery(
   };
 }
 
-/**
- * Fetches transactions for a given month and year
- */
+
 export async function fetchMonthlyTransactions(
   email: string,
   month: string,
@@ -70,9 +64,7 @@ export async function fetchMonthlyTransactions(
   }).lean<TransactionType[]>();
 }
 
-/**
- * Standard error response for transaction-related endpoints
- */
+
 export function sendTransactionError(
   res: NextApiResponse,
   error: unknown,

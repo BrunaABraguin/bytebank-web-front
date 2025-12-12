@@ -17,7 +17,7 @@ const connectToMongoDB = async (): Promise<void> => {
     let mongoUri: string;
 
     if (process.env.NODE_ENV === "development" && !process.env.MONGODB_URI) {
-      // Usar MongoDB in-memory apenas se não houver MONGODB_URI configurado
+      
       try {
         const { MongoMemoryServer } = await import("mongodb-memory-server");
         mongoServer = await MongoMemoryServer.create();
@@ -53,7 +53,7 @@ const connectToMongoDB = async (): Promise<void> => {
   }
 };
 
-// Função para limpar conexão (útil em testes)
+
 export const disconnectFromMongoDB = async (): Promise<void> => {
   if (mongoServer) {
     await mongoServer.stop();

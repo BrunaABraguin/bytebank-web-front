@@ -9,7 +9,6 @@ interface StateProviderProps {
 
 export function StateProvider({ children }: StateProviderProps) {
   useEffect(() => {
-    // Inicializar DI Container quando o provider for montado
     try {
       DIContainer.init();
       console.log("DI Container inicializado com sucesso");

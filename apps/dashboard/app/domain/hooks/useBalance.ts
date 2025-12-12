@@ -2,11 +2,7 @@ import { getBalanceAccount } from "@/domain/services/balance";
 import { useQuery } from "@tanstack/react-query";
 import { Account } from "@bytebank-web/types/account";
 
-/**
- * Hook para buscar transações com base no email do proprietário.
- * @param ownerEmail O email do proprietário das transações.
- * @returns {object} Dados das transações, estado de carregamento e erros.
- */
+
 export const useBalance = (
   ownerEmail: string | null,
   month: number,
