@@ -1,11 +1,13 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import connectToMongoDB from "./libs/mongoDB";
 import runMiddleware, { cors } from "./libs/cors";
 import Transaction from "./models/Transaction";
+import { validateRequiredFields } from "./utils/requiredFields";
 import {
   TransactionEnum,
   Transaction as TransactionType,
 } from "@bytebank-web/types/transaction";
+import { parsedMonth, parsedYear } from "./utils/parseDate";
 
 export default async function handler(
   req: NextApiRequest,
@@ -25,20 +27,24 @@ export default async function handler(
 async function handleGetAccount(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { email, month, year } = req.query;
-    if (!email || !month || !year) {
-      return res
-        .status(400)
-        .json({ error: "Campos obrigatórios não preenchidos" });
+    const validation = validateRequiredFields({ email, month, year }, res);
+    if (!validation.isValid) {
+      return;
     }
-
-    const parsedMonth = Number.parseInt(month as string, 10);
-    const parsedYear = Number.parseInt(year as string, 10);
 
     const transactions = await Transaction.find({
       ownerEmail: email,
       date: {
-        $gte: new Date(parsedYear, parsedMonth - 1, 1),
-        $lt: new Date(parsedYear, parsedMonth, 1),
+        $gte: new Date(
+          parsedYear(year as string),
+          parsedMonth(month as string) - 1,
+          1
+        ),
+        $lt: new Date(
+          parsedYear(year as string),
+          parsedMonth(month as string),
+          1
+        ),
       },
     }).lean<TransactionType[]>();
 
