@@ -17,6 +17,7 @@ const HeaderHome: React.FC = () => (
           height={32}
           className="block sm:hidden h-6 w-auto"
           priority
+          unoptimized
         />
         <Image
           src="/favicon.svg"
@@ -25,6 +26,7 @@ const HeaderHome: React.FC = () => (
           height={32}
           className="block lg:hidden max-sm:hidden"
           style={{ width: "auto", height: "auto" }}
+          unoptimized
         />
       </Link>
     </div>

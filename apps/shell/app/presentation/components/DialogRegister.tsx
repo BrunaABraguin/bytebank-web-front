@@ -71,6 +71,7 @@ export const DialogRegister = () => {
             height={252}
             className="mx-auto"
             style={{ width: "auto", height: "auto" }}
+            unoptimized
           />
           <DialogTitle className="text-center">Cadastrar conta</DialogTitle>
           <DialogDescription className="text-center my-4">

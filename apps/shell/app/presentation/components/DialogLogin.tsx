@@ -60,6 +60,7 @@ export const DialogLogin = () => {
             width={334}
             height={267}
             className="mx-auto my-auto"
+            unoptimized
           />
           <DialogTitle className="text-center my-5">Login</DialogTitle>
           <DialogDescription className="text-center">

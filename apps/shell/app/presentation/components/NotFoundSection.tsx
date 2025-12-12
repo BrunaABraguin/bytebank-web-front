@@ -37,6 +37,7 @@ const NotFoundSection: React.FC = () => {
         height={354}
         className="mt-10 mx-auto"
         style={{ width: "auto", height: "auto" }}
+        unoptimized
       />
     </section>
   );

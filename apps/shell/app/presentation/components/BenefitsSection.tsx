@@ -48,6 +48,7 @@ export const BenefitsSection = () => {
               height={56}
               className="mx-auto w-auto h-auto"
               style={{ width: "auto", height: "auto" }}
+              unoptimized
             />
             <h3 className="text-xl text-green mt-2 mb-1 font-bold">
               {benefit.title}

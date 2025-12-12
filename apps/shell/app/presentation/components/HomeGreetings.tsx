@@ -30,6 +30,7 @@ export const HomeGreetings: React.FC = () => {
             height: "auto",
             maxWidth: "100%",
           }}
+          unoptimized
         />
       </div>
     </main>

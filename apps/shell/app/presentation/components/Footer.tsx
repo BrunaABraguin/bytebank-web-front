@@ -50,10 +50,7 @@ const Footer: React.FC = () => (
       </h3>
       <ul>
         {contacts.map((contact) => (
-          <li
-            className="leading-7 [&:not(:first-child)]:mt-6"
-            key={contact}
-          >
+          <li className="leading-7 [&:not(:first-child)]:mt-6" key={contact}>
             {contact.includes("@") ? (
               <a
                 href={`mailto:${contact}`}
@@ -77,6 +74,7 @@ const Footer: React.FC = () => (
         width={145}
         height={35}
         style={{ width: "auto", height: "auto" }}
+        unoptimized
       />
       <nav className="flex gap-3 mt-2" aria-labelledby="social-media-heading">
         <h4 id="social-media-heading" className="sr-only">
@@ -96,6 +94,7 @@ const Footer: React.FC = () => (
               width={30}
               height={30}
               style={{ width: "auto", height: "auto" }}
+              unoptimized
             />
           </a>
         ))}
