@@ -1,4 +1,4 @@
-import { useCategoriesChart } from "@/hooks/useCategoriesChart";
+import { useCategoriesChart } from "@/domain/hooks/useCategoriesChart";
 import { Card, CardContent } from "@bytebank-web/ui/card";
 import { Loading } from "@bytebank-web/ui/loading";
 import {
@@ -16,7 +16,11 @@ interface CategoriesChartProps {
   year: number;
 }
 
-export const CategoriesChart = ({ ownerEmail, month, year }: CategoriesChartProps) => {
+export const CategoriesChart = ({
+  ownerEmail,
+  month,
+  year,
+}: CategoriesChartProps) => {
   const { data: categories, isLoading } = useCategoriesChart(
     ownerEmail,
     month,

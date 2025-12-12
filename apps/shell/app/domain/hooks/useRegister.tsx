@@ -1,7 +1,7 @@
 import { ApiMessage } from "@bytebank-web/types/api";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { postRegister } from "../services/register";
+import { postRegister } from "@/domain/services/register";
 import { useSharedStore } from "@bytebank-web/store";
 import {
   AUTH_COOKIE_NAME,

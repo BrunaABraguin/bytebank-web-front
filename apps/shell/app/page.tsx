@@ -1,7 +1,7 @@
-import { BenefitsSection } from "./components/BenefitsSection";
-import Footer from "./components/Footer";
-import HeaderHome from "./components/HeaderHome";
-import { HomeGreetings } from "./components/HomeGreetings";
+import { BenefitsSection } from "./presentation/components/BenefitsSection";
+import Footer from "./presentation/components/Footer";
+import HeaderHome from "./presentation/components/HeaderHome";
+import { HomeGreetings } from "./presentation/components/HomeGreetings";
 
 export default function Shell() {
   return (

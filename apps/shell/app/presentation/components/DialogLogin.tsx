@@ -16,11 +16,11 @@ import { Button } from "@bytebank-web/ui/button";
 import { Input } from "@bytebank-web/ui/input";
 import { Loading } from "@bytebank-web/ui/loading";
 import { useState } from "react";
-import { useLogin } from "../hooks/useLogin";
 import { Alert, AlertDescription, AlertTitle } from "@bytebank-web/ui/alert";
 import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
 import { User } from "@bytebank-web/core";
-import { PASSWORD_VALIDATION } from "../contants";
+import { PASSWORD_VALIDATION } from "../../domain/contants";
+import { useLogin } from "@/domain/hooks/useLogin";
 
 export const DialogLogin = () => {
   const [email, setEmail] = useState("");

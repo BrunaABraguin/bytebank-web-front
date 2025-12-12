@@ -1,4 +1,4 @@
-import { CellProps } from "@/types";
+import { CellProps } from "@/presentation/types";
 import { Input } from "@bytebank-web/ui/input";
 
 export const DateCell = ({

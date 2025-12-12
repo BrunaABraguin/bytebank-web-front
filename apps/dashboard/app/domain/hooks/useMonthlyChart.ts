@@ -1,4 +1,4 @@
-import { getMonthlyData } from "@/services/monthly-chart";
+import { getMonthlyData } from "@/domain/services/monthly-chart";
 import { useQuery } from "@tanstack/react-query";
 import { MonthlyData } from "@bytebank-web/types/monthlyData";
 

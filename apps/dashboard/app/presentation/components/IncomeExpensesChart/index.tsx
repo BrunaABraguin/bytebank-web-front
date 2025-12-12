@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@bytebank-web/ui/card";
 import { AreaChartMonths } from "@bytebank-web/ui/areaChartMonths";
 import { useSharedStore } from "@bytebank-web/store";
-import { useMonthlyChart } from "@/hooks/useMonthlyChart";
+import { useMonthlyChart } from "@/domain/hooks/useMonthlyChart";
 import { Loading } from "@bytebank-web/ui/loading";
 
 export const IncomeExpensesChart = () => {

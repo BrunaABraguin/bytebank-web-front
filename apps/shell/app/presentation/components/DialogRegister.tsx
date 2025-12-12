@@ -15,10 +15,10 @@ import { Button } from "@bytebank-web/ui/button";
 import { Input } from "@bytebank-web/ui/input";
 import { Alert, AlertTitle } from "@bytebank-web/ui/alert";
 import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
-import { useRegister } from "../hooks/useRegister";
+import { useRegister } from "@/domain/hooks/useRegister";
 import { useState } from "react";
 import { User } from "@bytebank-web/core";
-import { PASSWORD_VALIDATION } from "../contants";
+import { PASSWORD_VALIDATION } from "../../domain/contants";
 
 export const DialogRegister = () => {
   const [name, setName] = useState("");

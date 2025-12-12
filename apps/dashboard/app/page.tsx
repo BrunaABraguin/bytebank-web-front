@@ -1,9 +1,9 @@
 "use client";
 
-import { Statement } from "./components/Statement";
-import { AccountBalance } from "./components/AccountBalance";
-import { IncomeExpensesChart } from "./components/IncomeExpensesChart";
-import { CategoriesChart } from "./components/CategoriesChart";
+import { Statement } from "./presentation/components/Statement";
+import { AccountBalance } from "./presentation/components/AccountBalance";
+import { IncomeExpensesChart } from "./presentation/components/IncomeExpensesChart";
+import { CategoriesChart } from "./presentation/components/CategoriesChart";
 import { useSharedStore } from "@bytebank-web/store";
 import { useState } from "react";
 

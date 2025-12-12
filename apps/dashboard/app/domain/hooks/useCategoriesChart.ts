@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getCategoriesData } from "@/services/categories";
+import { getCategoriesData } from "@/domain/services/categories";
 import { CategoryData } from "@bytebank-web/types/categoryData";
 
 /**
@@ -7,7 +7,11 @@ import { CategoryData } from "@bytebank-web/types/categoryData";
  * @param ownerEmail O email do proprietário das transações.
  * @returns {object} Dados das transações, estado de carregamento e erros.
  */
-export const useCategoriesChart = (ownerEmail: string | null, month: number, year: number) => {
+export const useCategoriesChart = (
+  ownerEmail: string | null,
+  month: number,
+  year: number
+) => {
   const { data, isLoading, error } = useQuery<CategoryData[], Error>({
     queryKey: ["categories-chart", ownerEmail, month, year],
     queryFn: () => getCategoriesData(ownerEmail, month, year),

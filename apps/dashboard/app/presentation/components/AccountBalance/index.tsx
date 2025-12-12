@@ -2,15 +2,20 @@ import { Card, CardContent } from "@bytebank-web/ui/card";
 import { TransactionForm } from "@bytebank-web/ui/transactionForm";
 import { Loading } from "@bytebank-web/ui/loading";
 import { MonthYearPicker } from "@bytebank-web/ui/monthYearPicker";
-import { useBalance } from "@/hooks/useBalance";
+import { useBalance } from "@/domain/hooks/useBalance";
 
 interface AccountBalanceProps {
-  ownerEmail: string | null; 
+  ownerEmail: string | null;
   month: number;
   year: number;
   onMonthChange: (selectedMonth: number, selectedYear: number) => void;
 }
-export const AccountBalance = ({ ownerEmail, month, year, onMonthChange }: AccountBalanceProps) => {
+export const AccountBalance = ({
+  ownerEmail,
+  month,
+  year,
+  onMonthChange,
+}: AccountBalanceProps) => {
   const { account, isLoadingAccount } = useBalance(ownerEmail, month, year);
 
   return (

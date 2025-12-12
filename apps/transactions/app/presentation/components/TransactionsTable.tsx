@@ -40,8 +40,8 @@ import {
   SelectItem,
 } from "@bytebank-web/ui/select";
 import { useState } from "react";
-import { useEditTransaction } from "@/hooks/use-edit-transaction";
-import { useDeleteTransaction } from "@/hooks/use-delete-transaction";
+import { useEditTransaction } from "@/domain/hooks/use-edit-transaction";
+import { useDeleteTransaction } from "@/domain/hooks/use-delete-transaction";
 import { TransactionForm } from "@bytebank-web/ui/transactionForm";
 import { Loading } from "@bytebank-web/ui/loading";
 import { DateCell } from "./cells/DateCell";
