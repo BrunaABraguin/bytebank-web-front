@@ -1,6 +1,7 @@
 import { useCategoriesChart } from "@/hooks/useCategoriesChart";
 import { Card, CardContent } from "@bytebank-web/ui/card";
 import { Loading } from "@bytebank-web/ui/loading";
+import { EmptyState, LoadingState } from "../StateComponents";
 import {
   ResponsiveContainer,
   BarChart,
@@ -16,7 +17,11 @@ interface CategoriesChartProps {
   year: number;
 }
 
-export const CategoriesChart = ({ ownerEmail, month, year }: CategoriesChartProps) => {
+export const CategoriesChart = ({
+  ownerEmail,
+  month,
+  year,
+}: CategoriesChartProps) => {
   const { data: categories, isLoading } = useCategoriesChart(
     ownerEmail,
     month,
@@ -33,18 +38,14 @@ export const CategoriesChart = ({ ownerEmail, month, year }: CategoriesChartProp
           {(() => {
             if (isLoading) {
               return (
-                <div className="flex justify-center items-center h-64">
+                <LoadingState>
                   <Loading />
-                </div>
+                </LoadingState>
               );
             }
 
             if (categories?.length === 0) {
-              return (
-                <div className="flex justify-center items-center h-64">
-                  <p className="text-gray-500">Nenhum dado disponível.</p>
-                </div>
-              );
+              return <EmptyState message="Nenhum dado disponível." />;
             }
 
             return (
@@ -55,7 +56,11 @@ export const CategoriesChart = ({ ownerEmail, month, year }: CategoriesChartProp
                 >
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <Tooltip formatter={(value: number) => `${value}%`} />
+                  <Tooltip
+                    formatter={(value: number | undefined) =>
+                      value ? `${value}%` : "0%"
+                    }
+                  />
                   <Bar
                     type="monotone"
                     dataKey="percentage"
