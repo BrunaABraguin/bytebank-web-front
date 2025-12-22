@@ -1,5 +1,5 @@
 import { createHttpService } from "@bytebank-web/utils/http";
-import { API_URL } from "../contants";
+import { API_URL } from "../constants";
 
 export const postRegister = async (
   name: string,

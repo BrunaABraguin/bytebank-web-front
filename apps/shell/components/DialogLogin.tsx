@@ -19,6 +19,7 @@ import { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 import { Alert, AlertDescription, AlertTitle } from "@bytebank-web/ui/alert";
 import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
+import { isValidEmail } from "../utils/validateEmail";
 
 export const DialogLogin = () => {
   const [email, setEmail] = useState("");
@@ -31,11 +32,6 @@ export const DialogLogin = () => {
       email,
       password,
     });
-  };
-
-  const isEmailValid = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
   };
 
   return (
@@ -86,10 +82,10 @@ export const DialogLogin = () => {
                     value={email}
                     required
                     autoComplete="email"
-                    aria-invalid={!isEmailValid(email)}
+                    aria-invalid={!isValidEmail(email)}
                     aria-describedby="email-error"
                   />
-                  {!isEmailValid(email) && email && (
+                  {!isValidEmail(email) && email && (
                     <Alert variant="destructive" role="alert">
                       <AlertCircleIcon />
                       <AlertTitle id="email-error">
@@ -139,13 +135,13 @@ export const DialogLogin = () => {
               className="bg-green mt-5"
               disabled={
                 isPending ||
-                !isEmailValid(email) ||
+                !isValidEmail(email) ||
                 password.length < 6 ||
                 isSuccess
               }
               aria-disabled={
                 isPending ||
-                !isEmailValid(email) ||
+                !isValidEmail(email) ||
                 password.length < 6 ||
                 isSuccess
               }

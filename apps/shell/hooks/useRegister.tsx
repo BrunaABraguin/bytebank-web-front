@@ -6,7 +6,7 @@ import { useSharedStore } from "@bytebank-web/store";
 import {
   AUTH_COOKIE_NAME,
   AUTH_COOKIE_MAX_AGE,
-} from "@bytebank-web/utils/contants";
+} from "@bytebank-web/utils/constants";
 
 interface RegisterData {
   name: string;

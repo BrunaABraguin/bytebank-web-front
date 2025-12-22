@@ -1,5 +1,5 @@
 import { createHttpService } from "@bytebank-web/utils/http";
-import { API_URL } from "./contants.js";
+import { API_URL } from "./constants.js";
 import { Transaction } from "@bytebank-web/types/transaction";
 
 export const getTransactions = async (
@@ -7,7 +7,11 @@ export const getTransactions = async (
   page: number,
   pageSize: number,
   type: string | undefined
-): Promise<{ transactions: Transaction[]; totalPages: number; hasMore: boolean }> => {
+): Promise<{
+  transactions: Transaction[];
+  totalPages: number;
+  hasMore: boolean;
+}> => {
   const client = createHttpService(API_URL);
 
   const response = await client.get("/api/transactions", {

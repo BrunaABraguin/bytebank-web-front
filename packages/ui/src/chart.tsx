@@ -109,6 +109,7 @@ type TooltipPayloadItem = {
   value?: number | string;
   color?: string;
   payload?: Record<string, unknown>;
+  graphicalItemId: string;
   [key: string]: unknown;
 };
 
@@ -183,7 +184,7 @@ function ChartTooltipContent({
   return (
     <div
       className={cn(
-        "border-border/50 bg-background grid min-w-[8rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl",
+        "border-border/50 bg-background grid min-w-32 items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl",
         className
       )}
     >
@@ -202,10 +203,10 @@ function ChartTooltipContent({
             typeof color === "string"
               ? color
               : typeof item.payload?.fill === "string"
-              ? item.payload.fill
-              : typeof item.color === "string"
-              ? item.color
-              : "";
+                ? item.payload.fill
+                : typeof item.color === "string"
+                  ? item.color
+                  : "";
 
           return (
             <div
@@ -280,11 +281,11 @@ function ChartLegendContent({
   verticalAlign = "bottom",
   nameKey,
 }: React.ComponentProps<"div"> & {
-    payload?: { dataKey?: string; value?: string; color?: string }[];
-    verticalAlign?: "top" | "bottom" | "middle";
-    hideIcon?: boolean;
-    nameKey?: string;
-  }) {
+  payload?: { dataKey?: string; value?: string; color?: string }[];
+  verticalAlign?: "top" | "bottom" | "middle";
+  hideIcon?: boolean;
+  nameKey?: string;
+}) {
   const { config } = useChart();
 
   if (!payload?.length) {
