@@ -46,14 +46,14 @@ export function extractTransactions(text: string) {
     .slice(0, 20);
 }
 
-export const parseForm = (
+export const parseForm = async (
   req: NextApiRequest
-): Promise<{ fields: Fields; files: Files }> =>
-  new Promise((resolve, reject) => {
+): Promise<{ fields: Fields; files: Files }> => {
+  return new Promise((resolve, reject) => {
     const form = new IncomingForm({
-      uploadDir: "./uploads",
-      keepExtensions: false,
       maxFileSize: 5 * 1024 * 1024, // 5MB
+      keepExtensions: false,
+      uploadDir: undefined,
     });
 
     form.parse(req, (err, fields, files) => {
@@ -61,3 +61,4 @@ export const parseForm = (
       else resolve({ fields, files });
     });
   });
+};

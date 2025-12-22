@@ -22,11 +22,14 @@ export default async function handler(
 
     const uploadedFile = Array.isArray(files.file) ? files.file[0] : files.file;
 
-    if (!uploadedFile?.filepath) {
+    if (!uploadedFile?.size) {
       return res.status(400).json({ error: "Nenhum arquivo válido enviado." });
     }
 
-    const fileBuffer = await fs.readFile(uploadedFile.filepath);
+    // Ler o buffer do arquivo diretamente da memória
+    const fileBuffer = await fs.readFile(
+      uploadedFile.filepath || uploadedFile.toJSON().filepath
+    );
     const pdfData = await pdfParse(fileBuffer);
 
     const transactions = extractTransactions(pdfData.text);
