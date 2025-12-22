@@ -1,4 +1,4 @@
-import formidable, { Fields, Files } from "formidable";
+import { IncomingForm, Fields, Files } from "formidable";
 import { NextApiRequest } from "next";
 
 export function extractTransactions(text: string) {
@@ -50,7 +50,7 @@ export const parseForm = (
   req: NextApiRequest
 ): Promise<{ fields: Fields; files: Files }> =>
   new Promise((resolve, reject) => {
-    const form = new formidable.Formidable({
+    const form = new IncomingForm({
       uploadDir: "./uploads",
       keepExtensions: false,
       maxFileSize: 5 * 1024 * 1024, // 5MB

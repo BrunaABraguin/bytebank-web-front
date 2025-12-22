@@ -1,12 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import connectToMongoDB from "./libs/mongoDB";
 import runMiddleware, { cors } from "./libs/cors";
-import Transaction from "./models/Transaction";
-import {
-  TransactionEnum,
-  Transaction as TransactionType,
-} from "@bytebank-web/types/transaction";
-import { validateRequiredParams } from "./utils/validation";
+import { TransactionEnum } from "@bytebank-web/types/transaction";
+import { validateAndGetTransactions } from "./utils/validation";
 
 export default async function handler(
   req: NextApiRequest,
@@ -25,23 +21,19 @@ export default async function handler(
 
 async function handleGetAccount(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const validation = validateRequiredParams(req, res);
+    const result = await validateAndGetTransactions(req, res);
 
-    if (!validation.isValid) {
+    if (!result.isValid) {
       return res
-        .status(validation.error!.status)
-        .json({ error: validation.error!.message });
+        .status(result.error!.status)
+        .json({ error: result.error!.message });
     }
 
-    const { email, month: parsedMonth, year: parsedYear } = validation;
+    const { transactions } = result;
 
-    const transactions = await Transaction.find({
-      ownerEmail: email,
-      date: {
-        $gte: new Date(parsedYear!, parsedMonth! - 1, 1),
-        $lt: new Date(parsedYear!, parsedMonth!, 1),
-      },
-    }).lean<TransactionType[]>();
+    if (!transactions) {
+      return res.status(500).json({ error: "Transactions not found" });
+    }
 
     const summary = transactions.reduce(
       (acc, transaction) => {

@@ -1,7 +1,21 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import Transaction from "../models/Transaction";
+import { Transaction as TransactionType } from "@bytebank-web/types/transaction";
 
 export interface ValidationResult {
   isValid: boolean;
+  email?: string;
+  month?: number;
+  year?: number;
+  error?: {
+    status: number;
+    message: string;
+  };
+}
+
+export interface TransactionsResult {
+  isValid: boolean;
+  transactions?: TransactionType[];
   email?: string;
   month?: number;
   year?: number;
@@ -36,7 +50,7 @@ export function validateRequiredParams(
       isValid: false,
       error: {
         status: 400,
-        message: "Campos obrigatórios não preenchidos",
+        message: `Campos obrigatórios não preenchidos: ${missingParams.join(", ")}`,
       },
     };
   }
@@ -78,4 +92,48 @@ export function validateRequiredParams(
     month: parsedMonth,
     year: parsedYear,
   };
+}
+
+export async function validateAndGetTransactions(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  requiredParams: string[] = ["email", "month", "year"]
+): Promise<TransactionsResult> {
+  try {
+    const validation = validateRequiredParams(req, res, requiredParams);
+
+    if (!validation.isValid) {
+      return {
+        isValid: false,
+        error: validation.error,
+      };
+    }
+
+    const { email, month: parsedMonth, year: parsedYear } = validation;
+
+    const transactions = await Transaction.find({
+      ownerEmail: email,
+      date: {
+        $gte: new Date(parsedYear!, parsedMonth! - 1, 1),
+        $lt: new Date(parsedYear!, parsedMonth!, 1),
+      },
+    }).lean<TransactionType[]>();
+
+    return {
+      isValid: true,
+      transactions,
+      email,
+      month: parsedMonth,
+      year: parsedYear,
+    };
+  } catch (error) {
+    console.error("Error in validateAndGetTransactions:", error);
+    return {
+      isValid: false,
+      error: {
+        status: 500,
+        message: "Erro interno do servidor",
+      },
+    };
+  }
 }
