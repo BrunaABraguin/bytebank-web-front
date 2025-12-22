@@ -101,17 +101,14 @@ export function TransactionsTable() {
       header: "Descrição",
       cell: ({ row }) => {
         const isEditing = editRowId === row.id;
-        const [editedDescription, setEditedDescription] = useState(
-          row.original.description
-        );
 
         if (isEditing) {
           return (
             <Input
               className="w-28"
-              defaultValue={editedDescription}
-              onChange={(e) => setEditedDescription(e.target.value)}
-              onBlur={() => (row.original.description = editedDescription)}
+              defaultValue={row.original.description}
+              onChange={(e) => (row.original.description = e.target.value)}
+              onBlur={() => handleSave(row.original)}
             />
           );
         }
@@ -124,18 +121,18 @@ export function TransactionsTable() {
       header: "Valor",
       cell: ({ row }) => {
         const isEditing = editRowId === row.id;
-        const [editedValue, setEditedValue] = useState(row.original.value);
 
         if (isEditing) {
           return (
             <Input
               className="w-28"
               type="number"
-              defaultValue={editedValue}
+              defaultValue={row.original.value}
               onChange={(e) =>
-                setEditedValue(parseFloat(e.target.value) || row.original.value)
+                (row.original.value =
+                  Number.parseFloat(e.target.value) || row.original.value)
               }
-              onBlur={() => (row.original.value = editedValue)}
+              onBlur={() => handleSave(row.original)}
             />
           );
         }
@@ -155,14 +152,12 @@ export function TransactionsTable() {
       header: "Tipo",
       cell: ({ row }) => {
         const isEditing = editRowId === row.id;
-        const [editedType, setEditedType] = useState(row.original.type);
 
         if (isEditing) {
           return (
             <Select
-              defaultValue={editedType}
+              defaultValue={row.original.type}
               onValueChange={(value) => {
-                setEditedType(value as TransactionEnum);
                 row.original.type = value as TransactionEnum;
               }}
               autoComplete="select"
@@ -199,17 +194,13 @@ export function TransactionsTable() {
       header: "Categoria",
       cell: ({ row }) => {
         const isEditing = editRowId === row.id;
-        const [editedCategory, setEditedCategory] = useState(
-          row.original.category || "Sem categoria"
-        );
 
         if (isEditing) {
           return (
             <Select
-              defaultValue={editedCategory}
+              defaultValue={row.original.category || "Sem categoria"}
               onValueChange={(value) => {
-                setEditedCategory(value as string);
-                row.original.category = value as string;
+                row.original.category = value;
               }}
             >
               <SelectTrigger>

@@ -17,6 +17,7 @@ import { Alert, AlertTitle } from "@bytebank-web/ui/alert";
 import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
 import { useRegister } from "../hooks/useRegister";
 import { useState } from "react";
+import { isValidEmail } from "../utils/validateEmail";
 
 export const DialogRegister = () => {
   const [name, setName] = useState("");
@@ -30,7 +31,7 @@ export const DialogRegister = () => {
     if (!name.trim()) newErrors.name = "O nome é obrigatório.";
     if (!email.trim()) {
       newErrors.email = "O email é obrigatório.";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
+    } else if (!isValidEmail(email)) {
       newErrors.email = "Digite um email válido.";
     }
     if (!password.trim()) {
