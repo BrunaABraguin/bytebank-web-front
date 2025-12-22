@@ -38,8 +38,8 @@ async function handleGetCategoriesData(
 
     const { transactions } = result;
 
-    if (!transactions) {
-      return res.status(400).json({ error: "No transactions found" });
+    if (!transactions || transactions.length === 0) {
+      return res.status(404).json({ error: "No transactions found" });
     }
 
     const categoryData: CategoryData[] = [];
@@ -70,12 +70,10 @@ async function handleGetCategoriesData(
       {} as Record<string, number>
     );
 
-    for (const [category, total] of Object.entries(groupedByCategory)) {
+    for (const [category, total] of Object.entries(groupedByCategory) as [string, number][]) {
       let percentage = 0;
       if (summary.expense > 0) {
-        percentage = Number.parseFloat(
-          ((total / summary.expense) * 100).toFixed(2)
-        );
+        percentage = Math.round((total / summary.expense) * 10000) / 100;
       }
       categoryData.push({
         name: category,

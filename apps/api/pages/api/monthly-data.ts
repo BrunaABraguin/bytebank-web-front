@@ -68,19 +68,15 @@ function aggregateTransactionsToModelData(
     }
 
     if (type === TransactionEnum.INCOME) {
-      groupedData[month].income += Number.parseFloat(value.toFixed(2));
+      groupedData[month].income += Math.round(value * 100) / 100;
     } else {
-      groupedData[month].expense += Math.abs(Number.parseFloat(value.toFixed(2)));
+      groupedData[month].expense += Math.abs(Math.round(value * 100) / 100);
     }
   });
 
   Object.keys(groupedData).forEach((month) => {
-    groupedData[month].income = Number.parseFloat(
-      groupedData[month].income.toFixed(2)
-    );
-    groupedData[month].expense = Number.parseFloat(
-      groupedData[month].expense.toFixed(2)
-    );
+    groupedData[month].income = Math.round(groupedData[month].income * 100) / 100;
+    groupedData[month].expense = Math.round(groupedData[month].expense * 100) / 100;
   });
 
   return groupedData;

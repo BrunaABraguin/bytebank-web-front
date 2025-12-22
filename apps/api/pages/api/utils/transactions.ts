@@ -1,5 +1,6 @@
 import { IncomingForm, Fields, Files } from "formidable";
 import { NextApiRequest } from "next";
+import { tmpdir } from "node:os";
 
 export function extractTransactions(text: string) {
   const transactions: { date: string; description: string; value: number }[] =
@@ -52,8 +53,8 @@ export const parseForm = async (
   return new Promise((resolve, reject) => {
     const form = new IncomingForm({
       maxFileSize: 5 * 1024 * 1024, // 5MB
-      keepExtensions: false,
-      uploadDir: undefined,
+      keepExtensions: true,
+      uploadDir: tmpdir(),
     });
 
     form.parse(req, (err, fields, files) => {

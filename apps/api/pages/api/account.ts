@@ -31,8 +31,8 @@ async function handleGetAccount(req: NextApiRequest, res: NextApiResponse) {
 
     const { transactions } = result;
 
-    if (!transactions) {
-      return res.status(500).json({ error: "Transactions not found" });
+    if (!transactions || transactions.length === 0) {
+      return res.status(404).json({ error: "Transactions not found" });
     }
 
     const summary = transactions.reduce(

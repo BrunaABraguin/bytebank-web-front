@@ -60,30 +60,37 @@ export function validateRequiredParams(
   const parsedYear = year ? Number.parseInt(year as string, 10) : undefined;
 
   // Validar se os valores numéricos são válidos
-  if (
-    requiredParams.includes("month") &&
-    (Number.isNaN(parsedMonth!) || parsedMonth! < 1 || parsedMonth! > 12)
-  ) {
-    return {
-      isValid: false,
-      error: {
-        status: 400,
-        message: "Mês deve ser um número entre 1 e 12",
-      },
-    };
+  if (requiredParams.includes("month")) {
+    if (
+      parsedMonth === undefined ||
+      Number.isNaN(parsedMonth) ||
+      parsedMonth < 1 ||
+      parsedMonth > 12
+    ) {
+      return {
+        isValid: false,
+        error: {
+          status: 400,
+          message: "Mês deve ser um número entre 1 e 12",
+        },
+      };
+    }
   }
 
-  if (
-    requiredParams.includes("year") &&
-    (Number.isNaN(parsedYear!) || parsedYear! < 1900)
-  ) {
-    return {
-      isValid: false,
-      error: {
-        status: 400,
-        message: "Ano deve ser um número válido",
-      },
-    };
+  if (requiredParams.includes("year")) {
+    if (
+      parsedYear === undefined ||
+      Number.isNaN(parsedYear) ||
+      parsedYear < 1900
+    ) {
+      return {
+        isValid: false,
+        error: {
+          status: 400,
+          message: "Ano deve ser um número válido",
+        },
+      };
+    }
   }
 
   return {
@@ -111,11 +118,21 @@ export async function validateAndGetTransactions(
 
     const { email, month: parsedMonth, year: parsedYear } = validation;
 
+    if (parsedMonth === undefined || parsedYear === undefined) {
+      return {
+        isValid: false,
+        error: {
+          status: 400,
+          message: "Parâmetros 'month' e 'year' são obrigatórios",
+        },
+      };
+    }
+
     const transactions = await Transaction.find({
       ownerEmail: email,
       date: {
-        $gte: new Date(parsedYear!, parsedMonth! - 1, 1),
-        $lt: new Date(parsedYear!, parsedMonth!, 1),
+        $gte: new Date(parsedYear, parsedMonth - 1, 1),
+        $lt: new Date(parsedYear, parsedMonth, 1),
       },
     }).lean<TransactionType[]>();
 
