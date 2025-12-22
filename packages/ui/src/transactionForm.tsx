@@ -42,9 +42,8 @@ export const TransactionForm = () => {
     if (isSuccess) {
       setOpen(false);
       resetForm();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
+    }    
+  }, [isSuccess, resetForm]);
 
   function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();

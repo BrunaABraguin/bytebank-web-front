@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useProcessFile } from "@bytebank-web/utils/use-process-file";
 import { useUploadFile } from "@bytebank-web/utils/use-upload-file";
 

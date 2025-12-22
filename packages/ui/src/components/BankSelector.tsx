@@ -15,9 +15,9 @@ interface BankSelectorProps {
 export const BankSelector = ({ value, onValueChange }: BankSelectorProps) => {
   return (
     <div className="flex flex-col gap-2">
-      <Label>Banco</Label>
+      <Label htmlFor="bank">Banco</Label>
       <Select value={value} onValueChange={onValueChange}>
-        <SelectTrigger>
+        <SelectTrigger id="bank">
           <SelectValue placeholder="Selecione" />
         </SelectTrigger>
         <SelectContent>

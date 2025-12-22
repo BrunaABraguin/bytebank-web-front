@@ -44,8 +44,7 @@ export const FileUpload = () => {
       setOpen(false);
       resetForm();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
+  }, [isSuccess, resetForm]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (file) {
@@ -57,6 +56,11 @@ export const FileUpload = () => {
   };
 
   const handleUpload = async () => {
+    if (!file) {
+      setMessage("Selecione um arquivo antes de processar.");
+      return;
+    }
+
     try {
       setMessage("Enviando arquivo...");
       await FileProcessor.uploadFile(file!, email!, uploadMutate);
@@ -70,6 +74,11 @@ export const FileUpload = () => {
   };
 
   const handleProcessFile = async () => {
+    if (!file) {
+      setMessage("Selecione um arquivo antes de processar.");
+      return;
+    }
+
     try {
       setMessage("Enviando arquivo...");
       await FileProcessor.processFile(file!, mutate);

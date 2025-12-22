@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-
 import {
   Dialog,
   DialogContent,
@@ -10,43 +9,23 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@bytebank-web/ui/dialog";
-import { Label } from "@bytebank-web/ui/label";
 import { Button } from "@bytebank-web/ui/button";
-import { Input } from "@bytebank-web/ui/input";
-import { Alert, AlertTitle } from "@bytebank-web/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@bytebank-web/ui/alert";
 import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
 import { useRegister } from "../hooks/useRegister";
-import { useState } from "react";
-import { isValidEmail } from "../utils/validateEmail";
+import { useRegisterForm } from "../hooks/useRegisterForm";
+import { NameInput } from "./form/NameInput";
+import { EmailInput } from "./form/EmailInput";
+import { PasswordInput } from "./form/PasswordInput";
 
 export const DialogRegister = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const { formData, errors, updateField, validateForm } = useRegisterForm();
   const { mutate, isPending, errorMessage, isSuccess } = useRegister();
-
-  function validateForm() {
-    const newErrors: Record<string, string> = {};
-    if (!name.trim()) newErrors.name = "O nome é obrigatório.";
-    if (!email.trim()) {
-      newErrors.email = "O email é obrigatório.";
-    } else if (!isValidEmail(email)) {
-      newErrors.email = "Digite um email válido.";
-    }
-    if (!password.trim()) {
-      newErrors.password = "A senha é obrigatória.";
-    } else if (password.length < 6) {
-      newErrors.password = "A senha deve ter pelo menos 6 caracteres.";
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }
 
   function handleRegister(event: React.FormEvent) {
     event.preventDefault();
     if (validateForm()) {
-      mutate({ name, email, password });
+      mutate(formData);
     }
   }
 
@@ -84,75 +63,34 @@ export const DialogRegister = () => {
             )}
             {!isPending && !isSuccess && (
               <>
-                <div className="grid gap-3">
-                  <Label htmlFor="name">Nome</Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    placeholder="Digite seu nome completo"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    autoComplete="name"
-                    aria-invalid={!!errors.name}
-                    aria-describedby="name-error"
-                  />
-                  {errors.name && (
-                    <Alert variant="destructive">
-                      <AlertCircleIcon className="mr-2" />
-                      <AlertTitle id="name-error">{errors.name}</AlertTitle>
-                    </Alert>
-                  )}
-                </div>
-                <div className="grid gap-3">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    placeholder="Digite seu email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    autoComplete="email"
-                    aria-invalid={!!errors.email}
-                    aria-describedby="email-error"
-                  />
-                  {errors.email && (
-                    <Alert variant="destructive">
-                      <AlertCircleIcon className="mr-2" />
-                      <p id="email-error" className="text-red-600 text-sm">
-                        {errors.email}
-                      </p>
-                    </Alert>
-                  )}
-                </div>
-                <div className="grid gap-3">
-                  <Label htmlFor="password">Senha</Label>
-                  <Input
-                    id="password"
-                    name="password"
-                    placeholder="Digite sua senha"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    aria-invalid={!!errors.password}
-                    aria-describedby="password-error"
-                  />
-                  {errors.password && (
-                    <Alert variant="destructive">
-                      <AlertCircleIcon className="mr-2" />
-                      <AlertTitle id="password-error">
-                        {errors.password}
-                      </AlertTitle>
-                    </Alert>
-                  )}
-                </div>
+                <NameInput
+                  value={formData.name}
+                  onChange={(value) => updateField("name", value)}
+                  error={errors.name}
+                  disabled={isPending}
+                />
+                <EmailInput
+                  value={formData.email}
+                  onChange={(value) => updateField("email", value)}
+                  error={errors.email}
+                  disabled={isPending}
+                  autoComplete="email"
+                />
+                <PasswordInput
+                  value={formData.password}
+                  onChange={(value) => updateField("password", value)}
+                  error={errors.password}
+                  disabled={isPending}
+                  autoComplete="new-password"
+                  placeholder="Crie uma senha (mín. 6 caracteres)"
+                />
               </>
             )}
             {errorMessage && (
-              <Alert variant="destructive">
-                <AlertCircleIcon className="mr-2" />
-                <AlertTitle>{errorMessage}</AlertTitle>
+              <Alert variant="destructive" role="alert">
+                <AlertCircleIcon />
+                <AlertTitle>Erro no cadastro</AlertTitle>
+                <AlertDescription>{errorMessage}</AlertDescription>
               </Alert>
             )}
           </div>
@@ -160,14 +98,14 @@ export const DialogRegister = () => {
             <Button
               size="lg"
               type="submit"
-              className="bg-orange mt-5"
-              disabled={isPending || isSuccess}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleRegister(e);
-                }
-              }}
+              className="bg-green mt-5"
+              disabled={
+                isPending ||
+                !formData.name ||
+                !formData.email ||
+                !formData.password ||
+                isSuccess
+              }
             >
               Criar conta
             </Button>

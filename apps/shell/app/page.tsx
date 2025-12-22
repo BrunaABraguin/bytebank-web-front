@@ -7,7 +7,7 @@ export default function Shell() {
   return (
     <div>
       <HeaderHome />
-      <div className="bg-gradient-to-b from-green-dark to-white">
+      <div className="bg-linear-to-b from-green-dark to-white">
         <HomeGreetings />
         <BenefitsSection />
       </div>

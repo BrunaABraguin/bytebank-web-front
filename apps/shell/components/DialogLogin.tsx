@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-
 import {
   Dialog,
   DialogContent,
@@ -11,27 +10,24 @@ import {
   DialogFooter,
   DialogDescription,
 } from "@bytebank-web/ui/dialog";
-import { Label } from "@bytebank-web/ui/label";
 import { Button } from "@bytebank-web/ui/button";
-import { Input } from "@bytebank-web/ui/input";
 import { Loading } from "@bytebank-web/ui/loading";
-import { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
+import { useLoginForm } from "../hooks/useLoginForm";
 import { Alert, AlertDescription, AlertTitle } from "@bytebank-web/ui/alert";
 import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
-import { isValidEmail } from "../utils/validateEmail";
+import { EmailInput } from "./form/EmailInput";
+import { PasswordInput } from "./form/PasswordInput";
 
 export const DialogLogin = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { mutate, errorMessage, isPending, isSuccess } = useLogin(email);
+  const { formData, errors, updateField, validateForm } = useLoginForm();
+  const { mutate, errorMessage, isPending, isSuccess } = useLogin();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    mutate({
-      email,
-      password,
-    });
+    if (validateForm()) {
+      mutate(formData);
+    }
   };
 
   return (
@@ -71,53 +67,18 @@ export const DialogLogin = () => {
             )}
             {!isPending && !isSuccess && (
               <>
-                <div className="grid gap-3">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    placeholder="Digite seu email"
-                    type="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
-                    required
-                    autoComplete="email"
-                    aria-invalid={!isValidEmail(email)}
-                    aria-describedby="email-error"
-                  />
-                  {!isValidEmail(email) && email && (
-                    <Alert variant="destructive" role="alert">
-                      <AlertCircleIcon />
-                      <AlertTitle id="email-error">
-                        Por favor, insira um email válido.
-                      </AlertTitle>
-                    </Alert>
-                  )}
-                </div>
-                <div className="grid gap-3">
-                  <Label htmlFor="password">Senha</Label>
-                  <Input
-                    id="password"
-                    name="password"
-                    placeholder="Digite sua senha"
-                    type="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
-                    required
-                    minLength={6}
-                    autoComplete="current-password"
-                    aria-invalid={password.length > 0 && password.length < 6}
-                    aria-describedby="password-error"
-                  />
-                  {password.length > 0 && password.length < 6 && (
-                    <Alert variant="destructive" role="alert">
-                      <AlertCircleIcon />
-                      <AlertTitle id="password-error">
-                        A senha deve ter pelo menos 6 caracteres.
-                      </AlertTitle>
-                    </Alert>
-                  )}
-                </div>
+                <EmailInput
+                  value={formData.email}
+                  onChange={(value) => updateField("email", value)}
+                  error={errors.email}
+                  disabled={isPending}
+                />
+                <PasswordInput
+                  value={formData.password}
+                  onChange={(value) => updateField("password", value)}
+                  error={errors.password}
+                  disabled={isPending}
+                />
               </>
             )}
             {errorMessage && (
@@ -134,23 +95,8 @@ export const DialogLogin = () => {
               type="submit"
               className="bg-green mt-5"
               disabled={
-                isPending ||
-                !isValidEmail(email) ||
-                password.length < 6 ||
-                isSuccess
+                isPending || !formData.email || !formData.password || isSuccess
               }
-              aria-disabled={
-                isPending ||
-                !isValidEmail(email) ||
-                password.length < 6 ||
-                isSuccess
-              }
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleLogin(e);
-                }
-              }}
             >
               Acessar
             </Button>
