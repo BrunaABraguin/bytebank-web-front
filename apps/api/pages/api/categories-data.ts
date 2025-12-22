@@ -9,6 +9,7 @@ import { CategoryData } from "@bytebank-web/types/categoryData";
 
 import runMiddleware, { cors } from "./libs/cors";
 import categories from "@bytebank-web/utils/categories";
+import { validateRequiredParams } from "./utils/validation";
 
 export default async function handler(
   req: NextApiRequest,
@@ -31,22 +32,21 @@ async function handleGetCategoriesData(
   await connectToMongoDB();
 
   try {
-    const { email, month, year } = req.query;
+    const validation = validateRequiredParams(req, res);
 
-    if (!email || !month || !year) {
+    if (!validation.isValid) {
       return res
-        .status(400)
-        .json({ error: "Campos obrigatórios não preenchidos" });
+        .status(validation.error!.status)
+        .json({ error: validation.error!.message });
     }
 
-    const parsedMonth = Number.parseInt(month as string, 10);
-    const parsedYear = Number.parseInt(year as string, 10);
+    const { email, month: parsedMonth, year: parsedYear } = validation;
 
     const transactions = await Transaction.find({
       ownerEmail: email,
       date: {
-        $gte: new Date(parsedYear, parsedMonth - 1, 1),
-        $lt: new Date(parsedYear, parsedMonth, 1),
+        $gte: new Date(parsedYear!, parsedMonth! - 1, 1),
+        $lt: new Date(parsedYear!, parsedMonth!, 1),
       },
     }).lean<TransactionType[]>();
 

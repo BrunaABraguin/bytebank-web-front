@@ -6,6 +6,7 @@ import {
   TransactionEnum,
   Transaction as TransactionType,
 } from "@bytebank-web/types/transaction";
+import { validateRequiredParams } from "./utils/validation";
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,21 +25,21 @@ export default async function handler(
 
 async function handleGetAccount(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { email, month, year } = req.query;
-    if (!email || !month || !year) {
+    const validation = validateRequiredParams(req, res);
+
+    if (!validation.isValid) {
       return res
-        .status(400)
-        .json({ error: "Campos obrigatórios não preenchidos" });
+        .status(validation.error!.status)
+        .json({ error: validation.error!.message });
     }
 
-    const parsedMonth = Number.parseInt(month as string, 10);
-    const parsedYear = Number.parseInt(year as string, 10);
+    const { email, month: parsedMonth, year: parsedYear } = validation;
 
     const transactions = await Transaction.find({
       ownerEmail: email,
       date: {
-        $gte: new Date(parsedYear, parsedMonth - 1, 1),
-        $lt: new Date(parsedYear, parsedMonth, 1),
+        $gte: new Date(parsedYear!, parsedMonth! - 1, 1),
+        $lt: new Date(parsedYear!, parsedMonth!, 1),
       },
     }).lean<TransactionType[]>();
 
