@@ -18,247 +18,151 @@ import {
   TableHeader,
   TableRow,
 } from "@bytebank-web/ui/table";
-import { FileUpload } from "@bytebank-web/ui/fileUpload";
-import { Input } from "@bytebank-web/ui/input";
-import { Button } from "@bytebank-web/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@bytebank-web/ui/dropdown-menu";
-import { ChevronDown, Edit, Trash } from "lucide-react";
+import { Loading } from "@bytebank-web/ui/loading";
 import { useSharedStore } from "@bytebank-web/store";
 import { useTransactions } from "@bytebank-web/utils/use-transactions";
-import { Transaction, TransactionEnum } from "@bytebank-web/types/transaction";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@bytebank-web/ui/select";
-import categories from "@bytebank-web/utils/categories";
-import { useState } from "react";
+import { Transaction } from "@bytebank-web/types/transaction";
 import { useEditTransaction } from "@/hooks/use-edit-transaction";
 import { useDeleteTransaction } from "@/hooks/use-delete-transaction";
-import { TransactionForm } from "@bytebank-web/ui/transactionForm";
-import { Loading } from "@bytebank-web/ui/loading";
+
+import { TransactionsToolbar } from "./TransactionsToolbar";
+import { TablePagination } from "./TablePagination";
+import { DateCell } from "./cells/DateCell";
+import { DescriptionCell } from "./cells/DescriptionCell";
+import { ValueCell } from "./cells/ValueCell";
+import { TypeCell } from "./cells/TypeCell";
+import { CategoryCell } from "./cells/CategoryCell";
+import { ActionsCell } from "./cells/ActionsCell";
+
+import { useTablePagination } from "../hooks/useTablePagination";
+import { useTransactionFilters } from "../hooks/useTransactionFilters";
+import { useTransactionEdit } from "../hooks/useTransactionEdit";
 
 export function TransactionsTable() {
   const { email } = useSharedStore();
-  const [pageSize, setPageSize] = useState(10);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [type, setType] = useState<TransactionEnum | "">("");
+
+  const { pageSize, pageIndex, updatePagination } = useTablePagination();
+  const { typeFilter, searchFilter, updateTypeFilter, updateSearchFilter } =
+    useTransactionFilters();
+
   const { transactions, isLoading, totalPages } = useTransactions(
     email,
     pageIndex + 1,
     pageSize,
-    type
+    typeFilter
   );
-  const [editRowId, setEditRowId] = useState<string | null>(null);
-  const { mutate } = useEditTransaction();
-  const { mutateDelete } = useDeleteTransaction();
 
-  const handleSave = (updatedRow: Transaction) => {
-    mutate(updatedRow);
-    setEditRowId(null);
-  };
+  const { mutate: updateTransaction } = useEditTransaction();
+  const { mutateDelete: deleteTransaction } = useDeleteTransaction();
+
+  const {
+    isEditing,
+    editingData,
+    errors,
+    startEdit,
+    cancelEdit,
+    updateField,
+    saveTransaction,
+  } = useTransactionEdit({
+    onSave: updateTransaction,
+  });
 
   const handleDelete = (transactionId: Transaction["_id"]) => {
-    mutateDelete(transactionId);
+    deleteTransaction(transactionId);
   };
 
   const columns: ColumnDef<Transaction>[] = [
     {
       accessorKey: "date",
       header: "Data",
-      cell: ({ row }) => {
-        const isEditing = editRowId === row.id;
-        const date = new Date(row.original.date);
-        const formattedDate = date.toLocaleDateString("pt-BR", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-        });
-
-        if (isEditing) {
-          return (
-            <Input
-              className="w-28"
-              type="date"
-              defaultValue={formattedDate}
-              onChange={(e) => (row.original.date = e.target.value)}
-            />
-          );
-        }
-
-        return <div>{formattedDate}</div>;
-      },
+      cell: ({ row }) => (
+        <DateCell
+          date={
+            isEditing(row.original._id || "")
+              ? editingData.date || row.original.date
+              : row.original.date
+          }
+          isEditing={isEditing(row.original._id || "")}
+          onUpdate={(value) => updateField("date", value)}
+        />
+      ),
     },
     {
       accessorKey: "description",
       header: "Descrição",
-      cell: ({ row }) => {
-        const isEditing = editRowId === row.id;
-
-        if (isEditing) {
-          return (
-            <Input
-              className="w-28"
-              defaultValue={row.original.description}
-              onChange={(e) => (row.original.description = e.target.value)}
-              onBlur={() => handleSave(row.original)}
-            />
-          );
-        }
-
-        return <div>{row.original.description || "Sem descrição"}</div>;
-      },
+      cell: ({ row }) => (
+        <DescriptionCell
+          description={
+            isEditing(row.original._id || "")
+              ? editingData.description || row.original.description || ""
+              : row.original.description || ""
+          }
+          isEditing={isEditing(row.original._id || "")}
+          onUpdate={(value) => updateField("description", value)}
+          onBlur={saveTransaction}
+          error={errors.description}
+        />
+      ),
     },
     {
       accessorKey: "value",
       header: "Valor",
-      cell: ({ row }) => {
-        const isEditing = editRowId === row.id;
-
-        if (isEditing) {
-          return (
-            <Input
-              className="w-28"
-              type="number"
-              defaultValue={row.original.value}
-              onChange={(e) =>
-                (row.original.value =
-                  Number.parseFloat(e.target.value) || row.original.value)
-              }
-              onBlur={() => handleSave(row.original)}
-            />
-          );
-        }
-
-        return (
-          <div>
-            {new Intl.NumberFormat("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            }).format(row.original.value || 0)}
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <ValueCell
+          value={
+            isEditing(row.original._id || "")
+              ? editingData.value || row.original.value || 0
+              : row.original.value || 0
+          }
+          isEditing={isEditing(row.original._id || "")}
+          onUpdate={(value) => updateField("value", value)}
+          onBlur={saveTransaction}
+          error={errors.value}
+        />
+      ),
     },
     {
       accessorKey: "type",
       header: "Tipo",
-      cell: ({ row }) => {
-        const isEditing = editRowId === row.id;
-
-        if (isEditing) {
-          return (
-            <Select
-              defaultValue={row.original.type}
-              onValueChange={(value) => {
-                row.original.type = value as TransactionEnum;
-              }}
-              autoComplete="select"
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={TransactionEnum.INCOME}>Receita</SelectItem>
-                <SelectItem value={TransactionEnum.EXPENSE}>Despesa</SelectItem>
-                <SelectItem value={TransactionEnum.TRANSFER}>
-                  Transferência
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          );
-        }
-
-        return (
-          <div
-            className={`${
-              row.original.type === TransactionEnum.INCOME
-                ? "text-green-500"
-                : "text-red-500"
-            }`}
-          >
-            {row.original.type}
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <TypeCell
+          type={
+            isEditing(row.original._id || "")
+              ? editingData.type || row.original.type
+              : row.original.type
+          }
+          isEditing={isEditing(row.original._id || "")}
+          onUpdate={(value) => updateField("type", value)}
+        />
+      ),
     },
     {
       accessorKey: "category",
       header: "Categoria",
-      cell: ({ row }) => {
-        const isEditing = editRowId === row.id;
-
-        if (isEditing) {
-          return (
-            <Select
-              defaultValue={row.original.category || "Sem categoria"}
-              onValueChange={(value) => {
-                row.original.category = value;
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.name}>
-                    {category.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          );
-        }
-
-        return <div>{row.original.category || "Sem categoria"}</div>;
-      },
+      cell: ({ row }) => (
+        <CategoryCell
+          category={
+            isEditing(row.original._id || "")
+              ? editingData.category || row.original.category || ""
+              : row.original.category || ""
+          }
+          isEditing={isEditing(row.original._id || "")}
+          onUpdate={(value) => updateField("category", value)}
+        />
+      ),
     },
     {
       accessorKey: "actions",
       header: "Ações",
-      cell: ({ row }) => {
-        const isEditing = editRowId === row.id;
-
-        return (
-          <div className="flex">
-            {isEditing ? (
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => handleSave(row.original)}
-              >
-                Salvar
-              </Button>
-            ) : (
-              <div className="flex space-x-2">
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  className="size-8"
-                  onClick={() => setEditRowId(row.id)}
-                >
-                  <Edit />
-                </Button>
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  className="size-8"
-                  onClick={() => handleDelete(row.original._id)}
-                >
-                  <Trash />
-                </Button>
-              </div>
-            )}
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <ActionsCell
+          isEditing={isEditing(row.original._id || "")}
+          onEdit={() => startEdit(row.original)}
+          onSave={saveTransaction}
+          onCancel={cancelEdit}
+          onDelete={() => handleDelete(row.original._id)}
+        />
+      ),
     },
   ];
 
@@ -271,164 +175,77 @@ export function TransactionsTable() {
     pageCount: totalPages,
     manualPagination: true,
     state: {
-      pagination: {
-        pageIndex,
-        pageSize,
-      },
+      pagination: { pageIndex, pageSize },
+      globalFilter: searchFilter,
     },
-    onPaginationChange: (updater) => {
-      let newPagination;
-      if (typeof updater === "function") {
-        newPagination = updater({ pageIndex, pageSize });
-      } else {
-        newPagination = updater;
-      }
-      setPageIndex(newPagination.pageIndex ?? 0);
-      setPageSize(newPagination.pageSize ?? 10);
-    },
+    onPaginationChange: updatePagination,
+    onGlobalFilterChange: updateSearchFilter,
   });
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-80">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
-      {isLoading ? (
-        <div className="flex items-center justify-center h-80">
-          <Loading />
-        </div>
-      ) : (
-        <>
-          <div className="flex items-center py-4">
-            <Input
-              placeholder="Buscar por descrição..."
-              className="max-w-sm"
-              value={
-                (table.getColumn("description")?.getFilterValue() as string) ??
-                ""
-              }
-              onChange={(event) =>
-                table
-                  .getColumn("description")
-                  ?.setFilterValue(event.target.value)
-              }
-            />
-            <div className="flex items-center space-x-2 ml-auto">
-              <FileUpload />
-              <TransactionForm />
-              <Select
-                defaultValue={type}
-                onValueChange={(value) => {
-                  setType(value as TransactionEnum);
-                }}
-                autoComplete="select"
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Filtrar por tipo" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all"> Todos</SelectItem>
-                  <SelectItem value={TransactionEnum.INCOME}>
-                    Receita
-                  </SelectItem>
-                  <SelectItem value={TransactionEnum.EXPENSE}>
-                    Despesa
-                  </SelectItem>
-                  <SelectItem value={TransactionEnum.TRANSFER}>
-                    Transferência
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              {transactions && transactions.length > 0 && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="ml-auto">
-                      Colunas <ChevronDown />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {table
-                      .getAllColumns()
-                      .filter((column) => column.getCanHide())
-                      .map((column) => {
-                        return (
-                          <DropdownMenuCheckboxItem
-                            key={column.id}
-                            className="capitalize"
-                            checked={column.getIsVisible()}
-                            onCheckedChange={(value) =>
-                              column.toggleVisibility(!!value)
-                            }
-                          >
-                            {column.columnDef.header as string}
-                          </DropdownMenuCheckboxItem>
-                        );
-                      })}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
-            </div>
-          </div>
-          <div className="overflow-hidden rounded-md border">
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <TableHead key={header.id}>
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                      </TableHead>
-                    ))}
-                  </TableRow>
+      <TransactionsToolbar
+        searchValue={searchFilter}
+        typeFilter={typeFilter}
+        onSearchChange={updateSearchFilter}
+        onTypeChange={updateTypeFilter}
+        table={table}
+        hasTransactions={!!transactions && transactions.length > 0}
+      />
+
+      <div className="overflow-hidden rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </TableHead>
                 ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow key={row.id}>
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      Sem resultados.
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-          <div className="flex items-center justify-end space-x-2 py-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Anterior
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Próximo
-            </Button>
-          </div>
-        </>
-      )}
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  Sem resultados.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      <TablePagination table={table} />
     </div>
   );
 }
