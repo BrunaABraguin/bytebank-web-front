@@ -31,8 +31,8 @@ async function handleGetAccount(req: NextApiRequest, res: NextApiResponse) {
         .json({ error: "Campos obrigatórios não preenchidos" });
     }
 
-    const parsedMonth = parseInt(month as string, 10);
-    const parsedYear = parseInt(year as string, 10);
+    const parsedMonth = Number.parseInt(month as string, 10);
+    const parsedYear = Number.parseInt(year as string, 10);
 
     const transactions = await Transaction.find({
       ownerEmail: email,

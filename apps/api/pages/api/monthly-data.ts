@@ -68,17 +68,17 @@ function aggregateTransactionsToModelData(
     }
 
     if (type === TransactionEnum.INCOME) {
-      groupedData[month].income += parseFloat(value.toFixed(2));
+      groupedData[month].income += Number.parseFloat(value.toFixed(2));
     } else {
-      groupedData[month].expense += Math.abs(parseFloat(value.toFixed(2)));
+      groupedData[month].expense += Math.abs(Number.parseFloat(value.toFixed(2)));
     }
   });
 
   Object.keys(groupedData).forEach((month) => {
-    groupedData[month].income = parseFloat(
+    groupedData[month].income = Number.parseFloat(
       groupedData[month].income.toFixed(2)
     );
-    groupedData[month].expense = parseFloat(
+    groupedData[month].expense = Number.parseFloat(
       groupedData[month].expense.toFixed(2)
     );
   });
@@ -96,10 +96,10 @@ function fillMissingMonths(
 
   while (current <= endDate) {
     const month = formatMonth(current);
-    if (!data[month]) {
-      result.push({ month, income: 0, expense: 0 });
-    } else {
+    if (data[month]) {
       result.push(data[month]);
+    } else {
+      result.push({ month, income: 0, expense: 0 });
     }
     current.setMonth(current.getMonth() + 1);
   }
