@@ -13,58 +13,54 @@ import {
   DialogClose,
   DialogDescription,
 } from "@bytebank-web/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@bytebank-web/ui/select";
-import { Input } from "@bytebank-web/ui/input";
-import { Label } from "@bytebank-web/ui/label";
 import { Button } from "@bytebank-web/ui/button";
-import { TransactionEnum } from "@bytebank-web/types/transaction";
 import { useAddTransaction } from "@bytebank-web/utils/use-add-transaction";
 import { useSharedStore } from "@bytebank-web/store";
+import { useTransactionForm } from "./hooks/useTransactionForm";
+import {
+  TransactionValidator,
+  TransactionFactory,
+} from "./services/transactionService";
+import { TransactionTypeSelector } from "./components/TransactionTypeSelector";
+import { TransactionValueInput } from "./components/TransactionValueInput";
 
 export const TransactionForm = () => {
   const { mutate, isSuccess, isPending } = useAddTransaction();
   const { email } = useSharedStore();
   const [open, setOpen] = useState(false);
-  const [transactionType, setTransactionType] = useState<TransactionEnum>(
-    TransactionEnum.INCOME
-  );
-  const [transactionValue, setTransactionValue] = useState<string>("");
-  const [errors, setErrors] = useState<{ transactionValue?: string }>({});
-  const transactionTypes = Object.values(TransactionEnum);
+  const {
+    transactionType,
+    setTransactionType,
+    transactionValue,
+    setTransactionValue,
+    errors,
+    setErrors,
+    resetForm,
+  } = useTransactionForm();
 
   useEffect(() => {
     if (isSuccess) {
       setOpen(false);
-      setTransactionValue("");
-      setTransactionType(TransactionEnum.INCOME);
+      resetForm();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
-  function validateForm() {
-    const newErrors: { transactionValue?: string } = {};
-    if (!transactionValue || parseFloat(transactionValue) <= 0) {
-      newErrors.transactionValue = "O valor deve ser maior que 0.";
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }
-
-  function createTransaction(evt: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
-    if (!validateForm()) return;
+
+    const validationErrors =
+      TransactionValidator.validateForm(transactionValue);
+    setErrors(validationErrors);
+
+    if (!TransactionValidator.isFormValid(validationErrors)) return;
 
     if (email) {
-      const transaction = {
-        type: transactionType,
-        value: parseFloat(transactionValue).toFixed(2),
-        email,
-      };
+      const transaction = TransactionFactory.createTransaction(
+        transactionType,
+        transactionValue,
+        email
+      );
       mutate(transaction);
     }
   }
@@ -77,7 +73,7 @@ export const TransactionForm = () => {
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <form onSubmit={createTransaction} noValidate>
+        <form onSubmit={handleSubmit} noValidate>
           <DialogHeader>
             <DialogTitle>Registre uma transação</DialogTitle>
             <DialogDescription>
@@ -85,53 +81,17 @@ export const TransactionForm = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 mt-5">
-            <div className="grid gap-3">
-              <Label htmlFor="transactionType" id="transactionType-label">Tipo</Label>
-              <Select
-                onValueChange={(value) =>
-                  setTransactionType(value as TransactionEnum)
-                }
-                defaultValue={transactionType}
-              >
-                <SelectTrigger
-                  className="w-[180px]"
-                  aria-label="Tipo de transação"
-                  id="transactionType"
-                  aria-labelledby="transactionType-label"
-                >
-                  <SelectValue placeholder="Selecione" />
-                </SelectTrigger>
-                <SelectContent>
-                  {transactionTypes.map((transactionType: TransactionEnum) => (
-                    <SelectItem key={transactionType} value={transactionType}>
-                      {transactionType}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="transactionValue">Valor</Label>
-              <Input
-                id="transactionValue"
-                name="transactionValue"
-                placeholder="00.00"
-                type="number"
-                value={transactionValue}
-                className="w-[180px]"
-                onChange={(e) => setTransactionValue(e.target.value)}
-                aria-invalid={!!errors.transactionValue}
-                aria-describedby="transactionValue-error"
-              />
-              {errors.transactionValue && (
-                <span
-                  id="transactionValue-error"
-                  className="text-red-500 text-sm"
-                >
-                  {errors.transactionValue}
-                </span>
-              )}
-            </div>
+            <TransactionTypeSelector
+              value={transactionType}
+              onValueChange={setTransactionType}
+              disabled={isPending}
+            />
+            <TransactionValueInput
+              value={transactionValue}
+              onValueChange={setTransactionValue}
+              error={errors.transactionValue}
+              disabled={isPending}
+            />
           </div>
           <DialogFooter>
             <Button

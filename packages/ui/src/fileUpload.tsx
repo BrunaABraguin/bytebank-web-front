@@ -1,12 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useProcessFile } from "@bytebank-web/utils/use-process-file";
-import { useUploadFile } from "@bytebank-web/utils/use-upload-file";
 import { useSharedStore } from "@bytebank-web/store";
+import { useFileUploadForm } from "./hooks/useFileUploadForm";
+import { FileProcessor } from "./services/fileService";
+import { BankSelector } from "./components/BankSelector";
+import { FileInput } from "./components/FileInput";
+import { ProcessFileButton } from "./components/ProcessFileButton";
 import { Button } from "./button";
 import { Upload } from "lucide-react";
-import { Label } from "./label";
-import { Input } from "./input";
 import {
   Dialog,
   DialogClose,
@@ -17,41 +18,38 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./select";
 import { Loading } from "./loading";
 
 export const FileUpload = () => {
   const [open, setOpen] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const [message, setMessage] = useState("");
-  const [bank, setBank] = useState("itau");
   const { email } = useSharedStore();
-  const { data, mutate, isPendingProcess } = useProcessFile();
-  const { uploadMutate, isPending, isSuccess } = useUploadFile();
+  const {
+    file,
+    setFile,
+    message,
+    setMessage,
+    bank,
+    setBank,
+    data,
+    mutate,
+    isPendingProcess,
+    uploadMutate,
+    isPending,
+    isSuccess,
+    resetForm,
+  } = useFileUploadForm();
 
   useEffect(() => {
     if (isSuccess) {
-      handleClose();
+      setOpen(false);
+      resetForm();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
-  const handleClose = () => {
-    setOpen(false);
-    setFile(null);
-    setMessage("");
-    setBank("itau");
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (file) {
-      setFile(null);
-      setMessage("");
+      resetForm();
     }
     if (e.target.files?.length) {
       setFile(e.target.files[0] ?? null);
@@ -59,32 +57,28 @@ export const FileUpload = () => {
   };
 
   const handleUpload = async () => {
-    if (!file) {
-      setMessage("Por favor, selecione um arquivo.");
-      return;
+    try {
+      setMessage("Enviando arquivo...");
+      await FileProcessor.uploadFile(file!, email!, uploadMutate);
+      setFile(null);
+      setMessage("");
+    } catch (error) {
+      setMessage(
+        error instanceof Error ? error.message : "Erro ao fazer upload"
+      );
     }
-    if (!email) {
-      setMessage("Email não encontrado.");
-      return;
-    }
-    setMessage("Enviando arquivo...");
-    uploadMutate({ email, file });
-    setFile(null);
-    setMessage("");
   };
 
   const handleProcessFile = async () => {
-    if (!file) {
-      setMessage("Por favor, selecione um arquivo.");
-      return;
+    try {
+      setMessage("Enviando arquivo...");
+      await FileProcessor.processFile(file!, mutate);
+      setMessage("");
+    } catch (error) {
+      setMessage(
+        error instanceof Error ? error.message : "Erro ao processar arquivo"
+      );
     }
-    if (!email) {
-      setMessage("Email não encontrado.");
-      return;
-    }
-    setMessage("Enviando arquivo...");
-    mutate({ file });
-    setMessage("");
   };
 
   return (
@@ -106,29 +100,11 @@ export const FileUpload = () => {
         </DialogHeader>
         {isPending && <Loading aria-label="Enviando arquivo" />}
         <div className="flex flex-col gap-3 space-y-2">
-          <div className="flex flex-col gap-2">
-            <Label>Banco</Label>
-            <Select value={bank} onValueChange={setBank}>
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="itau">Itaú</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="file-pdf">Arquivo PDF</Label>
-            <Input
-              id="file-pdf"
-              type="file"
-              accept="application/pdf"
-              onChange={handleChange}
-            />
-          </div>
+          <BankSelector value={bank} onValueChange={setBank} />
+          <FileInput onChange={handleFileChange} />
           {message && <p>{message}</p>}
           {data && file && (
-            <p className="leading-7 [&:not(:first-child)]:mt-6">
+            <p className="leading-7 not-first:mt-6">
               Deseja processar o arquivo? Foram encontradas{" "}
               <strong>{data.totalTransactions}</strong> transações. Máximo de 20
               transações serão processadas.
@@ -136,24 +112,22 @@ export const FileUpload = () => {
           )}
         </div>
         <DialogFooter>
-          {(data && !isPending && !isPendingProcess && file) ? (
-            <Button
-              type="submit"
-              onClick={handleUpload}
-              disabled={isPending || isPendingProcess}
-            >
-              Processar arquivo ({data.totalTransactions} transações)
-            </Button>
-          ) : (
-            <Button
-              type="submit"
-              onClick={handleProcessFile}
-              disabled={isPendingProcess || isPending}
-            >
-              Enviar arquivo
-            </Button>
-          )}
-          <DialogClose asChild onClick={handleClose}>
+          <ProcessFileButton
+            hasData={!!data}
+            hasFile={!!file}
+            isPending={isPending}
+            isPendingProcess={isPendingProcess}
+            totalTransactions={data?.totalTransactions}
+            onUpload={handleUpload}
+            onProcess={handleProcessFile}
+          />
+          <DialogClose
+            asChild
+            onClick={() => {
+              setOpen(false);
+              resetForm();
+            }}
+          >
             <Button variant="secondary" type="button">
               Cancelar
             </Button>
