@@ -13,6 +13,7 @@ interface TransactionsToolbarProps {
   onTypeChange: (type: TransactionEnum | "") => void;
   table: Table<Transaction>;
   hasTransactions: boolean;
+  userEmail: string;
 }
 
 export function TransactionsToolbar({
@@ -22,14 +23,15 @@ export function TransactionsToolbar({
   onTypeChange,
   table,
   hasTransactions,
+  userEmail,
 }: Readonly<TransactionsToolbarProps>) {
   return (
     <div className="flex items-center justify-between py-4">
       <SearchInput value={searchValue} onSearch={onSearchChange} />
 
       <div className="flex items-center space-x-2">
-        <FileUpload />
-        <TransactionForm />
+        <FileUpload userEmail={userEmail} />
+        <TransactionForm userEmail={userEmail} />
         <TypeFilter value={typeFilter} onTypeChange={onTypeChange} />
         {hasTransactions && <ColumnSelector table={table} />}
       </div>

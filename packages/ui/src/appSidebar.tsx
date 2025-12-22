@@ -9,9 +9,13 @@ import {
 } from "./sidebar";
 import Image from "next/image";
 import { LayoutDashboard, Receipt } from "lucide-react";
-import { useSharedStore } from "@bytebank-web/store";
 import { NavigationMenu } from "./components/NavigationMenu";
 import { UserMenu } from "./components/UserMenu";
+
+interface AppSidebarProps {
+  userEmail: string;
+  userName: string;
+}
 
 const items = [
   {
@@ -26,9 +30,7 @@ const items = [
   },
 ];
 
-export function AppSidebar() {
-  const { email, name } = useSharedStore();
-
+export function AppSidebar({ userEmail, userName }: AppSidebarProps) {
   return (
     <Sidebar>
       <SidebarHeader className="flex">
@@ -50,7 +52,7 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
-          <UserMenu name={name} email={email} />
+          <UserMenu name={userName} email={userEmail} />
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>

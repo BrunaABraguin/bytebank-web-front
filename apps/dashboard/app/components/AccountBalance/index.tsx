@@ -59,7 +59,10 @@ export const AccountBalance = ({
             )}
           </div>
           <div className="flex gap-2">
-            <TransactionForm aria-label="Formulário de Transações" />
+            <TransactionForm
+              userEmail={ownerEmail || ""}
+              aria-label="Formulário de Transações"
+            />
           </div>
         </section>
       </CardContent>

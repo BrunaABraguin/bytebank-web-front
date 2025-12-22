@@ -15,7 +15,6 @@ import {
 } from "@bytebank-web/ui/dialog";
 import { Button } from "@bytebank-web/ui/button";
 import { useAddTransaction } from "@bytebank-web/utils/use-add-transaction";
-import { useSharedStore } from "@bytebank-web/store";
 import { useTransactionForm } from "./hooks/useTransactionForm";
 import {
   TransactionValidator,
@@ -24,9 +23,12 @@ import {
 import { TransactionTypeSelector } from "./components/TransactionTypeSelector";
 import { TransactionValueInput } from "./components/TransactionValueInput";
 
-export const TransactionForm = () => {
+interface TransactionFormProps {
+  userEmail: string;
+}
+
+export const TransactionForm = ({ userEmail }: TransactionFormProps) => {
   const { mutate, isSuccess, isPending } = useAddTransaction();
-  const { email } = useSharedStore();
   const [open, setOpen] = useState(false);
   const {
     transactionType,
@@ -42,7 +44,7 @@ export const TransactionForm = () => {
     if (isSuccess) {
       setOpen(false);
       resetForm();
-    }    
+    }
   }, [isSuccess, resetForm]);
 
   function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
@@ -54,11 +56,11 @@ export const TransactionForm = () => {
 
     if (!TransactionValidator.isFormValid(validationErrors)) return;
 
-    if (email) {
+    if (userEmail) {
       const transaction = TransactionFactory.createTransaction(
         transactionType,
         transactionValue,
-        email
+        userEmail
       );
       mutate(transaction);
     }
@@ -96,7 +98,7 @@ export const TransactionForm = () => {
             <Button
               type="submit"
               className="mt-5"
-              disabled={!email || isPending || !transactionValue}
+              disabled={!userEmail || isPending || !transactionValue}
             >
               Registrar
             </Button>

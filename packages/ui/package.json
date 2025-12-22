@@ -24,7 +24,6 @@
   },
   "dependencies": {    
     "@bytebank-web/utils": "*",
-    "@bytebank-web/store": "*",
     "@bytebank-web/types": "*",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-dialog": "^1.1.14",

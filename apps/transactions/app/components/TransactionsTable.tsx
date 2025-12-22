@@ -199,6 +199,7 @@ export function TransactionsTable() {
         onTypeChange={updateTypeFilter}
         table={table}
         hasTransactions={!!transactions && transactions.length > 0}
+        userEmail={email || ""}
       />
 
       <div className="overflow-hidden rounded-md border">

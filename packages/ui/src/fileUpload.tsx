@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useSharedStore } from "@bytebank-web/store";
 import { useFileUploadForm } from "./hooks/useFileUploadForm";
 import { FileProcessor } from "./services/fileService";
 import { BankSelector } from "./components/BankSelector";
@@ -20,9 +19,12 @@ import {
 } from "./dialog";
 import { Loading } from "./loading";
 
-export const FileUpload = () => {
+interface FileUploadProps {
+  userEmail: string;
+}
+
+export const FileUpload = ({ userEmail }: FileUploadProps) => {
   const [open, setOpen] = useState(false);
-  const { email } = useSharedStore();
   const {
     file,
     setFile,
@@ -63,7 +65,7 @@ export const FileUpload = () => {
 
     try {
       setMessage("Enviando arquivo...");
-      await FileProcessor.uploadFile(file!, email!, uploadMutate);
+      await FileProcessor.uploadFile(file!, userEmail!, uploadMutate);
       setFile(null);
       setMessage("");
     } catch (error) {
