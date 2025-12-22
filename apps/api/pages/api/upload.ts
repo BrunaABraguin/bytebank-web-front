@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import fs from "fs/promises";
+import fs from "node:fs/promises";
 import pdfParse from "pdf-parse";
 import { extractTransactions, parseForm } from "./utils/transactions";
 import Transaction from "./models/Transaction";
@@ -45,7 +45,7 @@ export default async function handler(
 
       const [day, month, year] = date.split("/").map(Number);
       const parsedDate = new Date(year, month - 1, day);
-      if (isNaN(parsedDate.getTime())) {
+      if (Number.isNaN(parsedDate.getTime())) {
         return res.status(400).json({ error: "Data inválida fornecida" });
       }
 

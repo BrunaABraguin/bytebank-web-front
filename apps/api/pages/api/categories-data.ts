@@ -1,14 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectToMongoDB from "./libs/mongoDB";
-import Transaction from "./models/Transaction";
-import {
-  TransactionEnum,
-  Transaction as TransactionType,
-} from "@bytebank-web/types/transaction";
+import { TransactionEnum } from "@bytebank-web/types/transaction";
 import { CategoryData } from "@bytebank-web/types/categoryData";
 
 import runMiddleware, { cors } from "./libs/cors";
 import categories from "@bytebank-web/utils/categories";
+import { validateAndGetTransactions } from "./utils/validation";
 
 export default async function handler(
   req: NextApiRequest,
@@ -31,24 +28,19 @@ async function handleGetCategoriesData(
   await connectToMongoDB();
 
   try {
-    const { email, month, year } = req.query;
+    const result = await validateAndGetTransactions(req, res);
 
-    if (!email || !month || !year) {
+    if (!result.isValid) {
       return res
-        .status(400)
-        .json({ error: "Campos obrigatórios não preenchidos" });
+        .status(result.error!.status)
+        .json({ error: result.error!.message });
     }
 
-    const parsedMonth = parseInt(month as string, 10);
-    const parsedYear = parseInt(year as string, 10);
+    const { transactions } = result;
 
-    const transactions = await Transaction.find({
-      ownerEmail: email,
-      date: {
-        $gte: new Date(parsedYear, parsedMonth - 1, 1),
-        $lt: new Date(parsedYear, parsedMonth, 1),
-      },
-    }).lean<TransactionType[]>();
+    if (!transactions) {
+      return res.status(400).json({ error: "No transactions found" });
+    }
 
     const categoryData: CategoryData[] = [];
 
@@ -79,10 +71,15 @@ async function handleGetCategoriesData(
     );
 
     for (const [category, total] of Object.entries(groupedByCategory)) {
-      const percentage = ((total / summary.expense) * 100).toFixed(2);
+      let percentage = 0;
+      if (summary.expense > 0) {
+        percentage = Number.parseFloat(
+          ((total / summary.expense) * 100).toFixed(2)
+        );
+      }
       categoryData.push({
         name: category,
-        percentage: parseFloat(percentage),
+        percentage,
       });
     }
 

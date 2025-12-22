@@ -46,8 +46,8 @@ async function handleGetTransactions(
         .json({ error: "Campos obrigatórios não preenchidos" });
     }
 
-    const pageNumber = Math.max(1, parseInt(page as string, 10));
-    const pageSizeNumber = Math.max(1, parseInt(pageSize as string, 10));
+    const pageNumber = Math.max(1, Number.parseInt(page as string, 10));
+    const pageSizeNumber = Math.max(1, Number.parseInt(pageSize as string, 10));
 
     let totalTransactions = await Transaction.countDocuments({
       ownerEmail: email,

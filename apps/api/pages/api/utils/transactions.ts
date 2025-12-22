@@ -1,4 +1,4 @@
-import formidable, { Fields, Files } from "formidable";
+import { IncomingForm, Fields, Files } from "formidable";
 import { NextApiRequest } from "next";
 
 export function extractTransactions(text: string) {
@@ -30,8 +30,8 @@ export function extractTransactions(text: string) {
       if (valueMatch) {
         currentDescription = currentDescription.replace(valueRegex, "").trim();
 
-        const currentValue = parseFloat(
-          valueMatch[1].replace(/\./g, "").replace(",", ".")
+        const currentValue = Number.parseFloat(
+          valueMatch[1].replaceAll(".", "").replaceAll(",", ".")
         );
         transactions.push({
           date: currentDate,
@@ -46,13 +46,19 @@ export function extractTransactions(text: string) {
     .slice(0, 20);
 }
 
-export const parseForm = (
+export const parseForm = async (
   req: NextApiRequest
-): Promise<{ fields: Fields; files: Files }> =>
-  new Promise((resolve, reject) => {
-    const form = formidable({ keepExtensions: true });
+): Promise<{ fields: Fields; files: Files }> => {
+  return new Promise((resolve, reject) => {
+    const form = new IncomingForm({
+      maxFileSize: 5 * 1024 * 1024, // 5MB
+      keepExtensions: false,
+      uploadDir: undefined,
+    });
+
     form.parse(req, (err, fields, files) => {
       if (err) reject(new Error(String(err)));
       else resolve({ fields, files });
     });
   });
+};
