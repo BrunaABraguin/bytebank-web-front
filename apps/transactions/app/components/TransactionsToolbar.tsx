@@ -1,0 +1,38 @@
+import { FileUpload } from "@bytebank-web/ui/fileUpload";
+import { TransactionForm } from "@bytebank-web/ui/transactionForm";
+import { SearchInput } from "./filters/SearchInput";
+import { TypeFilter } from "./filters/TypeFilter";
+import { ColumnSelector } from "./filters/ColumnSelector";
+import { TransactionEnum, Transaction } from "@bytebank-web/types/transaction";
+import { Table } from "@tanstack/react-table";
+
+interface TransactionsToolbarProps {
+  searchValue: string;
+  typeFilter: TransactionEnum | "";
+  onSearchChange: (value: string) => void;
+  onTypeChange: (type: TransactionEnum | "") => void;
+  table: Table<Transaction>;
+  hasTransactions: boolean;
+}
+
+export function TransactionsToolbar({
+  searchValue,
+  typeFilter,
+  onSearchChange,
+  onTypeChange,
+  table,
+  hasTransactions,
+}: Readonly<TransactionsToolbarProps>) {
+  return (
+    <div className="flex items-center justify-between py-4">
+      <SearchInput value={searchValue} onSearch={onSearchChange} />
+
+      <div className="flex items-center space-x-2">
+        <FileUpload />
+        <TransactionForm />
+        <TypeFilter value={typeFilter} onTypeChange={onTypeChange} />
+        {hasTransactions && <ColumnSelector table={table} />}
+      </div>
+    </div>
+  );
+}

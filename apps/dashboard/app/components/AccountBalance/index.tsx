@@ -3,14 +3,20 @@ import { TransactionForm } from "@bytebank-web/ui/transactionForm";
 import { Loading } from "@bytebank-web/ui/loading";
 import { MonthYearPicker } from "@bytebank-web/ui/monthYearPicker";
 import { useBalance } from "@/hooks/useBalance";
+import { BalanceDisplay } from "../BalanceDisplay";
 
 interface AccountBalanceProps {
-  ownerEmail: string | null; 
+  ownerEmail: string | null;
   month: number;
   year: number;
   onMonthChange: (selectedMonth: number, selectedYear: number) => void;
 }
-export const AccountBalance = ({ ownerEmail, month, year, onMonthChange }: AccountBalanceProps) => {
+export const AccountBalance = ({
+  ownerEmail,
+  month,
+  year,
+  onMonthChange,
+}: AccountBalanceProps) => {
   const { account, isLoadingAccount } = useBalance(ownerEmail, month, year);
 
   return (
@@ -34,29 +40,21 @@ export const AccountBalance = ({ ownerEmail, month, year, onMonthChange }: Accou
               <Loading aria-label="Carregando informações do saldo" />
             ) : (
               <>
-                <div className="grid font-semibold">
-                  <span
-                    id="account-balance-title"
-                    className="text-sm text-gray-500"
-                  >
-                    Saldo
-                  </span>
-                  <span aria-live="polite" aria-atomic="true">
-                    R$ {account?.balance.toLocaleString()}
-                  </span>
-                </div>
-                <div className="grid font-semibold">
-                  <span className="text-sm text-gray-500">Receita</span>
-                  <span aria-live="polite" aria-atomic="true">
-                    R$ {account?.income.toLocaleString()}
-                  </span>
-                </div>
-                <div className="grid font-semibold">
-                  <span className="text-sm text-gray-500">Despesas</span>
-                  <span aria-live="polite" aria-atomic="true">
-                    R$ {account?.expense.toLocaleString()}
-                  </span>
-                </div>
+                <BalanceDisplay
+                  label="Saldo"
+                  value={account?.balance ?? 0}
+                  isLoading={isLoadingAccount}
+                />
+                <BalanceDisplay
+                  label="Receita"
+                  value={account?.income ?? 0}
+                  isLoading={isLoadingAccount}
+                />
+                <BalanceDisplay
+                  label="Despesas"
+                  value={account?.expense ?? 0}
+                  isLoading={isLoadingAccount}
+                />
               </>
             )}
           </div>

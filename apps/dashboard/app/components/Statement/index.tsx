@@ -6,10 +6,11 @@ import { Loading } from "@bytebank-web/ui/loading";
 import { useSharedStore } from "@bytebank-web/store";
 import { useTransactions } from "@bytebank-web/utils/use-transactions";
 import { SquareArrowOutUpRight } from "lucide-react";
+import { EmptyState, LoadingState } from "../StateComponents";
 
 export const Statement = () => {
   const { email } = useSharedStore();
-  const { transactions, isLoading } = useTransactions(email, 1, 20);
+  const { transactions, isLoading } = useTransactions(email, 1, 20, undefined);
 
   return (
     <Card className="col-span-1">
@@ -22,14 +23,17 @@ export const Statement = () => {
         </div>
         <div className="gap-9 h-80 overflow-auto">
           {isLoading ? (
-            <Loading aria-label="Carregando transações" />
+            <LoadingState className="flex justify-center items-center h-32">
+              <Loading aria-label="Carregando transações" />
+            </LoadingState>
           ) : (
             (() => {
               if (transactions?.length === 0) {
                 return (
-                  <p className="text-gray-500 text-center">
-                    Nenhuma transação encontrada.
-                  </p>
+                  <EmptyState
+                    message="Nenhuma transação encontrada."
+                    className="text-gray-500 text-center h-32 flex items-center justify-center"
+                  />
                 );
               }
               return transactions?.map((transaction, index) => (

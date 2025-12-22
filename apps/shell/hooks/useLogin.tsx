@@ -7,18 +7,20 @@ import {
   AUTH_COOKIE_MAX_AGE,
   AUTH_COOKIE_NAME,
 } from "@bytebank-web/utils/constants";
+
 interface LoginParams {
   email: string;
   password: string;
 }
 
-export const useLogin = (email: string) => {
+export const useLogin = () => {
   const { setEmail, setName } = useSharedStore();
+
   const { data, mutate, isPending, error, isSuccess } = useMutation({
     mutationFn: async ({ email, password }: LoginParams) => {
       return loginService(email, password);
     },
-    onSuccess: ({ token, name }) => {
+    onSuccess: ({ token, name }, { email }) => {
       document.cookie = `${AUTH_COOKIE_NAME}=${token}; path=/; max-age=${AUTH_COOKIE_MAX_AGE}`;
       setEmail(email);
       setName(name);

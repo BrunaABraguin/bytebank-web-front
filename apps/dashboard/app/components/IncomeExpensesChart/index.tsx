@@ -3,6 +3,7 @@ import { AreaChartMonths } from "@bytebank-web/ui/areaChartMonths";
 import { useSharedStore } from "@bytebank-web/store";
 import { useMonthlyChart } from "@/hooks/useMonthlyChart";
 import { Loading } from "@bytebank-web/ui/loading";
+import { EmptyState, LoadingState } from "../StateComponents";
 
 export const IncomeExpensesChart = () => {
   const { email } = useSharedStore();
@@ -20,18 +21,14 @@ export const IncomeExpensesChart = () => {
         {(() => {
           if (isLoading) {
             return (
-              <div className="flex justify-center items-center h-64">
+              <LoadingState>
                 <Loading />
-              </div>
+              </LoadingState>
             );
           }
 
           if (data?.length === 0) {
-            return (
-              <div className="flex justify-center items-center h-64">
-                <p className="text-gray-500">Nenhum dado disponível.</p>
-              </div>
-            );
+            return <EmptyState message="Nenhum dado disponível." />;
           }
 
           return (
