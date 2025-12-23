@@ -14,7 +14,7 @@ import {
   DialogDescription,
 } from "@bytebank-web/ui/dialog";
 import { Button } from "@bytebank-web/ui/button";
-import { useAddTransaction } from "@bytebank-web/utils/use-add-transaction";
+import { useAddTransaction } from "@bytebank-web/utils";
 import { useTransactionForm } from "./hooks/useTransactionForm";
 import {
   TransactionValidator,
