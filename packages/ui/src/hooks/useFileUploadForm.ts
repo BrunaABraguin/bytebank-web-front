@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
-import { useProcessFile, useUploadFile } from "@bytebank-web/utils";
+import { useProcessFile } from "@bytebank-web/utils/use-process-file";
+import { useUploadFile } from "@bytebank-web/utils/use-upload-file";
 
 // Hook para gerenciar estado do upload de arquivo
 export function useFileUploadForm() {

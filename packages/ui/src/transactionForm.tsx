@@ -14,7 +14,6 @@ import {
   DialogDescription,
 } from "@bytebank-web/ui/dialog";
 import { Button } from "@bytebank-web/ui/button";
-import { useAddTransaction } from "@bytebank-web/utils";
 import { useTransactionForm } from "./hooks/useTransactionForm";
 import {
   TransactionValidator,
@@ -25,10 +24,21 @@ import { TransactionValueInput } from "./components/TransactionValueInput";
 
 interface TransactionFormProps {
   userEmail: string;
+  isSuccess: boolean;
+  isPending: boolean;
+  onMutate: (transaction: {
+    type: string;
+    value: string;
+    email: string;
+  }) => void;
 }
 
-export const TransactionForm = ({ userEmail }: TransactionFormProps) => {
-  const { mutate, isSuccess, isPending } = useAddTransaction();
+export const TransactionForm = ({
+  userEmail,
+  isSuccess,
+  isPending,
+  onMutate,
+}: TransactionFormProps) => {
   const [open, setOpen] = useState(false);
   const {
     transactionType,
@@ -62,7 +72,7 @@ export const TransactionForm = ({ userEmail }: TransactionFormProps) => {
         transactionValue,
         userEmail
       );
-      mutate(transaction);
+      onMutate(transaction);
     }
   }
 

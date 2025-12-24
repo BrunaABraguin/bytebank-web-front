@@ -4,6 +4,7 @@ import { Loading } from "@bytebank-web/ui/loading";
 import { MonthYearPicker } from "@bytebank-web/ui/monthYearPicker";
 import { useBalance } from "@/hooks/useBalance";
 import { BalanceDisplay } from "../BalanceDisplay";
+import { useAddTransaction } from "@bytebank-web/utils/use-add-transaction";
 
 interface AccountBalanceProps {
   ownerEmail: string | null;
@@ -18,6 +19,7 @@ export const AccountBalance = ({
   onMonthChange,
 }: AccountBalanceProps) => {
   const { account, isLoadingAccount } = useBalance(ownerEmail, month, year);
+  const { mutate, isSuccess, isPending } = useAddTransaction();
 
   return (
     <Card className="col-span-4">
@@ -60,6 +62,9 @@ export const AccountBalance = ({
           </div>
           <div className="flex gap-2">
             <TransactionForm
+              isSuccess={isSuccess}
+              isPending={isPending}
+              onMutate={mutate}
               userEmail={ownerEmail || ""}
               aria-label="Formulário de Transações"
             />
