@@ -20,10 +20,10 @@ import {
 } from "@bytebank-web/ui/table";
 import { Loading } from "@bytebank-web/ui/loading";
 import { useSharedStore } from "@bytebank-web/store";
-import { useTransactions } from "@bytebank-web/utils/use-transactions";
+import { useTransactions } from "@bytebank-web/utils";
 import { Transaction } from "@bytebank-web/types/transaction";
-import { useEditTransaction } from "@/hooks/use-edit-transaction";
-import { useDeleteTransaction } from "@/hooks/use-delete-transaction";
+import { useEditTransaction } from "@/hooks/useEditTransaction";
+import { useDeleteTransaction } from "@/hooks/useDeleteTransaction";
 
 import { TransactionsToolbar } from "./TransactionsToolbar";
 import { TablePagination } from "./TablePagination";

@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@bytebank-web/ui/select";
-import categories from "@bytebank-web/utils/categories";
+import { useCategories } from "../../hooks/useCategories";
 
 interface CategoryCellProps {
   category: string;
@@ -18,11 +18,13 @@ export function CategoryCell({
   isEditing,
   onUpdate,
 }: Readonly<CategoryCellProps>) {
+  const { categories, isLoading } = useCategories();
+
   if (isEditing) {
     return (
       <Select value={category || "Sem categoria"} onValueChange={onUpdate}>
         <SelectTrigger className="w-36">
-          <SelectValue placeholder="Selecione" />
+          <SelectValue placeholder={isLoading ? "Carregando..." : "Selecione"} />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="Sem categoria">Sem categoria</SelectItem>

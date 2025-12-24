@@ -4,7 +4,7 @@ import { Transaction } from "../Transaction";
 import { Card, CardContent } from "@bytebank-web/ui/card";
 import { Loading } from "@bytebank-web/ui/loading";
 import { useSharedStore } from "@bytebank-web/store";
-import { useTransactions } from "@bytebank-web/utils/use-transactions";
+import { useTransactions } from "@bytebank-web/utils";
 import { SquareArrowOutUpRight } from "lucide-react";
 import { EmptyState, LoadingState } from "../StateComponents";
 

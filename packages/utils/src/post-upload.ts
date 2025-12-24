@@ -1,4 +1,4 @@
-import { createHttpService } from "@bytebank-web/utils/http";
+import { createHttpService } from "@bytebank-web/utils";
 import { API_URL } from "./constants.js";
 
 export const postUploadFile = async (

@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { queryClient } from "@bytebank-web/utils/react-query";
+import { queryClient } from "@bytebank-web/utils";
 import { postTransaction } from "./post-transaction.js";
 
 export const useAddTransaction = () => {

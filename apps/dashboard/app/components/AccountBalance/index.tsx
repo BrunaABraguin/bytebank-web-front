@@ -4,7 +4,7 @@ import { Loading } from "@bytebank-web/ui/loading";
 import { MonthYearPicker } from "@bytebank-web/ui/monthYearPicker";
 import { useBalance } from "@/hooks/useBalance";
 import { BalanceDisplay } from "../BalanceDisplay";
-import { useAddTransaction } from "@bytebank-web/utils/use-add-transaction";
+import { useAddTransaction } from "@bytebank-web/utils";
 
 interface AccountBalanceProps {
   ownerEmail: string | null;

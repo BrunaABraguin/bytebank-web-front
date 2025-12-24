@@ -4,7 +4,7 @@ import { TransactionEnum } from "@bytebank-web/types/transaction";
 import { CategoryData } from "@bytebank-web/types/categoryData";
 
 import runMiddleware, { cors } from "./libs/cors";
-import categories from "@bytebank-web/utils/categories";
+import { categories } from "./utils/categories";
 import { validateAndGetTransactions } from "./utils/validation";
 
 export default async function handler(
@@ -82,7 +82,6 @@ async function handleGetCategoriesData(
         percentage,
       });
     }
-
     categories.forEach((cat) => {
       if (!categoryData.some((data) => data.name === cat.name)) {
         categoryData.push({

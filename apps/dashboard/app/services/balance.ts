@@ -1,4 +1,4 @@
-import { createHttpService } from "@bytebank-web/utils/http";
+import { createHttpService } from "@bytebank-web/utils";
 import { Account } from "@bytebank-web/types/account";
 import { API_URL } from "@/constants";
 

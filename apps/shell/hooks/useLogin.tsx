@@ -6,7 +6,7 @@ import { ApiMessage } from "@bytebank-web/types/api";
 import {
   AUTH_COOKIE_MAX_AGE,
   AUTH_COOKIE_NAME,
-} from "@bytebank-web/utils/constants";
+} from "@bytebank-web/utils";
 
 interface LoginParams {
   email: string;
