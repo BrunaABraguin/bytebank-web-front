@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useFileUploadForm } from "./hooks/useFileUploadForm";
-import { FileProcessor } from "./services/fileService";
-import { BankSelector } from "./components/BankSelector";
-import { FileInput } from "./components/FileInput";
-import { ProcessFileButton } from "./components/ProcessFileButton";
-import { Button } from "./button";
+import { useFileUploadForm } from "../hooks/useFileUploadForm";
+import { FileProcessor } from "../services/fileService";
+import { BankSelector } from "../components/BankSelector";
+import { FileInput } from "../components/FileInput";
+import { ProcessFileButton } from "../components/ProcessFileButton";
+import { Button } from "@bytebank-web/ui/button";
 import { Upload } from "lucide-react";
 import {
   Dialog,
@@ -16,8 +16,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./dialog";
-import { Loading } from "./loading";
+} from "@bytebank-web/ui/dialog";
+import { Loading } from "@bytebank-web/ui/loading";
 
 interface FileUploadProps {
   userEmail: string;

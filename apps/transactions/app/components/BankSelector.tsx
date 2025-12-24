@@ -1,11 +1,11 @@
-import { Label } from "../label";
+import { Label } from "@bytebank-web/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../select";
+} from "@bytebank-web/ui/select";
 
 interface BankSelectorProps {
   value: string;

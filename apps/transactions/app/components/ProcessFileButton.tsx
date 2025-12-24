@@ -1,4 +1,4 @@
-import { Button } from "../button";
+import { Button } from "@bytebank-web/ui/button";
 
 interface ProcessFileButtonProps {
   hasData: boolean;

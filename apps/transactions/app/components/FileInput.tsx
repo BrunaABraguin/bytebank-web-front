@@ -1,5 +1,5 @@
-import { Label } from "../label";
-import { Input } from "../input";
+import { Label } from "@bytebank-web/ui/label";
+import { Input } from "@bytebank-web/ui/input";
 
 interface FileInputProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
