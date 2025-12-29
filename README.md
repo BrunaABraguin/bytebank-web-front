@@ -1,6 +1,6 @@
-# 💰 ByteBank - Tech Challenge (Fase 2)
+# 💰 ByteBank - Tech Challenge (Fase 4)
 
-Este projeto é a continuação do Tech Challenge da Fase 01, com o objetivo de aprimorar e escalar a aplicação de gerenciamento financeiro existente. Nesta fase, aplicamos conceitos avançados como **microfrontends com multi zones**, **deploy em ambiente cloud**, **validações inteligentes**, **melhorias de performance**, **UX**, **acessibilidade** e **segurança**.
+Este projeto é a continuação do Tech Challenge da Fase 04, com o objetivo de aprimorar e escalar a aplicação de gerenciamento financeiro existente.
 
 ---
 
@@ -23,7 +23,7 @@ Este projeto é a continuação do Tech Challenge da Fase 01, com o objetivo de 
 
 ### 🏠 Página Inicial (Home)
 
-- Balamço mensal
+- Balanço mensal
 - Filtro de mês e ano
 - Adição de nova transação
 - Gráfico de Receitas e Despesas
@@ -122,7 +122,7 @@ Demonstração completa da aplicação com:
 - Deploy individual em cloud via Vercel
 - Funcionalidades implementadas conforme os requisitos
 
-🔗 [Link para o vídeo Fase 2](https://youtu.be/YHi8pEaladI)
+🔗 [Link para o vídeo Fase 4](https://youtu.be/C8Ahl1Dd-Qo)
 
 ---
 
